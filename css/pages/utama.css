@@ -1,0 +1,106 @@
+/* ============================================================
+   LENTERA JIWA — css/pages/utama.css
+   Halaman Utama (index.html) — Specific Styles
+   Bergantung pada: base.css · components.css
+   ============================================================ */
+
+
+/* ============================================================
+   01. HERO — Halaman Utama
+   ============================================================ */
+.hero-inner {
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-title {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.hero-subtitle {
+  margin-top: 22px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+
+/* ============================================================
+   02. ARTIKEL LAYOUT — Grid khusus beranda
+   ============================================================ */
+.artikel-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+.artikel-layout .featured { grid-row: 1 / 3; }
+
+
+/* ============================================================
+   03. STATS BAND — Tentang & Beranda
+   ============================================================ */
+.stats-band {
+  background: var(--lav-900);
+  border-radius: var(--radius-2xl);
+  padding: 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  color: white;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-lab {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+}
+
+
+/* ============================================================
+   04. RESPONSIVE — Halaman Utama
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .stats-band {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 40px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .artikel-layout {
+    grid-template-columns: 1fr;
+  }
+  .artikel-layout .featured { grid-row: auto; }
+}
+
+@media (max-width: 480px) {
+  .stats-band {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 32px 20px;
+  }
+}

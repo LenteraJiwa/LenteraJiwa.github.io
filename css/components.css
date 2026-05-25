@@ -1,0 +1,770 @@
+/* ============================================================
+   LENTERA JIWA — css/components.css (PERF v3.0 FIXED)
+   Reusable UI Components: Buttons · Age Selector · Service Cards
+   · Artikel Cards · Tes Cards · Buku Cards · Form Elements
+   · Testimonial Cards · CTA Dark Block · Trust Strip
+
+   PERBAIKAN v3.0:
+   - book-cover-shine pakai translate3d (bukan left property)
+   - Tidak ada duplikasi dengan style-loading-addition.css
+   - Semua backdrop-filter dikurangi di mobile
+   ============================================================ */
+
+
+/* ============================================================
+   01. BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-full);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    box-shadow var(--t-mid) var(--ease-out),
+    background var(--t-mid) var(--ease-out);
+}
+
+.btn:active,
+[class*="btn-"]:active { transform: scale(0.96) !important; }
+
+.btn-sm { padding: 9px 20px;  font-size: 13px; }
+.btn-md { padding: 13px 28px; font-size: 14px; }
+.btn-lg { padding: 17px 40px; font-size: 16px; }
+.btn-xl { padding: 20px 48px; font-size: 17px; }
+
+.btn-primary {
+  background: var(--age-gradient);
+  color: white;
+  box-shadow: 0 6px 22px rgba(123, 111, 212, 0.32);
+}
+.btn-primary:hover {
+  transform: translate3d(0, -3px, 0) scale(1.02);
+  box-shadow: 0 12px 36px rgba(123, 111, 212, 0.42);
+}
+
+.btn-soft {
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid var(--border-strong);
+  color: var(--age-primary);
+}
+.btn-soft:hover {
+  background: white;
+  border-color: var(--age-primary);
+  transform: translate3d(0, -2px, 0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--border-mid);
+  color: var(--text-secondary);
+}
+.btn-ghost:hover {
+  background: var(--age-light);
+  border-color: var(--age-primary);
+  color: var(--age-primary);
+  transform: translate3d(0, -2px, 0);
+}
+
+.btn-text {
+  background: none;
+  color: var(--age-primary);
+  padding: 8px 12px;
+  gap: 6px;
+  font-size: 14px;
+}
+.btn-text:hover { background: var(--age-light); transform: translate3d(3px, 0, 0); }
+
+.btn-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--age-light);
+  color: var(--age-primary);
+  font-size: 18px;
+}
+.btn-icon:hover {
+  background: var(--age-primary);
+  color: white;
+  transform: scale(1.1) rotate(8deg);
+}
+
+.btn-danger { background: #FFE8E8; color: #C0392B; }
+.btn-danger:hover { background: #C0392B; color: white; transform: translate3d(0, -2px, 0); }
+
+.btn-ripple { position: relative; overflow: hidden; }
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.32);
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: ripple 0.65s var(--ease-out) forwards;
+  transform-origin: center;
+}
+
+
+/* ============================================================
+   02. AGE SELECTOR CARDS
+   ============================================================ */
+.age-selector-grid {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.age-card-item {
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-lg);
+  padding: 18px 24px;
+  cursor: pointer;
+  text-align: center;
+  min-width: 115px;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    background var(--t-mid),
+    border-color var(--t-mid),
+    box-shadow var(--t-mid);
+}
+
+.age-card-item:hover {
+  background: rgba(255, 255, 255, 0.92);
+  transform: translate3d(0, -5px, 0) scale(1.04);
+}
+
+.age-card-item.is-active {
+  background: white;
+  transform: translate3d(0, -6px, 0) scale(1.06);
+}
+
+.age-card-item.is-active[data-age-val="anak"]   { border-color: var(--mint-600);  box-shadow: 0 10px 32px rgba(61, 184, 122, 0.22); }
+.age-card-item.is-active[data-age-val="remaja"] { border-color: var(--sky-600);   box-shadow: 0 10px 32px rgba(74, 159, 212, 0.22); }
+.age-card-item.is-active[data-age-val="dewasa"] { border-color: var(--lav-600);   box-shadow: 0 10px 32px rgba(123, 111, 212, 0.22); }
+.age-card-item.is-active[data-age-val="lansia"] { border-color: var(--peach-600); box-shadow: 0 10px 32px rgba(232, 139, 106, 0.22); }
+
+.age-card-emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+.age-card-label { font-size: 14px; font-weight: 800; color: var(--text-primary); display: block; }
+.age-card-range { font-size: 11px; color: var(--text-muted); margin-top: 3px; display: block; font-weight: 600; }
+
+.age-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  background: var(--age-light);
+  border: 1.5px solid var(--age-primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--age-primary);
+  margin-bottom: 16px;
+  transition:
+    background 0.4s,
+    border-color 0.4s,
+    color 0.4s;
+}
+
+
+/* ============================================================
+   03. SERVICE CARDS (Layanan)
+   ============================================================ */
+.layanan-card {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-xl);
+  padding: 40px 34px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  contain: layout style;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    box-shadow var(--t-mid) var(--ease-out),
+    background var(--t-mid);
+}
+
+.layanan-card::before {
+  content: '';
+  position: absolute;
+  top: -70px; right: -70px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  opacity: 0.12;
+  transition: transform 0.5s var(--ease-smooth), opacity 0.4s;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+.layanan-card:nth-child(1)::before { background: var(--lav-200); }
+.layanan-card:nth-child(2)::before { background: var(--sky-400); }
+.layanan-card:nth-child(3)::before { background: var(--peach-400); }
+
+.layanan-card:hover {
+  transform: translate3d(0, -10px, 0);
+  box-shadow: 0 24px 64px rgba(45, 37, 80, 0.13);
+  background: rgba(255, 255, 255, 0.88);
+}
+.layanan-card:hover::before { transform: scale(1.6) translateZ(0); opacity: 0.2; }
+
+.layanan-icon-wrap {
+  width: 64px; height: 64px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin-bottom: 24px;
+  transition: transform var(--t-mid) var(--ease-spring);
+}
+.layanan-card:hover .layanan-icon-wrap { transform: scale(1.1) rotate(-5deg); }
+
+.layanan-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.layanan-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.72;
+}
+
+.layanan-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--age-primary);
+  background: var(--age-light);
+  padding: 9px 18px;
+  border-radius: var(--radius-full);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast),
+    gap var(--t-fast),
+    transform var(--t-fast) var(--ease-spring);
+}
+.layanan-cta:hover { background: var(--age-primary); color: white; gap: 12px; transform: translate3d(3px, 0, 0); }
+
+
+/* ============================================================
+   04. ARTIKEL CARDS
+   ============================================================ */
+.artikel-card {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  contain: layout style;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    box-shadow var(--t-mid) var(--ease-out),
+    background var(--t-mid);
+}
+
+.artikel-card:hover {
+  transform: translate3d(0, -6px, 0);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.artikel-card.featured {
+  background: linear-gradient(155deg,
+    rgba(232, 228, 255, 0.75),
+    rgba(255, 255, 255, 0.65)
+  );
+}
+.artikel-card.featured:hover {
+  background: linear-gradient(155deg,
+    rgba(232, 228, 255, 0.90),
+    rgba(255, 255, 255, 0.88)
+  );
+}
+
+.artikel-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  letter-spacing: 0.03em;
+}
+
+.artikel-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 12px;
+  transition: color var(--t-fast);
+}
+.artikel-card:hover .artikel-title { color: var(--age-primary); }
+.artikel-title.featured { font-size: clamp(22px, 3vw, 34px); }
+.artikel-title.regular  { font-size: 19px; }
+
+.artikel-excerpt {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.72;
+}
+
+.artikel-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.filter-btn {
+  padding: 9px 20px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border-mid);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--t-fast) var(--ease-spring),
+    border-color var(--t-fast),
+    color var(--t-fast),
+    transform var(--t-fast) var(--ease-spring);
+}
+.filter-btn:hover,
+.filter-btn.is-active {
+  background: var(--age-light);
+  border-color: var(--age-primary);
+  color: var(--age-primary);
+  transform: translate3d(0, -2px, 0);
+}
+
+
+/* ============================================================
+   05. TES CARDS
+   ============================================================ */
+.tes-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  contain: layout style;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    border-color var(--t-mid),
+    box-shadow var(--t-mid),
+    background var(--t-mid);
+}
+.tes-card:hover {
+  transform: translate3d(8px, 0, 0);
+  border-color: var(--lav-200);
+  box-shadow: var(--shadow-md);
+  background: rgba(255, 255, 255, 0.90);
+}
+.tes-card.is-active {
+  border-color: var(--age-primary);
+  background: white;
+  box-shadow: 0 12px 40px rgba(123, 111, 212, 0.16);
+  transform: translate3d(4px, 0, 0);
+}
+.tes-icon  { font-size: 36px; flex-shrink: 0; }
+.tes-name  { font-size: 15px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+.tes-info  { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.tes-arrow {
+  font-size: 18px; color: var(--lav-200); margin-left: auto;
+  transition:
+    transform var(--t-fast) var(--ease-spring),
+    color var(--t-fast);
+}
+.tes-card:hover .tes-arrow,
+.tes-card.is-active .tes-arrow { color: var(--age-primary); transform: translate3d(4px, 0, 0); }
+
+.tes-demo-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-xl);
+  padding: 36px;
+  box-shadow: var(--shadow-lg);
+}
+
+.tes-demo-question {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.45;
+  margin-bottom: 24px;
+}
+
+.tes-demo-option,
+.test-option {
+  width: 100%;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.65);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color var(--t-fast),
+    background var(--t-fast),
+    transform var(--t-fast) var(--ease-spring);
+}
+
+.tes-demo-option {
+  padding: 13px 18px;
+  border: 2px solid rgba(123, 111, 212, 0.14);
+  font-size: 14px;
+  margin-bottom: 9px;
+}
+
+.test-option {
+  padding: 16px 22px;
+  border: 2px solid var(--border-mid);
+  font-size: 15px;
+}
+
+.tes-demo-option::before,
+.test-option::before {
+  content: '';
+  border-radius: 50%;
+  border: 2px solid rgba(123, 111, 212, 0.28);
+  flex-shrink: 0;
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.tes-demo-option::before { width: 18px; height: 18px; }
+.test-option::before     { width: 20px; height: 20px; }
+
+.tes-demo-option:hover,
+.test-option:hover {
+  border-color: var(--age-primary);
+  background: var(--age-light);
+}
+.tes-demo-option:hover { transform: translate3d(5px, 0, 0); }
+.test-option:hover     { transform: translate3d(6px, 0, 0); }
+
+.tes-demo-option:hover::before,
+.test-option:hover::before {
+  background: var(--age-primary);
+  border-color: var(--age-primary);
+}
+
+.tes-demo-option.is-selected,
+.test-option.is-selected {
+  border-color: var(--age-primary);
+  background: var(--age-light);
+}
+.tes-demo-option.is-selected::before,
+.test-option.is-selected::before {
+  background: var(--age-primary);
+  border-color: var(--age-primary);
+}
+
+
+/* ============================================================
+   06. BUKU CARDS
+   PERBAIKAN: book-cover-shine pakai translate3d bukan left property
+   ============================================================ */
+.buku-card {
+  min-width: 195px;
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  contain: layout style;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    box-shadow var(--t-mid) var(--ease-out);
+}
+.buku-card:hover {
+  transform: translate3d(0, -10px, 0) rotate(-1.5deg) scale(1.02);
+  box-shadow: 0 20px 50px rgba(45, 37, 80, 0.14);
+}
+
+.buku-cover {
+  height: 195px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 54px;
+  position: relative;
+  overflow: hidden;
+}
+.buku-cover::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.06));
+}
+
+/* PERBAIKAN: translate3d menggantikan left property sepenuhnya */
+.buku-cover-shine {
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  transform: translate3d(-150%, 0, 0) skewX(-15deg);
+  will-change: transform;
+  transition: transform 0.6s ease;
+}
+.buku-card:hover .buku-cover-shine {
+  transform: translate3d(350%, 0, 0) skewX(-15deg);
+}
+
+.buku-info       { padding: 14px 16px 18px; }
+.buku-title-text { font-size: 13px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; line-height: 1.35; }
+.buku-author-text{ font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+
+/* ============================================================
+   07. FORM ELEMENTS
+   ============================================================ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-mid);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  outline: none;
+  transition:
+    border-color var(--t-fast),
+    box-shadow var(--t-fast),
+    background var(--t-fast);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  border-color: var(--age-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(123, 111, 212, 0.10);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--text-muted); font-weight: 400; }
+
+.form-textarea { resize: vertical; min-height: 120px; }
+
+
+/* ============================================================
+   08. TESTIMONIAL CARDS
+   ============================================================ */
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  position: relative;
+  contain: layout style;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    box-shadow var(--t-mid);
+}
+.testimonial-card:hover { transform: translate3d(0, -6px, 0); box-shadow: var(--shadow-md); }
+
+.testimonial-quote {
+  font-family: 'Fraunces', serif;
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 0.8;
+  color: var(--age-primary);
+  opacity: 0.25;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.testimonial-author {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   09. CTA DARK BLOCK
+   ============================================================ */
+.cta-dark-block {
+  background: var(--lav-900);
+  border-radius: var(--radius-2xl);
+  padding: 80px 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-dark-deco {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.cta-dark-deco-1 {
+  width: 300px; height: 300px;
+  top: -80px; left: -80px;
+  background: radial-gradient(circle, rgba(196, 190, 255, 0.12), transparent 70%);
+  filter: blur(40px);
+}
+
+.cta-dark-deco-2 {
+  width: 240px; height: 240px;
+  bottom: -60px; right: -60px;
+  background: radial-gradient(circle, rgba(74, 159, 212, 0.10), transparent 70%);
+  filter: blur(32px);
+}
+
+
+/* ============================================================
+   10. TRUST STRIP
+   ============================================================ */
+.trust-strip {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition:
+    transform var(--t-fast) var(--ease-spring),
+    box-shadow var(--t-fast);
+}
+.trust-badge:hover {
+  transform: translate3d(0, -3px, 0);
+  box-shadow: var(--shadow-sm);
+  background: white;
+}
+
+
+/* ============================================================
+   11. RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .artikel-grid { grid-template-columns: 1fr; }
+  .artikel-grid .featured { grid-row: auto; }
+
+  /* Mobile: kurangi backdrop-filter */
+  .layanan-card,
+  .artikel-card,
+  .testimonial-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+@media (max-width: 600px) {
+  .cta-dark-block { padding: 48px 28px; }
+}
+
+@media (max-width: 480px) {
+  .trust-strip { gap: 8px; }
+  .trust-badge { font-size: 11px; padding: 8px 14px; }
+  .stats-band  { grid-template-columns: 1fr 1fr; gap: 24px; padding: 32px 20px; }
+
+  /* Mobile: matikan backdrop-filter pada cards */
+  .tes-card,
+  .tes-demo-panel,
+  .age-card-item {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

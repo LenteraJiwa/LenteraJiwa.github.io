@@ -1,0 +1,90 @@
+<!-- ══════════════════════════════════════════════════════════
+     LENTERA JIWA — pages/tes.html
+     Konten halaman tes psikologi (dimuat oleh index.html via SPA)
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- ══ HEADER ══ -->
+<header style="padding-top:60px;padding-bottom:52px;text-align:center;">
+  <div class="container">
+    <div class="section-tag reveal" style="justify-content:center;margin:0 auto 18px;">🧪 Tes Tervalidasi</div>
+    <h1 class="section-title reveal" style="text-align:center;max-width:600px;margin:0 auto 20px;">Kenali Dirimu Lebih <em>Dalam</em></h1>
+    <p class="section-intro reveal" style="text-align:center;margin:0 auto 12px;">
+      Instrumen tervalidasi secara psikometrik. Gratis, anonim, dan hasilnya langsung kamu lihat.
+    </p>
+    <p role="note" class="reveal" style="font-size:13px;color:var(--text-muted);text-align:center;max-width:480px;margin:0 auto;">
+      Tes ini bukan diagnosis. Hasilnya adalah titik awal untuk memahami dirimu — bukan label permanen.
+    </p>
+  </div>
+</header>
+
+<!-- ══ TES SELECTOR ══ -->
+<section class="section" style="padding-top:0;" aria-labelledby="tes-pilih-heading">
+  <div class="container">
+    <div id="tes-selector">
+      <h2 id="tes-pilih-heading" class="sr-only">Pilih tes psikologi</h2>
+      <div class="grid grid-3 reveal" style="gap:24px;align-items:start;" role="list">
+
+        <div class="tes-selector-card" data-tes="wellbeing" role="listitem" tabindex="0" aria-label="Mulai Tes Wellbeing Emosional">
+          <div class="tes-big-icon">😌</div>
+          <div class="tes-card-title">Wellbeing Emosional</div>
+          <div class="tes-card-meta">20 pertanyaan · ~10 menit</div>
+          <p class="tes-card-desc">Ukur kesejahteraan emosionalmu secara menyeluruh — dari energi positif, keterhubungan sosial, hingga kemampuan pulih dari tekanan.</p>
+          <button class="btn btn-primary btn-md w-full btn-ripple" style="justify-content:center;margin-bottom:16px;"
+                  onclick="TestEngine.start('wellbeing')">
+            Mulai Tes ✨
+          </button>
+          <div class="tes-basis">Diadaptasi dari WEMWBS, WHO-5 &amp; PERMA Profiler (α = .87)</div>
+        </div>
+
+        <div class="tes-selector-card" data-tes="kepribadian" role="listitem" tabindex="0" aria-label="Mulai Tes Profil Kepribadian">
+          <div class="tes-big-icon">🧠</div>
+          <div class="tes-card-title">Profil Kepribadian</div>
+          <div class="tes-card-meta">30 pertanyaan · ~15 menit</div>
+          <p class="tes-card-desc">Temukan profil kepribadian OCEAN-mu berdasarkan Big Five Theory — Openness, Conscientiousness, Extraversion, Agreeableness, dan Neuroticism.</p>
+          <button class="btn btn-primary btn-md w-full btn-ripple" style="justify-content:center;margin-bottom:16px;"
+                  onclick="TestEngine.start('kepribadian')">
+            Mulai Tes ✨
+          </button>
+          <div class="tes-basis">Diadaptasi dari Big Five Inventory, NEO-PI-R (Costa &amp; McCrae, 1992)</div>
+        </div>
+
+        <div class="tes-selector-card" data-tes="stres" role="listitem" tabindex="0" aria-label="Mulai Tes Stres dan Burnout">
+          <div class="tes-big-icon">🌿</div>
+          <div class="tes-card-title">Stres &amp; Burnout</div>
+          <div class="tes-card-meta">15 pertanyaan · ~8 menit</div>
+          <p class="tes-card-desc">Identifikasi level stres dan tanda-tanda burnout sebelum berkembang lebih jauh. Dapatkan insight tentang exhaustion, cynicism, dan recovery.</p>
+          <button class="btn btn-primary btn-md w-full btn-ripple" style="justify-content:center;margin-bottom:16px;"
+                  onclick="TestEngine.start('stres')">
+            Mulai Tes ✨
+          </button>
+          <div class="tes-basis">Diadaptasi dari MBI-GS (Schaufeli, 1996) &amp; PSS-10 (Cohen, 1983), α = .83</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ FULL TEST ENGINE ══ -->
+    <div id="test-engine" role="main" aria-label="Tes psikologi aktif">
+      <div class="test-engine-header">
+        <div class="test-q-counter" id="q-counter" aria-live="polite">Pertanyaan 1 dari 20</div>
+        <div class="test-progress-outer" aria-hidden="true">
+          <div class="test-progress-inner" id="test-progress" style="width:0%;"></div>
+        </div>
+      </div>
+      <p class="test-question-text" id="test-question" aria-live="polite"></p>
+      <div class="test-options" id="test-options" role="group" aria-label="Pilihan jawaban"></div>
+      <div class="test-nav">
+        <button class="btn btn-ghost btn-md" id="btn-back" onclick="TestEngine.prev()" aria-label="Kembali ke pertanyaan sebelumnya">
+          ← Kembali
+        </button>
+        <button class="btn btn-soft btn-md" id="btn-skip" onclick="TestEngine.skip()" aria-label="Lewati pertanyaan ini">
+          Lewati
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ RESULTS ══ -->
+    <div id="test-results" role="main" aria-label="Hasil tes psikologi" aria-live="polite"></div>
+
+  </div>
+</section>

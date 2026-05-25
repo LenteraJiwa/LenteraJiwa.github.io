@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id" data-age="dewasa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lentera Jiwa — Merawat Jiwa, Menerangi Perjalanan</title>
+  <meta name="description" content="Platform kesehatan mental terpercaya Indonesia. Artikel berbasis bukti, tes psikologi tervalidasi, perpustakaan digital, dan konsultasi bersama psikolog berlisensi — untuk semua usia.">
+  <meta name="keywords" content="kesehatan mental, psikologi, konsultasi psikolog, tes psikologi, burnout, kecemasan, depresi, mindfulness, Indonesia">
+  <meta name="author" content="Lentera Jiwa">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#7B6FD4">
+  <link rel="canonical" href="https://lenterajiwa.id/">
+
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://lenterajiwa.id/">
+  <meta property="og:title"       content="Lentera Jiwa — Merawat Jiwa, Menerangi Perjalanan">
+  <meta property="og:description" content="Ruang hangat untuk memahami diri dan bertumbuh. Artikel, tes psikologi, buku, dan konsultasi yang disesuaikan dengan kebutuhanmu.">
+  <meta property="og:image"       content="https://lenterajiwa.id/assets/og-image.jpg">
+  <meta property="og:locale"      content="id_ID">
+  <meta property="og:site_name"   content="Lentera Jiwa">
+
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@lenterajiwa">
+  <meta name="twitter:title"       content="Lentera Jiwa — Merawat Jiwa, Menerangi Perjalanan">
+  <meta name="twitter:description" content="Ruang hangat untuk memahami diri dan bertumbuh.">
+  <meta name="twitter:image"       content="https://lenterajiwa.id/assets/og-image.jpg">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title"   content="Lentera Jiwa">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+  <!--
+    ╔══════════════════════════════════════════════════════════╗
+    ║  LENTERA JIWA — Sistem CSS Modular (SPA Architecture)    ║
+    ║                                                          ║
+    ║  CORE (selalu dimuat):                                   ║
+    ║    css/base.css       — Reset, Variables, Layout, Nav,   ║
+    ║                         Footer, Animations, Utilities    ║
+    ║    css/components.css — Buttons, Cards, Forms, Badges    ║
+    ║                                                          ║
+    ║  PAGE-SPECIFIC (lazy-load via loadPageStyle di main.js): ║
+    ║    css/pages/utama.css        — Halaman beranda          ║
+    ║    css/pages/layanan.css      — Halaman layanan          ║
+    ║    css/pages/artikel.css      — Halaman artikel          ║
+    ║    css/pages/perpustakaan.css — Halaman perpustakaan     ║
+    ║    css/pages/tes.css          — Halaman tes psikologi    ║
+    ║    css/pages/tentang.css      — Halaman tentang kami     ║
+    ╚══════════════════════════════════════════════════════════╝
+  -->
+
+  <!-- CORE CSS — selalu ada, dimuat sinkron -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- CSS loading screen tambahan (jika ada) -->
+  <link rel="stylesheet" href="css/style-loading-addition.css">
+
+  <!--
+    CSS halaman-spesifik TIDAK diletakkan di sini.
+    Mereka di-lazy-load oleh loadPageStyle() di main.js
+    saat pengguna berpindah ke halaman tersebut.
+
+    Manfaat:
+    - Halaman pertama hanya memuat CSS yang dibutuhkan
+    - CSS ter-cache di <head> setelah pertama kali dimuat
+    - Tidak ada FOUC karena CSS dimuat sebelum HTML diinjeksikan
+  -->
+</head>
+<body>
+
+<!-- ══ LOADING SCREEN ══════════════════════════════════════ -->
+<div id="spa-loading" role="status" aria-label="Memuat Lentera Jiwa" aria-live="polite">
+  <div class="loading-logo" aria-hidden="true">🪔 Lentera Jiwa</div>
+  <div class="loading-spinner" aria-hidden="true"></div>
+  <p class="loading-hint">Menyiapkan ruang untukmu…</p>
+</div>
+
+<!-- ══ BACKGROUND ══════════════════════════════════════════ -->
+<div class="bg-canvas" aria-hidden="true">
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+  <div class="bg-blob bg-blob-3"></div>
+  <div class="bg-blob bg-blob-4"></div>
+  <div class="bg-blob bg-blob-5"></div>
+</div>
+<div id="particles-canvas" aria-hidden="true"></div>
+
+<!-- ══ NAVIGATION ══════════════════════════════════════════ -->
+<header>
+  <nav id="main-nav" class="nav" role="navigation" aria-label="Navigasi Utama">
+    <div id="nav-inner" class="nav-inner">
+
+      <a href="index.html" class="nav-logo" aria-label="Lentera Jiwa — Halaman Utama">
+        <div class="nav-logo-icon" aria-hidden="true">🪔</div>
+        Lentera <strong>Jiwa</strong>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="layanan.html" class="nav-link" data-page="layanan.html"><span class="nav-link-dot" aria-hidden="true"></span>Layanan</a></li>
+        <li><a href="artikel.html" class="nav-link" data-page="artikel.html"><span class="nav-link-dot" aria-hidden="true"></span>Artikel</a></li>
+        <li><a href="perpustakaan.html" class="nav-link" data-page="perpustakaan.html"><span class="nav-link-dot" aria-hidden="true"></span>Buku &amp; Jurnal</a></li>
+        <li><a href="tes.html" class="nav-link" data-page="tes.html"><span class="nav-link-dot" aria-hidden="true"></span>Tes Psikologi</a></li>
+        <li><a href="tentang.html" class="nav-link" data-page="tentang.html"><span class="nav-link-dot" aria-hidden="true"></span>Tentang</a></li>
+      </ul>
+
+      <div class="nav-right" style="display:flex;align-items:center;gap:10px;">
+        <div id="nav-age-label"
+             class="age-indicator"
+             style="margin-bottom:0;font-size:12px;padding:7px 14px;"
+             aria-live="polite"
+             aria-label="Mode konten aktif">
+          ☀️ Dewasa
+        </div>
+        <a href="layanan.html" class="nav-cta btn-ripple" aria-label="Mulai konsultasi">
+          ✨ Konsultasi
+        </a>
+        <button id="nav-burger"
+                class="nav-burger"
+                aria-label="Buka menu navigasi"
+                aria-expanded="false"
+                aria-controls="nav-drawer">
+          <span class="nav-burger-bar"></span>
+          <span class="nav-burger-bar"></span>
+          <span class="nav-burger-bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+<!-- ══ DRAWER OVERLAY ══════════════════════════════════════ -->
+<div id="nav-drawer-overlay" class="nav-drawer-overlay" aria-hidden="true"></div>
+
+<aside id="nav-drawer"
+       class="nav-drawer"
+       role="dialog"
+       aria-modal="true"
+       aria-label="Menu Navigasi Mobile"
+       aria-hidden="true">
+
+  <div class="nav-drawer-header">
+    <a href="index.html" class="nav-logo" aria-label="Lentera Jiwa — Beranda">
+      <div class="nav-logo-icon" aria-hidden="true">🪔</div>
+      Lentera <strong>Jiwa</strong>
+    </a>
+    <button id="nav-drawer-close" class="nav-drawer-close" aria-label="Tutup menu">✕</button>
+  </div>
+
+  <nav class="nav-drawer-body" aria-label="Menu mobile">
+    <a href="index.html"        class="nav-drawer-link"><span>🏠 Beranda</span>          <span class="arrow">→</span></a>
+    <a href="layanan.html"      class="nav-drawer-link"><span>💬 Layanan</span>          <span class="arrow">→</span></a>
+    <a href="artikel.html"      class="nav-drawer-link"><span>📝 Artikel</span>          <span class="arrow">→</span></a>
+    <a href="perpustakaan.html" class="nav-drawer-link"><span>📚 Buku &amp; Jurnal</span><span class="arrow">→</span></a>
+    <a href="tes.html"          class="nav-drawer-link"><span>🧪 Tes Psikologi</span>   <span class="arrow">→</span></a>
+    <a href="tentang.html"      class="nav-drawer-link"><span>💜 Tentang Kami</span>    <span class="arrow">→</span></a>
+  </nav>
+
+  <div class="nav-drawer-footer">
+    <div class="nav-drawer-age-section">
+      <span class="nav-drawer-age-label">Konten untuk usia</span>
+      <div class="nav-drawer-ages" role="group" aria-label="Pilih kelompok usia">
+        <div class="nav-drawer-age" data-age-val="anak"   role="button" tabindex="0" aria-pressed="false"><span class="age-emoji">🌱</span><span class="age-text">Anak</span></div>
+        <div class="nav-drawer-age" data-age-val="remaja" role="button" tabindex="0" aria-pressed="false"><span class="age-emoji">🌙</span><span class="age-text">Remaja</span></div>
+        <div class="nav-drawer-age is-active" data-age-val="dewasa" role="button" tabindex="0" aria-pressed="true"><span class="age-emoji">☀️</span><span class="age-text">Dewasa</span></div>
+        <div class="nav-drawer-age" data-age-val="lansia" role="button" tabindex="0" aria-pressed="false"><span class="age-emoji">🌸</span><span class="age-text">Lansia</span></div>
+      </div>
+    </div>
+    <a href="layanan.html"
+       class="btn btn-primary btn-md w-full"
+       style="justify-content:center;margin-top:12px;">
+      ✨ Mulai Konsultasi
+    </a>
+  </div>
+
+</aside>
+
+<!-- ══ MAIN CONTENT (SPA target) ═══════════════════════════ -->
+<main id="app-content"
+      role="main"
+      aria-label="Konten Utama"
+      aria-live="polite"
+      style="min-height:100vh;padding-top:88px;">
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo" aria-label="Footer Lentera Jiwa">
+  <div class="footer-inner">
+    <div class="footer-top">
+
+      <div>
+        <a href="index.html" class="footer-brand-logo" aria-label="Lentera Jiwa — Kembali ke Beranda">
+          Lentera <strong style="font-style:normal;font-weight:700;">Jiwa</strong>
+        </a>
+        <p class="footer-brand-desc">
+          Ruang hangat untuk setiap jiwa yang sedang mencari cahaya dalam perjalanannya.
+        </p>
+        <div class="footer-social" aria-label="Media sosial Lentera Jiwa">
+          <button class="footer-social-btn" aria-label="Instagram Lentera Jiwa">📸</button>
+          <button class="footer-social-btn" aria-label="Twitter / X Lentera Jiwa">🐦</button>
+          <button class="footer-social-btn" aria-label="YouTube Lentera Jiwa">▶️</button>
+          <button class="footer-social-btn" aria-label="TikTok Lentera Jiwa">🎵</button>
+        </div>
+      </div>
+
+      <nav aria-label="Tautan Layanan">
+        <span class="footer-col-title">Layanan</span>
+        <ul role="list">
+          <li><a href="layanan.html" class="footer-link-item">Konsultasi Individual</a></li>
+          <li><a href="layanan.html" class="footer-link-item">Terapi Keluarga</a></li>
+          <li><a href="layanan.html" class="footer-link-item">Workshop Kelompok</a></li>
+          <li><a href="layanan.html" class="footer-link-item">Jadwal Temu</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Tautan Konten">
+        <span class="footer-col-title">Konten</span>
+        <ul role="list">
+          <li><a href="artikel.html"      class="footer-link-item">Artikel</a></li>
+          <li><a href="perpustakaan.html" class="footer-link-item">Buku &amp; Jurnal</a></li>
+          <li><a href="tes.html"          class="footer-link-item">Tes Psikologi</a></li>
+          <li><a href="perpustakaan.html" class="footer-link-item">Materi &amp; Modul</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Tautan Tentang">
+        <span class="footer-col-title">Tentang</span>
+        <ul role="list">
+          <li><a href="tentang.html" class="footer-link-item">Tim Kami</a></li>
+          <li><a href="tentang.html" class="footer-link-item">Misi &amp; Visi</a></li>
+          <li><a href="tentang.html" class="footer-link-item">Kontak</a></li>
+          <li><a href="tentang.html" class="footer-link-item">Kebijakan Privasi</a></li>
+        </ul>
+      </nav>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Lentera Jiwa. Dibuat dengan 💜 di Indonesia.</span>
+      <div class="footer-bottom-badge">
+        <span aria-hidden="true">🔒</span>
+        <span>Data Anda Aman &amp; Rahasia</span>
+      </div>
+      <span>Krisis? Into The Light: <strong style="color:rgba(255,255,255,0.65);">119 ext 8</strong></span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════════
+  Urutan loading SANGAT penting:
+  1. scroll.js  — ScrollReveal harus ada sebelum main.js memanggil observeAll()
+  2. marquee.js — MarqueeManager harus ada sebelum main.js memanggil init()
+  3. tes.js     — TesManager harus ada sebelum main.js memanggil init()
+  4. main.js    — Core SPA logic, loadPageStyle, navigasi
+  Script halaman-spesifik (layanan.js, artikel.js, dll.) di-load
+  secara dinamis oleh loadPageScript() di main.js.
+══════════════════════════════════════════════════════════ -->
+<script src="js/scroll.js"  defer></script>
+<script src="js/marquee.js" defer></script>
+<script src="js/tes.js"     defer></script>
+<script src="js/main.js"    defer></script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+/* ============================================================
+   LENTERA JIWA — css/pages/layanan.css
+   Halaman Layanan — Specific Styles
+   Bergantung pada: base.css · components.css
+   ============================================================ */
+
+
+/* ============================================================
+   01. LAYANAN HERO
+   ============================================================ */
+.layanan-hero {
+  min-height: unset !important;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 60px;
+  padding-top: 120px !important;
+  padding-bottom: 64px !important;
+}
+
+/* Hero Visual — Floating Cards */
+.layanan-hero-visual { position: relative; height: 520px; }
+
+.floating-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-xl);
+  padding: 22px 26px;
+  box-shadow: var(--shadow-lg);
+}
+.fc-1 { top: 0;      left: 20px;  width: 260px; animation: floatBadge 5.0s ease-in-out infinite; }
+.fc-2 { top: 160px;  right: 0;    width: 240px; animation: floatBadge 6.5s ease-in-out infinite reverse; }
+.fc-3 { bottom: 60px; left: 40px; width: 220px; animation: floatBadge 7.0s ease-in-out infinite 1s; }
+
+.fc-emoji { font-size: 32px; margin-bottom: 10px; }
+.fc-label { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+.fc-value { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 400; color: var(--text-primary); line-height: 1.3; }
+.fc-sub   { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.fc-green { color: var(--mint-600); font-weight: 800; font-size: 13px; }
+
+
+/* ============================================================
+   02. PRICING CARDS
+   ============================================================ */
+.pricing-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-2xl);
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--t-mid) var(--ease-spring),
+    box-shadow var(--t-mid),
+    border-color var(--t-mid);
+}
+.pricing-card:hover         { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
+.pricing-card.featured      { border-color: var(--age-primary); background: white; box-shadow: var(--shadow-lav-lg); }
+
+.pricing-card.featured::before {
+  content: '✨ Paling Populer';
+  position: absolute;
+  top: 20px; right: -28px;
+  background: var(--age-gradient);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 40px;
+  transform: rotate(35deg);
+  letter-spacing: 0.05em;
+}
+
+.pricing-icon     { font-size: 44px; margin-bottom: 16px; }
+.pricing-name     { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+.pricing-tagline  { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px; }
+.pricing-price    { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 300; color: var(--text-primary); margin-bottom: 4px; line-height: 1; }
+.pricing-price span { font-size: 15px; font-weight: 700; vertical-align: top; margin-top: 8px; display: inline-block; }
+.pricing-duration { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 28px; }
+
+.pricing-features      { list-style: none; padding: 0; margin-bottom: 28px; }
+.pricing-features li {
+  font-size: 14px; color: var(--text-secondary);
+  padding: 8px 0; border-bottom: 1px solid var(--border-mid);
+  display: flex; align-items: center; gap: 10px; line-height: 1.5;
+}
+.pricing-features li::before      { content: '✓'; color: var(--mint-600); font-weight: 800; flex-shrink: 0; }
+.pricing-features li:last-child   { border-bottom: none; }
+
+
+/* ============================================================
+   03. BOOKING FORM
+   ============================================================ */
+.booking-wrapper {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-2xl);
+  padding: 52px;
+  box-shadow: var(--shadow-lg);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.schedule-chip {
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-mid);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.4;
+  transition: all var(--t-fast) var(--ease-spring);
+}
+.schedule-chip:hover,
+.schedule-chip.is-selected {
+  border-color: var(--age-primary);
+  background: var(--age-light);
+  color: var(--age-primary);
+  transform: translateY(-2px);
+}
+
+.form-success             { display: none; text-align: center; padding: 20px 0; }
+.form-success.is-visible  { display: block; }
+.form-success-icon        { font-size: 64px; margin-bottom: 16px; }
+
+.modality-toggle { display: flex; gap: 10px; margin-bottom: 8px; }
+
+.modality-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-mid);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--t-fast) var(--ease-spring);
+}
+.modality-btn.is-active { border-color: var(--age-primary); background: var(--age-light); color: var(--age-primary); }
+
+
+/* ============================================================
+   04. FAQ
+   ============================================================ */
+.faq-item { border-bottom: 1px solid var(--border-mid); overflow: hidden; }
+
+.faq-q {
+  width: 100%;
+  text-align: left;
+  padding: 20px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color var(--t-fast);
+}
+.faq-q:hover { color: var(--age-primary); }
+
+.faq-icon { font-size: 20px; transition: transform 0.3s var(--ease-smooth); flex-shrink: 0; }
+.faq-item.is-open .faq-icon { transform: rotate(45deg); }
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  transition: max-height 0.4s var(--ease-smooth), padding 0.3s;
+}
+.faq-item.is-open .faq-a { max-height: 300px; padding-bottom: 20px; }
+
+
+/* ============================================================
+   05. PROCESS STEPS
+   ============================================================ */
+.process-step      { display: flex; gap: 24px; align-items: flex-start; }
+.process-num {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--age-gradient);
+  color: white;
+  font-weight: 800;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(123, 111, 212, 0.25);
+}
+.process-connector { width: 2px; height: 40px; background: linear-gradient(to bottom, var(--age-primary), transparent); margin: 4px 0 4px 23px; }
+
+
+/* ============================================================
+   06. RESPONSIVE — Layanan Page
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .layanan-hero {
+    grid-template-columns: 1fr !important;
+    padding-top: 96px !important;
+    padding-bottom: 48px !important;
+    gap: 40px;
+  }
+  .layanan-hero-visual { display: none !important; }
+}
+
+@media (max-width: 600px) {
+  .booking-wrapper { padding: 28px 20px; border-radius: var(--radius-xl); }
+  .form-row        { grid-template-columns: 1fr; }
+  .schedule-grid   { grid-template-columns: repeat(2, 1fr); }
+}

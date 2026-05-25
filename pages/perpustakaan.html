@@ -1,0 +1,75 @@
+<!-- ══════════════════════════════════════════════════════════
+     LENTERA JIWA — pages/perpustakaan.html
+     Konten halaman perpustakaan (dimuat oleh index.html via SPA)
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- ══ HEADER ══ -->
+<header style="padding-top:60px;padding-bottom:40px;text-align:center;">
+  <div class="container">
+    <div class="section-tag reveal" style="justify-content:center;margin:0 auto 18px;">📚 Perpustakaan Digital</div>
+    <h1 class="section-title reveal" style="text-align:center;">Buku &amp; Jurnal untuk <em>Setiap Jiwa</em></h1>
+    <p class="section-intro reveal" style="text-align:center;margin:0 auto 32px;">Dikurasi oleh tim psikolog kami — konten berkualitas untuk mendampingi perjalananmu.</p>
+    <div class="search-wrap reveal" style="max-width:480px;margin:0 auto;">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="search" class="search-input" id="search-input" placeholder="Cari judul, penulis, atau topik..." aria-label="Cari buku atau jurnal">
+      <span class="search-count" id="search-count" aria-live="polite">12 buku</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══ FILTER BAR ══ -->
+<div class="container" style="padding-bottom:20px;">
+  <div class="filter-bar reveal" role="toolbar" aria-label="Filter koleksi" style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="filter-btn is-active" data-filter="semua"    aria-pressed="true">Semua</button>
+    <button class="filter-btn" data-filter="anak"    aria-pressed="false">🌱 Anak</button>
+    <button class="filter-btn" data-filter="remaja"  aria-pressed="false">🌙 Remaja</button>
+    <button class="filter-btn" data-filter="dewasa"  aria-pressed="false">☀️ Dewasa</button>
+    <button class="filter-btn" data-filter="lansia"  aria-pressed="false">🌸 Lansia</button>
+    <button class="filter-btn" data-filter="trauma"  aria-pressed="false">🧠 Trauma</button>
+    <button class="filter-btn" data-filter="cbt"     aria-pressed="false">🎯 CBT</button>
+    <button class="filter-btn" data-filter="kebiasaan" aria-pressed="false">⭐ Kebiasaan</button>
+  </div>
+</div>
+
+<!-- ══ BOOK GRID ══ -->
+<section class="section" style="padding-top:0;" aria-label="Koleksi buku dan jurnal">
+  <div class="container">
+    <div class="library-grid reveal" id="book-grid" role="list"></div>
+    <div id="empty-state" style="display:none;text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">📭</div>
+      <h3 style="font-family:'Fraunces',serif;font-size:24px;font-weight:300;color:var(--text-primary);margin-bottom:8px;">Belum ada buku untuk topik ini</h3>
+      <p style="font-size:14px;color:var(--text-muted);">Kami terus menambah koleksi baru setiap minggu.</p>
+      <button onclick="document.getElementById('search-input').value='';BookManager.renderAll();" class="btn btn-soft btn-md" style="margin-top:20px;">Lihat Semua Buku →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BOOK DETAIL DRAWER ══ -->
+<div id="book-overlay" class="book-overlay" aria-hidden="true"></div>
+<aside id="book-drawer" class="book-drawer" role="dialog" aria-modal="true" aria-label="Detail buku" aria-hidden="true">
+  <div class="book-drawer-header">
+    <span id="book-drawer-tag" class="section-tag" style="margin:0;font-size:11px;"></span>
+    <button id="book-close" class="book-close-btn" aria-label="Tutup detail buku">✕</button>
+  </div>
+  <div class="book-drawer-body" id="book-detail-content"></div>
+
+  <!-- Download Panel -->
+  <div id="book-download-panel" style="
+    position:sticky;bottom:0;
+    background:rgba(253,251,255,0.97);
+    backdrop-filter:blur(12px);
+    border-top:1px solid var(--border-mid);
+    padding:16px 28px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:space-between;
+  ">
+    <span style="font-size:13px;font-weight:700;color:var(--text-muted);">📥 Simpan ringkasan:</span>
+    <div style="display:flex;gap:10px;">
+      <button id="btn-book-pdf"  class="btn btn-soft btn-sm btn-ripple">📄 PDF</button>
+      <button id="btn-book-word" class="btn btn-soft btn-sm btn-ripple">📝 Word</button>
+    </div>
+  </div>
+</aside>

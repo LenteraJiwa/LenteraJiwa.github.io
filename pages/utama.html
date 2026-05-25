@@ -1,0 +1,462 @@
+<!-- ══════════════════════════════════════════════════════════
+     LENTERA JIWA — pages/utama.html
+     Konten halaman utama (dimuat oleh index.html via SPA fetch)
+     CATATAN: Semua CSS ada di css/style.css
+     ══════════════════════════════════════════════════════════ -->
+
+<section class="hero" aria-labelledby="hero-heading">
+
+  <div class="hero-badge section-tag" role="status">
+    🌟 Platform Kesehatan Mental Terpercaya Indonesia
+  </div>
+
+  <h1 id="hero-heading" class="hero-title text-display-xl" style="margin-bottom:0;">
+    Merawat <span style="font-style:italic;color:var(--age-primary);transition:color 0.4s;">Jiwa</span>,<br>
+    Menerangi <span class="text-gradient" style="transition:background 0.4s;">Perjalanan</span>
+  </h1>
+
+  <div class="hero-subtitle" style="margin-top:22px;">
+    <p class="hero-tagline-anak text-body-lg text-secondary" style="max-width:520px;line-height:1.75;text-align:center;">
+      Hei teman kecil! Di sini kamu bisa belajar tentang perasaanmu, baca cerita seru, dan bermain sambil mengenal diri sendiri. 🌱
+    </p>
+    <p class="hero-tagline-remaja text-body-lg text-secondary" style="max-width:520px;line-height:1.75;text-align:center;">
+      Ruang aman untukmu bertanya, merasakan, dan bertumbuh — tanpa dihakimi. Tes, artikel, dan chat bersama psikolog siap menemanimu. 🌙
+    </p>
+    <p class="hero-tagline-dewasa text-body-lg text-secondary" style="max-width:540px;line-height:1.75;text-align:center;">
+      Ruang hangat untuk memahami diri dan bertumbuh — tersedia artikel, tes psikologi, buku, dan konsultasi yang disesuaikan dengan kebutuhanmu.
+    </p>
+    <p class="hero-tagline-lansia text-body-lg text-secondary" style="max-width:520px;line-height:1.75;text-align:center;">
+      Bersama Lentera Jiwa, Anda tidak perlu merasa sendirian. Kami siap menemani perjalanan hidup Anda dengan hangat dan penuh hormat. 🌸
+    </p>
+  </div>
+
+  <div class="hero-ages age-selector-grid" role="group" aria-label="Pilih kelompok usia untuk menyesuaikan konten">
+    <div class="age-card-item" data-age-val="anak" role="button" tabindex="0" aria-pressed="false"
+      aria-label="Anak, 8–12 tahun — Cerita dan aktivitas menyenangkan">
+      <span class="age-card-emoji" aria-hidden="true">🌱</span>
+      <span class="age-card-label">Anak</span>
+      <span class="age-card-range">8–12 tahun</span>
+    </div>
+    <div class="age-card-item" data-age-val="remaja" role="button" tabindex="0" aria-pressed="false"
+      aria-label="Remaja, 13–17 tahun — Ruang aman bertumbuh">
+      <span class="age-card-emoji" aria-hidden="true">🌙</span>
+      <span class="age-card-label">Remaja</span>
+      <span class="age-card-range">13–17 tahun</span>
+    </div>
+    <div class="age-card-item is-active" data-age-val="dewasa" role="button" tabindex="0" aria-pressed="true"
+      aria-label="Dewasa, 18–59 tahun — Artikel mendalam dan tes tervalidasi">
+      <span class="age-card-emoji" aria-hidden="true">☀️</span>
+      <span class="age-card-label">Dewasa</span>
+      <span class="age-card-range">18–59 tahun</span>
+    </div>
+    <div class="age-card-item" data-age-val="lansia" role="button" tabindex="0" aria-pressed="false"
+      aria-label="Lansia, 60 tahun ke atas — Hangat dan penuh hormat">
+      <span class="age-card-emoji" aria-hidden="true">🌸</span>
+      <span class="age-card-label">Lansia</span>
+      <span class="age-card-range">60+ tahun</span>
+    </div>
+  </div>
+
+  <div class="hero-cta" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+    <a href="layanan.html" class="btn btn-primary btn-lg btn-ripple" aria-label="Mulai perjalanan kesehatan mental Anda">
+      Mulai Perjalanan ✨
+    </a>
+    <a href="tes.html" class="btn btn-soft btn-lg" aria-label="Coba tes psikologi gratis">
+      Coba Tes Gratis →
+    </a>
+  </div>
+
+  <div class="hero-stats stats-strip" role="list" aria-label="Statistik platform">
+    <div class="stat-pill" style="--float-dur:3.5s;" role="listitem">
+      <span class="stat-pill-icon" aria-hidden="true">📚</span>
+      <div class="stat-pill-text">
+        <strong data-count="500" data-suffix="+">500+</strong>
+        <span>Artikel Kesehatan Mental</span>
+      </div>
+    </div>
+    <div class="stat-pill" style="--float-dur:4.2s;animation-delay:-1s;" role="listitem">
+      <span class="stat-pill-icon" aria-hidden="true">🧪</span>
+      <div class="stat-pill-text">
+        <strong data-count="12">12</strong>
+        <span>Tes Tervalidasi Gratis</span>
+      </div>
+    </div>
+    <div class="stat-pill" style="--float-dur:4.8s;animation-delay:-2s;" role="listitem">
+      <span class="stat-pill-icon" aria-hidden="true">💬</span>
+      <div class="stat-pill-text">
+        <strong data-count="50" data-suffix="+">50+</strong>
+        <span>Psikolog Berpengalaman</span>
+      </div>
+    </div>
+    <div class="stat-pill" style="--float-dur:3.9s;animation-delay:-0.5s;" role="listitem">
+      <span class="stat-pill-icon" aria-hidden="true">📖</span>
+      <div class="stat-pill-text">
+        <strong data-count="200" data-suffix="+">200+</strong>
+        <span>Buku &amp; Jurnal Digital</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══ TICKER 1 ══ -->
+<div class="ticker-wrapper" aria-hidden="true" data-speed="1">
+  <div class="ticker-track">
+    <div class="ticker-item">🧠 Kecemasan</div>
+    <div class="ticker-item">💙 Depresi</div>
+    <div class="ticker-item">🌿 Mindfulness</div>
+    <div class="ticker-item">👨‍👩‍👧 Keluarga</div>
+    <div class="ticker-item">🌱 Trauma &amp; Pemulihan</div>
+    <div class="ticker-item">💜 Self-love</div>
+    <div class="ticker-item">🔥 Burnout</div>
+    <div class="ticker-item">💪 Resiliensi</div>
+    <div class="ticker-item">😌 Stres Kerja</div>
+    <div class="ticker-item">🌸 Lansia Bahagia</div>
+    <div class="ticker-item">🌙 Remaja &amp; Identitas</div>
+    <div class="ticker-item">🌱 Tumbuh Kembang Anak</div>
+    <div class="ticker-item">🤝 Hubungan Sehat</div>
+    <div class="ticker-item">✨ Kesejahteraan Mental</div>
+  </div>
+</div>
+
+<!-- ══ TRUST STRIP ══ -->
+<section aria-label="Kepercayaan dan sertifikasi">
+  <div class="container">
+    <div class="trust-strip reveal" role="list" aria-label="Badge kepercayaan platform">
+      <span class="trust-badge" role="listitem">🏥 Direview oleh Psikolog Klinis Berlisensi</span>
+      <span class="trust-badge" role="listitem">🔒 Data Anda Aman &amp; Sepenuhnya Rahasia</span>
+      <span class="trust-badge" role="listitem">📋 Instrumen Tes Berbasis Standar Internasional</span>
+      <span class="trust-badge" role="listitem">🇮🇩 Dikembangkan untuk Konteks Indonesia</span>
+      <span class="trust-badge" role="listitem">❤️ Bebas Stigma &amp; Inklusif untuk Semua Usia</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LAYANAN ══ -->
+<section class="section" aria-labelledby="layanan-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">💜 Layanan Kami</div>
+      <h2 id="layanan-heading" class="section-title">Bagaimana Kami<br><em>Mendampingi</em> Anda</h2>
+      <p class="section-intro">Setiap layanan dirancang penuh kasih, disesuaikan dengan usia dan kebutuhan unikmu.</p>
+    </div>
+
+    <div class="grid grid-3">
+      <article class="layanan-card reveal card-hover" onclick="location.href='layanan.html'">
+        <div class="layanan-icon-wrap" style="background:var(--lav-100);" aria-hidden="true">💬</div>
+        <h3 class="layanan-title">Konsultasi Individual</h3>
+        <p class="layanan-desc">Sesi private bersama psikolog berpengalaman. Aman, rahasia, dan nyaman — online maupun tatap muka. Sesi pertama gratis, 20 menit, tanpa komitmen.</p>
+        <a href="layanan.html" class="layanan-cta" aria-label="Jadwalkan sesi konsultasi individual">Jadwalkan Sesi →</a>
+      </article>
+
+      <article class="layanan-card reveal reveal-d2 card-hover" onclick="location.href='layanan.html'">
+        <div class="layanan-icon-wrap" style="background:var(--sky-100);" aria-hidden="true">👨‍👩‍👧‍👦</div>
+        <h3 class="layanan-title">Terapi Keluarga</h3>
+        <p class="layanan-desc">Membangun kedekatan dan komunikasi yang sehat antar anggota keluarga dalam suasana yang hangat. Cocok untuk semua komposisi dan dinamika keluarga.</p>
+        <a href="layanan.html" class="layanan-cta" aria-label="Pelajari lebih tentang terapi keluarga">Pelajari Lebih →</a>
+      </article>
+
+      <article class="layanan-card reveal reveal-d3 card-hover" onclick="location.href='layanan.html'">
+        <div class="layanan-icon-wrap" style="background:var(--peach-100);" aria-hidden="true">🌿</div>
+        <h3 class="layanan-title">Workshop Kelompok</h3>
+        <p class="layanan-desc">Bertumbuh bersama dalam kelompok kecil yang suportif. Program mindfulness, stres, dan pengembangan diri berbasis CBT dan ACT.</p>
+        <a href="layanan.html" class="layanan-cta" aria-label="Lihat jadwal workshop kelompok">Lihat Jadwal →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER 2 ══ -->
+<div class="ticker-wrapper" aria-hidden="true" data-speed="0.8">
+  <div class="ticker-track ticker-track-reverse" style="--ticker-dur:38s;">
+    <div class="ticker-item" style="background:rgba(214,238,255,0.8);">📖 Buku Self-help</div>
+    <div class="ticker-item" style="background:rgba(220,255,240,0.8);">🎯 CBT &amp; DBT</div>
+    <div class="ticker-item" style="background:rgba(232,228,255,0.8);">🧘 Meditasi Harian</div>
+    <div class="ticker-item" style="background:rgba(255,232,220,0.8);">🌅 Gratitude Journal</div>
+    <div class="ticker-item" style="background:rgba(255,249,214,0.8);">🎵 Musik Terapi</div>
+    <div class="ticker-item" style="background:rgba(214,238,255,0.8);">🏃 Olahraga &amp; Mental</div>
+    <div class="ticker-item" style="background:rgba(220,255,240,0.8);">😴 Tidur &amp; Mood</div>
+    <div class="ticker-item" style="background:rgba(232,228,255,0.8);">🌍 Dukungan Sosial</div>
+    <div class="ticker-item" style="background:rgba(255,232,220,0.8);">💊 Kesehatan Holistik</div>
+    <div class="ticker-item" style="background:rgba(255,249,214,0.8);">✍️ Expressive Writing</div>
+    <div class="ticker-item" style="background:rgba(220,255,240,0.8);">🧩 Cognitive Reframing</div>
+    <div class="ticker-item" style="background:rgba(232,228,255,0.8);">🌱 Growth Mindset</div>
+  </div>
+</div>
+
+<!-- ══ ARTIKEL ══ -->
+<section class="section" aria-labelledby="artikel-heading">
+  <div class="container">
+    <div class="section-header reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div class="section-tag">📝 Konten &amp; Edukasi</div>
+        <h2 id="artikel-heading" class="section-title">Artikel untuk <em>Setiap</em> Jiwa</h2>
+        <p class="section-intro">Konten disesuaikan berdasarkan usia — dari cerita bergambar hingga jurnal psikologi berbasis bukti.</p>
+      </div>
+      <a href="artikel.html" class="btn btn-soft btn-md" style="flex-shrink:0;align-self:flex-end;" aria-label="Lihat semua artikel">
+        Semua Artikel →
+      </a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:auto auto;gap:20px;" class="artikel-layout">
+
+      <article class="artikel-card featured reveal" style="grid-row:1/3;" onclick="location.href='artikel.html'">
+        <span class="artikel-tag" style="background:var(--lav-100);color:var(--lav-800);">Dewasa · Kecemasan</span>
+        <h3 class="artikel-title featured">Ketika Diam Terasa Lebih Aman: Memahami High-Functioning Anxiety dan Cara Hidup Bersamanya</h3>
+        <p class="artikel-excerpt">Di permukaan, semuanya tampak baik-baik saja — produktif, terorganisir, bahkan dikagumi. Namun di balik itu, ada suara yang tidak pernah berhenti. High-functioning anxiety jarang terdiagnosis bukan karena tidak nyata, melainkan karena gejalanya tersembunyi di balik pencapaian…</p>
+        <div class="artikel-meta">
+          <span>📖 14 menit baca</span>
+          <span class="age-pill dewasa">Dewasa</span>
+        </div>
+      </article>
+
+      <article class="artikel-card reveal reveal-d1" onclick="location.href='artikel.html'">
+        <span class="artikel-tag" style="background:var(--mint-100);color:var(--mint-800);">Anak · Emosi</span>
+        <h3 class="artikel-title regular">Kenapa Aku Bisa Marah dan Sedih di Waktu yang Sama?</h3>
+        <div class="artikel-meta">
+          <span>📖 4 menit baca</span>
+          <span class="age-pill anak">Anak</span>
+        </div>
+      </article>
+
+      <article class="artikel-card reveal reveal-d2" onclick="location.href='artikel.html'">
+        <span class="artikel-tag" style="background:var(--peach-100);color:var(--peach-800);">Dewasa · Mindfulness</span>
+        <h3 class="artikel-title regular">Mempraktikkan Hadir Sepenuhnya di Era Penuh Distraksi</h3>
+        <div class="artikel-meta">
+          <span>📖 10 menit baca</span>
+          <span class="age-pill dewasa">Dewasa</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TES PSIKOLOGI ══ -->
+<section class="section" style="background:rgba(255,255,255,0.25);backdrop-filter:blur(6px);" aria-labelledby="tes-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">🧪 Tes Psikologi</div>
+      <h2 id="tes-heading" class="section-title">Kenali Dirimu Lebih <em>Dalam</em></h2>
+      <p class="section-intro">Tes tervalidasi ilmiah, gratis, dan langsung melihat hasil dengan interpretasi yang ramah. Bukan diagnosis — titik awal pemahaman diri.</p>
+    </div>
+
+    <div class="grid grid-2-3" style="gap:32px;align-items:start;">
+
+      <div style="display:flex;flex-direction:column;gap:14px;" class="reveal">
+
+        <div class="tes-card is-active" data-tes-id="wellbeing" tabindex="0" role="button"
+          aria-label="Tes Wellbeing Emosional — 20 pertanyaan, sekitar 10 menit" aria-pressed="true">
+          <span class="tes-icon" aria-hidden="true">😌</span>
+          <div style="flex:1;">
+            <div class="tes-name">Wellbeing Emosional</div>
+            <div class="tes-info">20 pertanyaan · ~10 menit</div>
+            <div class="progress-bar" style="margin-top:10px;" aria-hidden="true">
+              <div class="progress-fill animate" style="width:35%;"></div>
+            </div>
+          </div>
+          <span class="tes-arrow" aria-hidden="true">→</span>
+        </div>
+
+        <div class="tes-card" data-tes-id="kepribadian" tabindex="0" role="button"
+          aria-label="Tes Profil Kepribadian Big Five — 30 pertanyaan, sekitar 15 menit" aria-pressed="false">
+          <span class="tes-icon" aria-hidden="true">🧠</span>
+          <div style="flex:1;">
+            <div class="tes-name">Profil Kepribadian</div>
+            <div class="tes-info">30 pertanyaan · ~15 menit</div>
+            <div class="progress-bar" style="margin-top:10px;" aria-hidden="true">
+              <div class="progress-fill" style="width:0%;"></div>
+            </div>
+          </div>
+          <span class="tes-arrow" aria-hidden="true">→</span>
+        </div>
+
+        <div class="tes-card" data-tes-id="stres" tabindex="0" role="button"
+          aria-label="Tes Stres dan Burnout — 15 pertanyaan, sekitar 8 menit" aria-pressed="false">
+          <span class="tes-icon" aria-hidden="true">🌿</span>
+          <div style="flex:1;">
+            <div class="tes-name">Stres &amp; Burnout</div>
+            <div class="tes-info">15 pertanyaan · ~8 menit</div>
+            <div class="progress-bar" style="margin-top:10px;" aria-hidden="true">
+              <div class="progress-fill" style="width:0%;"></div>
+            </div>
+          </div>
+          <span class="tes-arrow" aria-hidden="true">→</span>
+        </div>
+
+        <p role="note" style="font-size:12px;color:var(--text-muted);line-height:1.65;padding:0 4px;">
+          Tes ini bukan diagnosis. Hasilnya adalah titik awal untuk memahami dirimu lebih baik. Jujurlah pada dirimu sendiri.
+        </p>
+
+        <a href="tes.html" class="btn btn-soft btn-md" style="text-align:center;justify-content:center;" aria-label="Lihat semua tes psikologi">
+          Lihat Semua Tes →
+        </a>
+      </div>
+
+      <div id="tes-demo-panel" class="tes-demo-panel reveal reveal-d2" aria-live="polite">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <span id="tes-demo-title" style="font-size:14px;font-weight:700;color:var(--age-primary);">😌 Wellbeing Emosional</span>
+          <span id="tes-demo-pct" style="font-size:13px;color:var(--text-muted);font-weight:600;" aria-live="polite">0% selesai</span>
+        </div>
+        <div class="progress-bar" style="margin-bottom:28px;" aria-hidden="true">
+          <div id="tes-demo-fill" class="progress-fill animate" style="width:0%;"></div>
+        </div>
+        <p id="tes-demo-q" class="tes-demo-question">"Dalam dua minggu terakhir, seberapa sering kamu merasa optimis tentang masa depan?"</p>
+        <div id="tes-demo-opts" role="group" aria-label="Pilihan jawaban">
+          <button class="tes-demo-option btn-ripple">Tidak pernah</button>
+          <button class="tes-demo-option btn-ripple">Beberapa hari</button>
+          <button class="tes-demo-option btn-ripple">Lebih dari separuh waktu</button>
+          <button class="tes-demo-option btn-ripple">Hampir setiap hari</button>
+        </div>
+        <a href="tes.html" class="btn btn-primary btn-lg btn-ripple w-full" style="margin-top:20px;justify-content:center;" aria-label="Mulai tes lengkap">
+          Mulai Tes Lengkap ✨
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BUKU ══ -->
+<section class="section" aria-labelledby="buku-heading">
+  <div class="container">
+    <div class="section-header reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div class="section-tag">📚 Perpustakaan Digital</div>
+        <h2 id="buku-heading" class="section-title">Buku &amp; Jurnal <em>Pilihan</em></h2>
+        <p class="section-intro">Koleksi terkurasi dari psikolog dan peneliti dunia — untuk semua usia dan kebutuhan.</p>
+      </div>
+      <a href="perpustakaan.html" class="btn btn-soft btn-md" style="flex-shrink:0;align-self:flex-end;" aria-label="Buka perpustakaan digital">
+        Perpustakaan →
+      </a>
+    </div>
+
+    <div class="cards-carousel reveal" role="list" aria-label="Buku dan jurnal pilihan">
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="The Body Keeps the Score oleh Bessel van der Kolk">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#E8E4FF,#C4BEFF);">🧠</div>
+        <div class="buku-info">
+          <div class="buku-title-text">The Body Keeps the Score</div>
+          <div class="buku-author-text">Bessel van der Kolk</div>
+          <span class="age-pill dewasa" style="margin-top:8px;display:inline-block;">Dewasa</span>
+        </div>
+      </div>
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="Mindfulness for Teens">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#D6EEFF,#7EC3F0);">🌊</div>
+        <div class="buku-info">
+          <div class="buku-title-text">Mindfulness for Teens</div>
+          <div class="buku-author-text">Jennie Marie Battistin</div>
+          <span class="age-pill remaja" style="margin-top:8px;display:inline-block;">Remaja</span>
+        </div>
+      </div>
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="Aku Berani! oleh Tim Lentera Jiwa">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#DCFFF0,#6FDDB0);">✨</div>
+        <div class="buku-info">
+          <div class="buku-title-text">Aku Berani!</div>
+          <div class="buku-author-text">Tim Lentera Jiwa</div>
+          <span class="age-pill anak" style="margin-top:8px;display:inline-block;">Anak</span>
+        </div>
+      </div>
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="Man's Search for Meaning oleh Viktor Frankl">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#DCFFF0,#3DB87A30);">🌱</div>
+        <div class="buku-info">
+          <div class="buku-title-text">Man's Search for Meaning</div>
+          <div class="buku-author-text">Viktor E. Frankl</div>
+          <span class="age-pill dewasa" style="margin-top:8px;display:inline-block;">Dewasa</span>
+        </div>
+      </div>
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="Self-Compassion oleh Kristin Neff">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#FFE8DC,#F0A882);">🤗</div>
+        <div class="buku-info">
+          <div class="buku-title-text">Self-Compassion</div>
+          <div class="buku-author-text">Kristin Neff</div>
+          <span class="age-pill remaja" style="margin-top:8px;display:inline-block;">Remaja</span>
+        </div>
+      </div>
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="Feeling Good oleh David D. Burns">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#E8E4FF,#9B8FE4);">💜</div>
+        <div class="buku-info">
+          <div class="buku-title-text">Feeling Good</div>
+          <div class="buku-author-text">David D. Burns</div>
+          <span class="age-pill dewasa" style="margin-top:8px;display:inline-block;">Dewasa</span>
+        </div>
+      </div>
+      <div class="buku-card" role="listitem" onclick="location.href='perpustakaan.html'" tabindex="0" aria-label="Atomic Habits oleh James Clear">
+        <div class="buku-cover" style="background:linear-gradient(135deg,#FFF9D6,#F0D070);">⭐</div>
+        <div class="buku-info">
+          <div class="buku-title-text">Atomic Habits</div>
+          <div class="buku-author-text">James Clear</div>
+          <span class="age-pill umum" style="margin-top:8px;display:inline-block;">Semua Usia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIAL ══ -->
+<section class="section" aria-labelledby="testimonial-heading">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;align-items:center;">
+      <div class="section-tag" style="margin:0 auto 18px;">💬 Cerita Nyata</div>
+      <h2 id="testimonial-heading" class="section-title" style="text-align:center;">Yang Mereka <em>Rasakan</em></h2>
+      <p class="section-intro" style="margin:0 auto;">Setiap perjalanan berbeda. Ini sebagian dari cerita mereka.</p>
+    </div>
+
+    <div class="grid grid-3 reveal" style="margin-top:16px;">
+
+      <article class="testimonial-card">
+        <div class="testimonial-quote" aria-hidden="true">"</div>
+        <p class="testimonial-text">Saya mulai dengan tes wellbeing yang terasa sederhana. Tapi hasilnya membuka mata saya — ternyata saya sudah burnout jauh sebelum saya menyadarinya.</p>
+        <span class="testimonial-author">— R.A., 34 tahun, Jakarta · <span class="age-pill dewasa" style="font-size:10px;padding:2px 8px;">Dewasa</span></span>
+      </article>
+
+      <article class="testimonial-card reveal-d1">
+        <div class="testimonial-quote" aria-hidden="true">"</div>
+        <p class="testimonial-text">Artikel-artikelnya ditulis dengan cara yang bikin aku merasa dimengerti, bukan diajari. Akhirnya aku mau juga bilang ke orang tua apa yang aku rasakan.</p>
+        <span class="testimonial-author">— F., 16 tahun, Surabaya · <span class="age-pill remaja" style="font-size:10px;padding:2px 8px;">Remaja</span></span>
+      </article>
+
+      <article class="testimonial-card reveal-d2">
+        <div class="testimonial-quote" aria-hidden="true">"</div>
+        <p class="testimonial-text">Saya pikir di usia saya, ini tidak penting lagi. Ternyata ada hal-hal yang belum pernah saya sadari. Psikolognya sangat sabar dan tidak terburu-buru.</p>
+        <span class="testimonial-author">— Bpk. H., 67 tahun, Bandung · <span class="age-pill lansia" style="font-size:10px;padding:2px 8px;">Lansia</span></span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA FINAL ══ -->
+<section class="section" aria-labelledby="cta-heading">
+  <div class="container">
+    <div class="reveal cta-dark-block">
+      <div class="cta-dark-deco cta-dark-deco-1" aria-hidden="true"></div>
+      <div class="cta-dark-deco cta-dark-deco-2" aria-hidden="true"></div>
+
+      <div style="position:relative;z-index:1;text-align:center;">
+        <div class="section-tag" style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);margin-bottom:20px;">
+          💬 Siap Memulai?
+        </div>
+        <h2 id="cta-heading" class="text-display-md" style="color:white;margin-bottom:18px;">
+          Kamu Tidak Harus<br>
+          <em style="color:var(--lav-200);">Berjalan Sendirian</em>
+        </h2>
+        <p style="font-size:17px;color:rgba(255,255,255,0.62);max-width:480px;margin:0 auto 36px;line-height:1.75;">
+          Langkah pertama adalah yang terberat. Kami siap menemanimu, apapun yang sedang kamu rasakan.
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+          <a href="layanan.html" class="btn btn-lg btn-ripple"
+             style="background:white;color:var(--lav-800);box-shadow:0 8px 32px rgba(0,0,0,0.2);"
+             aria-label="Jadwalkan konsultasi sekarang">
+            Jadwalkan Konsultasi ✨
+          </a>
+          <a href="tes.html" class="btn btn-lg btn-ripple"
+             style="background:rgba(255,255,255,0.12);color:white;border:1.5px solid rgba(255,255,255,0.25);"
+             aria-label="Mulai dengan tes gratis">
+            Mulai dengan Tes Gratis →
+          </a>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:24px;">
+          Krisis? Hubungi Into The Light Indonesia: <strong style="color:rgba(255,255,255,0.55);">119 ext 8</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

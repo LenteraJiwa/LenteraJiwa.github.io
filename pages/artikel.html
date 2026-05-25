@@ -1,0 +1,153 @@
+<!-- ══════════════════════════════════════════════════════════
+     LENTERA JIWA — pages/artikel.html
+     Konten halaman artikel (dimuat oleh index.html via SPA)
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- ══ PAGE HEADER ══ -->
+<header class="artikel-page-header">
+  <div class="container">
+    <div class="section-tag reveal" style="justify-content:center;">📝 Konten &amp; Edukasi</div>
+    <h1 class="section-title reveal" style="text-align:center;">
+      Artikel untuk <em>Setiap</em> Jiwa
+    </h1>
+    <p class="section-intro reveal" style="text-align:center;margin:0 auto;">
+      Konten berbasis bukti ilmiah, dikurasi oleh psikolog klinis — disesuaikan dengan setiap kelompok usia.
+    </p>
+  </div>
+</header>
+
+<!-- ══ ARTIKEL SECTION ══ -->
+<section class="section" style="padding-top:0;" aria-labelledby="artikel-list-heading">
+  <div class="container">
+    <h2 id="artikel-list-heading" class="sr-only">Daftar Artikel</h2>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar reveal" role="toolbar" aria-label="Filter artikel">
+      <button class="filter-btn is-active" data-filter="semua" aria-pressed="true">Semua</button>
+      <button class="filter-btn" data-filter="anak"          aria-pressed="false">🌱 Anak</button>
+      <button class="filter-btn" data-filter="remaja"        aria-pressed="false">🌙 Remaja</button>
+      <button class="filter-btn" data-filter="dewasa"        aria-pressed="false">☀️ Dewasa</button>
+      <button class="filter-btn" data-filter="lansia"        aria-pressed="false">🌸 Lansia</button>
+      <button class="filter-btn" data-filter="kecemasan"     aria-pressed="false">🧠 Kecemasan</button>
+      <button class="filter-btn" data-filter="selfcompassion" aria-pressed="false">💜 Self-compassion</button>
+    </div>
+
+    <!-- Artikel Grid -->
+    <div class="artikel-grid reveal" id="artikel-grid" role="list" aria-label="Daftar artikel">
+
+      <article class="artikel-card featured card-hover"
+        data-article-id="hfa-dewasa" data-tags="dewasa kecemasan"
+        role="listitem" tabindex="0" aria-label="Buka artikel: Ketika Diam Terasa Lebih Aman">
+        <span class="artikel-tag" style="background:var(--lav-100);color:var(--lav-800);">Dewasa · Kecemasan</span>
+        <h2 class="artikel-title featured">Ketika Diam Terasa Lebih Aman: Memahami High-Functioning Anxiety dan Cara Hidup Bersamanya</h2>
+        <p class="artikel-excerpt">Di permukaan, semuanya tampak baik-baik saja — produktif, terorganisir, bahkan dikagumi. Namun di balik itu, ada suara yang tidak pernah berhenti. High-functioning anxiety jarang terdiagnosis bukan karena tidak nyata, melainkan karena gejalanya tersembunyi di balik pencapaian…</p>
+        <div class="artikel-meta">
+          <span>📖 14 menit baca</span>
+          <span class="age-pill dewasa">Dewasa</span>
+        </div>
+      </article>
+
+      <article class="artikel-card card-hover reveal reveal-d1"
+        data-article-id="inner-critic-remaja" data-tags="remaja selfcompassion"
+        role="listitem" tabindex="0" aria-label="Buka artikel: Ketika Dirimu Merasa Tidak Cukup">
+        <span class="artikel-tag" style="background:var(--sky-100);color:var(--sky-800);">Remaja · Self-compassion</span>
+        <h2 class="artikel-title regular">Ketika Dirimu Merasa Tidak Cukup: Memahami Inner Critic dan Cara Melunakkannya</h2>
+        <div class="artikel-meta">
+          <span>📖 12 menit baca</span>
+          <span class="age-pill remaja">Remaja</span>
+        </div>
+      </article>
+
+      <article class="artikel-card card-hover reveal reveal-d2"
+        data-article-id="emosi-anak" data-tags="anak emosi"
+        role="listitem" tabindex="0" aria-label="Buka artikel: Kenapa Aku Bisa Marah dan Sedih di Waktu yang Sama">
+        <span class="artikel-tag" style="background:var(--mint-100);color:var(--mint-800);">Anak · Emosi</span>
+        <h2 class="artikel-title regular">Kenapa Aku Bisa Marah dan Sedih di Waktu yang Sama?</h2>
+        <div class="artikel-meta">
+          <span>📖 4 menit baca</span>
+          <span class="age-pill anak">Anak</span>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Baris ke-2 -->
+    <div class="grid grid-3 reveal" style="margin-top:20px;" role="list" aria-label="Artikel lainnya">
+
+      <article class="artikel-card card-hover"
+        data-article-id="makna-lansia" data-tags="lansia makna"
+        role="listitem" tabindex="0" aria-label="Buka artikel: Menemukan Makna di Setiap Tahap">
+        <span class="artikel-tag" style="background:var(--peach-100);color:var(--peach-800);">Lansia · Makna &amp; Penuaan</span>
+        <h2 class="artikel-title regular">Menemukan Makna di Setiap Tahap: Psikologi Penuaan yang Sehat</h2>
+        <div class="artikel-meta">
+          <span>📖 11 menit baca</span>
+          <span class="age-pill lansia">Lansia</span>
+        </div>
+      </article>
+
+      <article class="artikel-card card-hover reveal-d1"
+        data-article-id="mindfulness-dewasa" data-tags="dewasa mindfulness"
+        role="listitem" tabindex="0" aria-label="Buka artikel: Mempraktikkan Hadir Sepenuhnya">
+        <span class="artikel-tag" style="background:var(--peach-100);color:var(--peach-800);">Dewasa · Mindfulness</span>
+        <h2 class="artikel-title regular">Mempraktikkan Hadir Sepenuhnya di Era Penuh Distraksi</h2>
+        <div class="artikel-meta">
+          <span>📖 10 menit baca</span>
+          <span class="age-pill dewasa">Dewasa</span>
+        </div>
+      </article>
+
+      <div class="artikel-card reveal-d2" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:200px;cursor:default;">
+        <span style="font-size:36px;">📭</span>
+        <p style="font-size:14px;font-weight:700;color:var(--text-secondary);">Konten baru setiap minggu</p>
+        <p style="font-size:13px;color:var(--text-muted);">Kami terus menambahkan artikel berkualitas untuk semua usia.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ ARTICLE READER OVERLAY ══ -->
+<div id="article-overlay" class="article-overlay" aria-hidden="true"></div>
+
+<aside id="article-drawer"
+       class="article-drawer"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="article-drawer-title"
+       aria-hidden="true">
+  <header class="article-drawer-header">
+    <div class="article-read-time">
+      <span id="article-drawer-tag" class="artikel-tag" style="margin-bottom:0;"></span>
+      <span id="article-drawer-time"></span>
+    </div>
+    <button id="article-close" class="article-close-btn" aria-label="Tutup artikel">✕</button>
+  </header>
+  <div class="article-progress-bar" aria-hidden="true">
+    <div id="article-progress-fill" class="article-progress-fill"></div>
+  </div>
+  <div class="article-body" id="article-content" tabindex="-1"></div>
+
+  <!-- Download Panel -->
+  <div id="article-download-panel" style="
+    position:sticky;bottom:0;
+    background:rgba(253,251,255,0.97);
+    backdrop-filter:blur(12px);
+    border-top:1px solid var(--border-mid);
+    padding:16px 32px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:space-between;
+  ">
+    <span style="font-size:13px;font-weight:700;color:var(--text-muted);">📥 Simpan artikel ini:</span>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button id="btn-download-pdf" class="btn btn-soft btn-sm btn-ripple" aria-label="Unduh sebagai PDF">
+        📄 Unduh PDF
+      </button>
+      <button id="btn-download-word" class="btn btn-soft btn-sm btn-ripple" aria-label="Unduh sebagai Word">
+        📝 Unduh Word
+      </button>
+    </div>
+  </div>
+</aside>
