@@ -251,6 +251,20 @@
           reply=typeof res==='string'?res:(res&&res.message&&res.message.content?res.message.content:null);
         }catch(e2){console.error('Puter error:',e2);}
       }
+      // Retry sekali jika gagal
+      if(!reply){
+        try{
+          var prompt2=encodeURIComponent(txt);
+          var sys2=encodeURIComponent(SYS);
+          var r2=await fetch('https://text.pollinations.ai/'+prompt2+'?system='+sys2+'&model=openai&seed='+Math.floor(Math.random()*999));
+          var raw2=(await r2.text()).trim();
+          if(raw2.includes('will continue to work normally')){
+            var parts2=raw2.split('will continue to work normally.');
+            raw2=parts2[parts2.length-1].trim();
+          }
+          if(raw2.length>2)reply=raw2;
+        }catch(e3){}
+      }
       if(!reply)reply='Maaf, ada gangguan koneksi 🪔 Coba lagi sebentar ya.';
       if(typing)typing.style.display='none';
       EMB.aiLoading=false;
