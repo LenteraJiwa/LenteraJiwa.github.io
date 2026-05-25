@@ -226,29 +226,26 @@
       if(typing)typing.style.display='flex';
       scr();
       var reply=null;
-      var attempts=0;
-      while(!reply&&attempts<3){
-        attempts++;
-        try{
-          var prompt=encodeURIComponent(txt);
-          var sys=encodeURIComponent(SYS);
-          var seed=Math.floor(Math.random()*99999);
-          var url='https://text.pollinations.ai/'+prompt+'?system='+sys+'&model=openai&seed='+seed;
-          var r=await Promise.race([
-            fetch(url),
-            new Promise(function(_,rj){setTimeout(function(){rj(new Error('timeout'));},45000);})
-          ]);
+      try{
+        var prompt=encodeURIComponent(txt);
+        var sys=encodeURIComponent(SYS);
+        var seed=Math.floor(Math.random()*99999);
+        var url='https://text.pollinations.ai/'+prompt+'?system='+sys+'&model=openai&seed='+seed;
+        var r=await Promise.race([
+          fetch(url),
+          new Promise(function(_,rj){setTimeout(function(){rj(new Error('timeout'));},45000);})
+        ]);
+        if(r.status===429){
+          reply='⏳ Server sedang sibuk, tunggu beberapa detik lalu kirim lagi ya.';
+        } else {
           var raw=(await r.text()).trim();
           if(raw.includes('will continue to work normally')){
             var parts=raw.split('will continue to work normally.');
             raw=parts[parts.length-1].trim();
           }
           if(raw&&raw.length>2) reply=raw;
-        }catch(e){
-          console.error('Pollinations attempt '+attempts+' error:',e);
-          if(attempts<3) await new Promise(function(res){setTimeout(res,2000);});
         }
-      }
+      }catch(e){console.error('Pollinations error:',e);}
       if(!reply) reply='Maaf, koneksi sedang terganggu. Coba kirim pesan lagi ya 🪔';
       if(typing)typing.style.display='none';
       EMB.aiLoading=false;
