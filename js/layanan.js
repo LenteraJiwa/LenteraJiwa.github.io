@@ -229,6 +229,7 @@
       if(typeof puter!=='undefined'){
         try{
           var res=await puter.ai.chat([{role:'system',content:SYS},{role:'user',content:txt}]);
+          console.log('PUTER RAW:', JSON.stringify(res));
           if(typeof res==='string') reply=res.trim();
           else if(res&&res.content) reply=String(res.content).trim();
           else if(res&&res.message&&res.message.content) reply=String(res.message.content).trim();
