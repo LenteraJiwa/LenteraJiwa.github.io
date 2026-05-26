@@ -5,7 +5,7 @@
 
 const LJ_AUTH = (function() {
 
-  const API = 'https://script.google.com/macros/s/AKfycbzJsYdbaHPjU4FfDG64X7C6gCVHIZuGOqYD3ZHR_HHsH6o-ouDtz4Gw7rwFcOWqP7Yzmg/exec';
+  const API = 'https://script.google.com/macros/s/AKfycbyx-p9_xqptSqmgLHqyDail0tq8peZFvZuaBdhVloKVWUVGVWtu7Tv-hKyO5ylUyPAs/exec';
   const KEY_SESSION = 'lj_session';
 
   /* ── Kirim request ke Apps Script ── */
@@ -82,6 +82,17 @@ const LJ_AUTH = (function() {
     return true;
   }
 
+  /* ── Cek Username ── */
+  async function checkUsername(username) {
+    const url = API + '?action=checkUsername&username=' + encodeURIComponent(username);
+    try {
+      const res = await fetch(url);
+      return await res.json();
+    } catch(e) {
+      return { ok: true }; // kalau gagal, lanjut saja
+    }
+  }
+
   /* ── Kirim OTP ── */
   async function sendOTP(email) {
     const url = API + '?action=sendOTP&email=' + encodeURIComponent(email);
@@ -112,8 +123,9 @@ const LJ_AUTH = (function() {
     isLoggedIn:  isLoggedIn,
     requireLogin: requireLogin,
     verifyToken: verifyToken,
-    sendOTP:     sendOTP,
-    verifyOTP:   verifyOTP
+    sendOTP:       sendOTP,
+    verifyOTP:     verifyOTP,
+    checkUsername: checkUsername
   };
 
 })();

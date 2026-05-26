@@ -712,7 +712,7 @@ select option{background:#082218;color:#fff}
           <div class="suc-ic">✓</div>
           <div class="suc-t">Berhasil! 🎉</div>
           <p class="suc-m" id="sucM"></p>
-          <button class="btn btn-p" onclick="go('scW','l');resetAll()" style="max-width:240px;margin:0 auto">Masuk Sekarang →</button>
+          <button class="btn btn-p" onclick="window.location.href='index.html'" style="max-width:240px;margin:0 auto">Masuk Sekarang →</button>
           <p style="font-size:.72rem;color:var(--text-w3);margin-top:.9rem">Periksa email untuk tautan aktivasi akun</p>
         </div>
       </div>
@@ -892,11 +892,10 @@ function goR(n) {
 }
 
 // ===== VALIDATE STEP 1 =====
-function v1() {
+async function v1() {
   const nf = document.getElementById('r1Nf');
   const u = g('rU'), nm = g('rN'), kt = g('rK'), ag = g('rA');
   if (!u || u.length < 4) { sN(nf, 'err', 'Username minimal 4 karakter.'); return; }
-  if (TAKEN.includes(u.toLowerCase())) { sN(nf, 'err', 'Username sudah dipakai orang lain.'); return; }
   if (!nm) { sN(nf, 'err', 'Nama lengkap harus diisi.'); return; }
   if (!kt) { sN(nf, 'err', 'Tempat tinggal harus diisi.'); return; }
   if (!ag || +ag < 15 || +ag > 80) { sN(nf, 'err', 'Usia harus antara 15–80 tahun.'); return; }
@@ -904,6 +903,9 @@ function v1() {
   if (!document.getElementById('univV').value) { sN(nf, 'err', 'Pilih universitas Anda.'); return; }
   if (!g('rSem')) { sN(nf, 'err', 'Pilih semester.'); return; }
   if (!g('rNIM')) { sN(nf, 'err', 'NIM harus diisi.'); return; }
+  sN(nf, 'ok', '⏳ Memeriksa ketersediaan username...');
+  const chk = await LJ_AUTH.checkUsername(u);
+  if (!chk.ok) { sN(nf, 'err', chk.msg); return; }
   sN(nf, '', '');
   goR(2);
 }
