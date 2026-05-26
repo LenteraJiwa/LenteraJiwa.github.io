@@ -5,7 +5,7 @@
 
 const LJ_AUTH = (function() {
 
-  const API = 'https://script.google.com/macros/s/AKfycbxdTFAlgdrPJ_GPWy8lXXqeXw6da5gRO-6PoBDsO0mE79TkB5OKfu-6Xn_DtmMT4v2BeQ/exec';
+  const API = 'https://script.google.com/macros/s/AKfycbzJsYdbaHPjU4FfDG64X7C6gCVHIZuGOqYD3ZHR_HHsH6o-ouDtz4Gw7rwFcOWqP7Yzmg/exec';
   const KEY_SESSION = 'lj_session';
 
   /* ── Kirim request ke Apps Script ── */
