@@ -870,8 +870,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .nav-drawer-close:hover { background: var(--lav-100); color: var(--lav-600); }
 
-.nav-drawer-body   { padding: 16px 12px; flex: 1; }
-.nav-drawer-footer { padding: 16px 20px 24px; border-top: 1px solid var(--border-mid); }
+.nav-drawer-body   { padding: 16px 12px; flex: 1; overflow-y: auto; }
+.nav-drawer-footer { padding: 16px 20px 24px; border-top: 1px solid var(--border-mid); margin-top: auto; }
 
 .nav-drawer-link {
   display: flex;
