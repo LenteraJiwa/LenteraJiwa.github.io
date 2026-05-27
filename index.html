@@ -287,11 +287,12 @@
 // ── User drawer ──
 function initDrawerUser() {
   const session = LJ_AUTH.getSession();
+  console.log('SESSION:', JSON.stringify(session));
   const section = document.getElementById('drawer-user-section');
   if (!section) return;
   if (session) {
     section.style.display = 'block';
-    const nama = session.nama || session.username || 'User';
+    const nama = session.nama || session.user?.nama || session.username || session.user?.username || 'User';
     document.getElementById('drawer-username').textContent = nama;
     document.getElementById('drawer-avatar').textContent = nama.charAt(0).toUpperCase();
   } else {
