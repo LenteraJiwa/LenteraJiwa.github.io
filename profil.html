@@ -154,6 +154,7 @@
 // ── Guard login ──
 window.addEventListener('load', function() {
   const session = LJ_AUTH.getSession();
+  alert('DEBUG: ' + (session ? session.username : 'NULL'));
   if (!session) { window.location.href = 'login.html'; return; }
   loadProfile(session);
 });
