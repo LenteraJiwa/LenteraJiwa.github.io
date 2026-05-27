@@ -60,7 +60,7 @@ const PAGE_MAP = {
   'profil.html':       {
     file:  'pages/profil.html',
     title: 'Profil Saya',
-    js:    [],
+    js:    ['js/auth.js'],
     css:   ['css/pages/profil.css'],
   },
 };
