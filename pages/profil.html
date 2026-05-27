@@ -1,0 +1,189 @@
+<div class="profil-page">
+
+<!-- HERO -->
+<div class="profil-hero">
+  <div class="profil-avatar-wrap">
+    <div class="profil-avatar" id="profil-avatar">R</div>
+    <span class="profil-role-badge" id="profil-role-badge">Mahasiswa</span>
+  </div>
+  <h1 class="profil-nama" id="profil-nama">Loading...</h1>
+  <p class="profil-username" id="profil-username">@username</p>
+  <div class="profil-email-badge">
+    <span>✉️</span>
+    <span id="profil-email">email@contoh.com</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="profil-stats">
+  <div class="profil-stat">
+    <div class="profil-stat-val" id="stat-usia">—</div>
+    <div class="profil-stat-lbl">Usia</div>
+  </div>
+  <div class="profil-stat">
+    <div class="profil-stat-val" id="stat-gender">—</div>
+    <div class="profil-stat-lbl">Gender</div>
+  </div>
+  <div class="profil-stat">
+    <div class="profil-stat-val">✓</div>
+    <div class="profil-stat-lbl">Terverifikasi</div>
+  </div>
+</div>
+
+<!-- INFO PRIBADI -->
+<div class="profil-section">
+  <div class="profil-card" id="card-info">
+    <div class="profil-card-header">
+      <div class="profil-card-title"><span class="ic">👤</span> Info Pribadi</div>
+      <button class="profil-edit-btn" onclick="profilToggleEdit('card-info', this)">Edit</button>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">🪪</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Nama Lengkap</div>
+        <div class="profil-info-val" id="val-nama">—</div>
+        <input class="profil-input" id="inp-nama" type="text" placeholder="Nama lengkap">
+      </div>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">📅</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Usia</div>
+        <div class="profil-info-val" id="val-usia">—</div>
+        <input class="profil-input" id="inp-usia" type="number" min="8" max="100" placeholder="Usia">
+      </div>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">⚧️</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Gender</div>
+        <div class="profil-info-val" id="val-gender">—</div>
+        <select class="profil-select" id="inp-gender">
+          <option value="L">Laki-laki</option>
+          <option value="P">Perempuan</option>
+        </select>
+      </div>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">🎓</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Role</div>
+        <div class="profil-info-val" id="val-role">—</div>
+      </div>
+    </div>
+    <button class="profil-save-btn" onclick="profilSaveInfo()">💾 Simpan Perubahan</button>
+  </div>
+</div>
+
+<!-- AKUN -->
+<div class="profil-section">
+  <div class="profil-card">
+    <div class="profil-card-header">
+      <div class="profil-card-title"><span class="ic">🔐</span> Akun</div>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">👤</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Username</div>
+        <div class="profil-info-val" id="val-username">—</div>
+      </div>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">✉️</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Email</div>
+        <div class="profil-info-val" id="val-email">—</div>
+      </div>
+    </div>
+    <div class="profil-info-row">
+      <div class="profil-info-icon">🕐</div>
+      <div class="profil-info-body">
+        <div class="profil-info-lbl">Login Terakhir</div>
+        <div class="profil-info-val" id="val-loginat">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT -->
+<div class="profil-section">
+  <div class="profil-card" style="padding:16px 18px;">
+    <button class="profil-logout-btn" onclick="if(confirm('Yakin ingin keluar?')) LJ_AUTH.logout()">
+      🚪 Keluar dari Akun
+    </button>
+    <p class="profil-login-time" id="profil-login-time"></p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="profil-toast" id="profil-toast">✅ Tersimpan!</div>
+
+<script>
+(function() {
+  const session = LJ_AUTH.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  function capitalize(str) {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+  }
+
+  function loadProfile(s) {
+    const inisial = (s.nama || s.username || 'U').charAt(0).toUpperCase();
+    document.getElementById('profil-avatar').textContent      = inisial;
+    document.getElementById('profil-role-badge').textContent  = capitalize(s.role || 'User');
+    document.getElementById('profil-nama').textContent        = s.nama     || '—';
+    document.getElementById('profil-username').textContent    = '@' + (s.username || '—');
+    document.getElementById('profil-email').textContent       = s.email    || '—';
+    document.getElementById('stat-usia').textContent          = s.usia ? s.usia + ' th' : '—';
+    const gMap = { L: '♂ L', P: '♀ P' };
+    document.getElementById('stat-gender').textContent        = gMap[s.gender] || s.gender || '—';
+    document.getElementById('val-nama').textContent           = s.nama     || '—';
+    document.getElementById('val-usia').textContent           = s.usia ? s.usia + ' tahun' : '—';
+    const gFull = { L: 'Laki-laki', P: 'Perempuan' };
+    document.getElementById('val-gender').textContent         = gFull[s.gender] || s.gender || '—';
+    document.getElementById('val-role').textContent           = capitalize(s.role || '—');
+    document.getElementById('val-username').textContent       = s.username || '—';
+    document.getElementById('val-email').textContent          = s.email    || '—';
+    if (s.loginAt) {
+      const d = new Date(s.loginAt);
+      const str = d.toLocaleString('id-ID', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      document.getElementById('val-loginat').textContent          = str;
+      document.getElementById('profil-login-time').textContent    = 'Masuk sejak ' + str;
+    }
+    document.getElementById('inp-nama').value   = s.nama   || '';
+    document.getElementById('inp-usia').value   = s.usia   || '';
+    document.getElementById('inp-gender').value = s.gender || 'L';
+  }
+
+  window.profilToggleEdit = function(cardId, btn) {
+    const card = document.getElementById(cardId);
+    const isEditing = card.classList.toggle('editing');
+    btn.textContent = isEditing ? 'Batal' : 'Edit';
+  };
+
+  window.profilSaveInfo = function() {
+    const s = LJ_AUTH.getSession();
+    if (!s) return;
+    const nama   = document.getElementById('inp-nama').value.trim();
+    const usia   = parseInt(document.getElementById('inp-usia').value) || s.usia;
+    const gender = document.getElementById('inp-gender').value;
+    if (!nama) { profilShowToast('❌ Nama tidak boleh kosong'); return; }
+    const newSession = Object.assign({}, s, { nama, usia, gender });
+    localStorage.setItem('lj_session', JSON.stringify(newSession));
+    loadProfile(newSession);
+    const card = document.getElementById('card-info');
+    card.classList.remove('editing');
+    document.querySelector('#card-info .profil-edit-btn').textContent = 'Edit';
+    profilShowToast('✅ Profil diperbarui!');
+  };
+
+  window.profilShowToast = function(msg) {
+    const t = document.getElementById('profil-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  };
+
+  loadProfile(session);
+})();
+</script>

@@ -57,6 +57,12 @@ const PAGE_MAP = {
     js:    [],
     css:   ['css/pages/tentang.css'],
   },
+  'profil.html':       {
+    file:  'pages/profil.html',
+    title: 'Profil Saya',
+    js:    [],
+    css:   ['css/pages/profil.css'],
+  },
 };
 
 const _loadedStyles = new Set();
