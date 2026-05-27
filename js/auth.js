@@ -5,7 +5,7 @@
 
 const LJ_AUTH = (function() {
 
-  const API = 'https://script.google.com/macros/s/AKfycbyx-p9_xqptSqmgLHqyDail0tq8peZFvZuaBdhVloKVWUVGVWtu7Tv-hKyO5ylUyPAs/exec';
+  const API = 'https://script.google.com/macros/s/AKfycbzY5dO_GfxOSqHJhMZFlHFKa2uCUi6a-aPIcs15TJnxU2G3-YtJnfoM3ocXbqR9aMey4Q/exec';
   const KEY_SESSION = 'lj_session';
 
   /* ── Kirim request ke Apps Script ── */
@@ -82,6 +82,29 @@ const LJ_AUTH = (function() {
     return true;
   }
 
+  /* ── Upload Foto KTM ── */
+  async function uploadPhoto(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64 = e.target.result.split(',')[1];
+        const mimeType = file.type;
+        const fileName = 'KTM_' + Date.now() + '_' + file.name;
+        try {
+          const res = await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: 'uploadPhoto', base64, fileName, mimeType })
+          });
+          resolve(await res.json());
+        } catch(e) {
+          resolve({ ok: false, msg: 'Gagal upload foto.' });
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   /* ── Cek Username ── */
   async function checkUsername(username) {
     const url = API + '?action=checkUsername&username=' + encodeURIComponent(username);
@@ -125,7 +148,8 @@ const LJ_AUTH = (function() {
     verifyToken: verifyToken,
     sendOTP:       sendOTP,
     verifyOTP:     verifyOTP,
-    checkUsername: checkUsername
+    checkUsername: checkUsername,
+    uploadPhoto:   uploadPhoto
   };
 
 })();

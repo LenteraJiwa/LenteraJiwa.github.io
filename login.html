@@ -945,6 +945,11 @@ async function subReg() {
     univ: document.getElementById('univV').value,
     nim: g('rNIM'), semester: g('rSem')
   };
+  sN(nf, 'ok', '⏳ Mengupload foto KTM...');
+  const ktmFile = document.getElementById('ktmF').files[0];
+  const uploadRes = await LJ_AUTH.uploadPhoto(ktmFile);
+  if (!uploadRes.ok) { sN(nf, 'err', 'Gagal upload foto KTM: ' + uploadRes.msg); return; }
+  regData.ktmUrl = uploadRes.url;
   sN(nf, 'ok', '⏳ Mendaftarkan akun...');
   const res = await LJ_AUTH.register(regData);
   if (!res.ok) { sN(nf, 'err', res.msg); return; }
