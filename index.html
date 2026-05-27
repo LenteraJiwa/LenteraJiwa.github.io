@@ -175,6 +175,23 @@
        style="justify-content:center;margin-top:12px;">
       ✨ Mulai Konsultasi
     </a>
+
+    <!-- User Profile -->
+    <div id="drawer-user-section" style="display:none;margin-top:16px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">
+      <div id="drawer-logout-popup" style="display:none;background:rgba(255,255,255,0.08);border-radius:10px;padding:8px;margin-bottom:8px;">
+        <button onclick="LJ_AUTH.logout()" style="width:100%;background:#e74c3c;color:white;border:none;border-radius:8px;padding:10px;font-size:14px;cursor:pointer;font-weight:600;">
+          🚪 Keluar
+        </button>
+      </div>
+      <div id="drawer-username-btn" onclick="toggleLogout()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:10px;background:rgba(255,255,255,0.06);">
+        <div id="drawer-avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00c896,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:14px;">U</div>
+        <div>
+          <div id="drawer-username" style="font-weight:600;font-size:14px;color:white;">Username</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);">Mahasiswa</div>
+        </div>
+        <span id="drawer-arrow" style="margin-left:auto;color:rgba(255,255,255,0.4);font-size:12px;">▲</span>
+      </div>
+    </div>
   </div>
 
 </aside>
@@ -266,5 +283,37 @@
 <script src="js/auth.js"    defer></script>
 <script src="js/main.js"    defer></script>
 
+<script>
+// ── User drawer ──
+function initDrawerUser() {
+  const session = LJ_AUTH.getSession();
+  const section = document.getElementById('drawer-user-section');
+  if (!section) return;
+  if (session) {
+    section.style.display = 'block';
+    const nama = session.nama || session.username || 'User';
+    document.getElementById('drawer-username').textContent = nama;
+    document.getElementById('drawer-avatar').textContent = nama.charAt(0).toUpperCase();
+  } else {
+    section.style.display = 'none';
+  }
+}
+
+function toggleLogout() {
+  const popup = document.getElementById('drawer-logout-popup');
+  const arrow = document.getElementById('drawer-arrow');
+  if (popup.style.display === 'none') {
+    popup.style.display = 'block';
+    arrow.textContent = '▼';
+  } else {
+    popup.style.display = 'none';
+    arrow.textContent = '▲';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initDrawerUser();
+});
+</script>
 </body>
 </html>
