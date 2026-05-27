@@ -313,7 +313,10 @@ function toggleLogout() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(initDrawerUser, 300);
+  setTimeout(initDrawerUser, 800);
+});
+window.addEventListener('load', function() {
+  initDrawerUser();
 });
 </script>
 </body>
