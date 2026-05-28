@@ -281,7 +281,7 @@
 
   initLayanan();
 
-})();
+
 // ── Chat Live Global (Spreadsheet) ──
 const LIVE_API = 'https://script.google.com/macros/s/AKfycbwXXLDgAb6ZmTVJSLb_FsgEIFzbgbOqt1gXsuK4C_QIks7UOXwV3B8MDc7qooWetyeqIw/exec';
 let _livePolling = null;
@@ -342,3 +342,5 @@ function liveStartPolling() {
 function liveStopPolling() {
   if (_livePolling) { clearInterval(_livePolling); _livePolling = null; }
 }
+
+})();
