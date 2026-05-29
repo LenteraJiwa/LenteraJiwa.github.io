@@ -277,16 +277,16 @@
     var oel=document.getElementById('emb-online');if(oel)oel.textContent=oc;
     liveStartPolling();
   }
-  initEmbeddedChat();
-
-  initLayanan();
-
 
 // ── Chat Live Global (Spreadsheet) ──
 const LIVE_API = 'https://script.google.com/macros/s/AKfycbwXXLDgAb6ZmTVJSLb_FsgEIFzbgbOqt1gXsuK4C_QIks7UOXwV3B8MDc7qooWetyeqIw/exec';
 let _livePolling = null;
 let _liveMsgs = [];
 let _liveLastCount = 0;
+  initEmbeddedChat();
+
+  initLayanan();
+
 
 async function liveGetMessages() {
   try {
