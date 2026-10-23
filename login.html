@@ -473,6 +473,15 @@ select option{background:#082218;color:#fff}
           </div>
         </div>
 
+        <!-- Belum punya akun -->
+        <div class="role-single" id="rcN" onclick="go('scR1','r')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();go('scR1','r')}">
+          <span class="role-single-ico">✨</span>
+          <div class="role-single-text">
+            <span class="rc-name">Buat Akun Baru</span>
+            <span class="rc-desc">Gratis · akun umum (18+) atau mahasiswa</span>
+          </div>
+        </div>
+
         <div class="pill" id="wPill" style="display:none"></div>
 
         <button class="btn btn-p" id="wBtn" onclick="wAction()" disabled>Pilih cara masuk →</button>
@@ -845,17 +854,32 @@ function tPw(id, ic) {
   ic.textContent = el.type === 'text' ? '🙈' : '👁';
 }
 
+// ===== TOMBOL SIBUK =====
+// Kunci tombol selama proses supaya tidak terkirim dua kali, dan beri tanda jelas.
+async function busyBtn(btn, label, fn) {
+  if (!btn) return fn();
+  if (btn.dataset.busy) return;
+  const old = btn.textContent;
+  btn.dataset.busy = '1'; btn.disabled = true; btn.textContent = label;
+  try { return await fn(); }
+  finally { delete btn.dataset.busy; btn.disabled = false; btn.textContent = old; }
+}
+
 // ===== LOGIN =====
 async function doLogin() {
   const nf = document.getElementById('lNf');
   const u = g('lU'), p = g('lP');
   if (!u || !p) { sN(nf, 'err', 'Harap isi username dan kata sandi.'); return; }
-  sN(nf, 'ok', '⏳ Sedang masuk...');
-  const res = await LJ_AUTH.login(u, p);
-  if (!res.ok) { sN(nf, 'err', res.msg); return; }
-  sN(nf, 'ok', '✓ Login berhasil! Selamat datang, ' + res.user.nama + ' 👋');
-  const role = res.user && res.user.role;
-  setTimeout(function() { window.location.href = (role === 'psikolog' || role === 'admin') ? 'portal.html' : 'index.html'; }, 1000);
+  const btn = document.querySelector('#scL .btn-p');
+  await busyBtn(btn, '⏳ Sedang masuk…', async () => {
+    sN(nf, 'ok', '⏳ Sedang masuk...');
+    const res = await LJ_AUTH.login(u, p);
+    if (!res.ok) { sN(nf, 'err', res.msg); return; }
+    sN(nf, 'ok', '✓ Login berhasil! Selamat datang, ' + res.user.nama + ' 👋');
+    const role = res.user && res.user.role;
+    // Langsung pindah halaman (sebelumnya ada jeda 1 detik)
+    window.location.href = (role === 'psikolog' || role === 'admin') ? 'portal.html' : 'index.html';
+  });
 }
 
 // ===== FORGOT =====
@@ -947,9 +971,14 @@ async function v1() {
   if (mhs && !document.getElementById('univV').value.trim()) { sN(nf, 'err', 'Isi nama universitas Anda.'); return; }
   if (mhs && !g('rSem')) { sN(nf, 'err', 'Pilih semester.'); return; }
   if (mhs && !g('rNIM')) { sN(nf, 'err', 'NIM harus diisi.'); return; }
-  sN(nf, 'ok', '⏳ Memeriksa ketersediaan username...');
-  const chk = await LJ_AUTH.checkUsername(u);
-  if (!chk.ok) { sN(nf, 'err', chk.msg); return; }
+  // Biasanya sudah dicek saat mengetik → langsung lanjut tanpa menunggu
+  let chk = unameCheck.name === u.toLowerCase() ? unameCheck.res : null;
+  if (!chk || chk.offline) {
+    const btn = document.querySelector('#scR1 .btn-p');
+    chk = await busyBtn(btn, '⏳ Memeriksa…', () => { sN(nf, 'ok', '⏳ Memeriksa ketersediaan username...'); return serverCheckUsername(u); });
+    if (!chk) return;
+  }
+  if (!chk.ok) { sN(nf, 'err', chk.msg || 'Username sudah dipakai.'); return; }
   sN(nf, '', '');
   goR(2);
 }
@@ -963,11 +992,15 @@ async function v2() {
   if (!/^[^@]+@[^@]+\.[^@]{2,}$/.test(em)) { sN(nf, 'err', 'Format email tidak valid.'); return; }
   const phClean = ph.replace(/[-\s]/g, '');
   if ((tipeAkun === 'mahasiswa' || phClean) && !/^(\+62|62|0)[0-9]{8,13}$/.test(phClean)) { sN(nf, 'err', tipeAkun === 'mahasiswa' ? 'Format nomor telepon tidak valid.' : 'Nomor telepon tidak valid. Kosongkan saja jika tidak ingin mengisi.'); return; }
-  sN(nf, 'ok', '📩 Mengirim kode OTP ke ' + em + '...');
-  const otpRes = await LJ_AUTH.sendOTP(em);
-  if (!otpRes.ok) { sN(nf, 'err', 'Gagal kirim OTP: ' + otpRes.msg); return; }
-  sN(nf, 'ok', '✅ Kode OTP terkirim ke ' + em);
+  // Langsung ke langkah 3; email dikirim di latar belakang sementara
+  // pengguna membuka email-nya (sebelumnya harus menunggu email terkirim).
+  sN(nf, '', '');
   goR(3);
+  const nf3 = document.getElementById('r3Nf');
+  sN(nf3, 'ok', '📩 Mengirim kode ke ' + em + '… cek email-mu sebentar lagi.');
+  const otpRes = await LJ_AUTH.sendOTP(em);
+  if (otpRes.ok) sN(nf3, 'ok', '✅ Kode terkirim ke ' + em + '. Cek juga folder Spam.');
+  else sN(nf3, 'err', 'Kode belum terkirim: ' + (otpRes.msg || 'coba lagi') + (/terdaftar/.test(otpRes.msg || '') ? '' : ' Ketuk "Kirim ulang" di bawah.'));
 }
 
 // ===== SUBMIT REG =====
@@ -998,6 +1031,19 @@ async function subReg() {
     nim: mhs ? g('rNIM') : '', semester: mhs ? g('rSem').replace('+', '') : '',
     tipe: tipeAkun
   };
+  const submitBtn = document.querySelector('#scR3 .btn-a');
+  if (submitBtn && submitBtn.dataset.busy) return;
+  if (submitBtn) { submitBtn.dataset.busy = '1'; submitBtn.disabled = true; }
+  try {
+  // Akun umum: data + kode OTP dikirim sekaligus (1 request), langsung masuk
+  if (!mhs && !regTicket) {
+    sN(nf, 'ok', '⏳ Membuat akun…');
+    const resU = await LJ_AUTH.register(regData, undefined, otp);
+    if (resU.ok) return selesaiDaftar(resU, regData, mhs);
+    // Backend versi lama belum mengenal cara 1-request → pakai alur tiket di bawah
+    const legacy = /verifikasi berakhir|ulangi verifikasi otp/i.test(resU.msg || '');
+    if (!legacy) { sN(nf, 'err', resU.msg || 'Pendaftaran gagal.'); return; }
+  }
   // 2) Verifikasi OTP → tiket
   if (!regTicket || regTicketEmail !== email) {
     sN(nf, 'ok', '⏳ Memverifikasi OTP...');
@@ -1019,10 +1065,16 @@ async function subReg() {
   const res = await LJ_AUTH.register(regData, regTicket === 'LEGACY' ? undefined : regTicket);
   if (!res.ok) { sN(nf, 'err', res.msg); if (/verifikasi/i.test(res.msg || '')) { regTicket = null; ktmUploaded = false; } return; }
   regTicket = null; ktmUploaded = false;
-  // Auto login setelah register
-  const loginRes = await LJ_AUTH.login(regData.username, regData.password);
-  // Bangun pesan dengan textContent: nama berasal dari input pengguna
-  // dan tidak boleh disisipkan sebagai HTML (mencegah XSS).
+  return selesaiDaftar(res, regData, mhs);
+  } finally {
+    if (submitBtn) { delete submitBtn.dataset.busy; submitBtn.disabled = false; }
+  }
+}
+
+async function selesaiDaftar(res, regData, mhs) {
+  // Server baru langsung memberi token; server lama perlu login terpisah
+  const loginRes = res.token ? res : await LJ_AUTH.login(regData.username, regData.password);
+  // Pesan dibangun dengan textContent: nama dari input pengguna (cegah XSS)
   const sucM = document.getElementById('sucM');
   sucM.textContent = '';
   const bold = t => { const b = document.createElement('strong'); b.textContent = t; return b; };
@@ -1037,21 +1089,34 @@ async function subReg() {
 
 // ===== USERNAME CHECK =====
 let uT;
+// Hasil cek username dari server disimpan, jadi tombol "Lanjutkan" di
+// langkah 1 tidak perlu menunggu server lagi.
+let unameCheck = { name: '', res: null, pending: null };
+function serverCheckUsername(val) {
+  const name = val.toLowerCase();
+  if (unameCheck.name === name && (unameCheck.res || unameCheck.pending)) return unameCheck.pending || Promise.resolve(unameCheck.res);
+  unameCheck = { name: name, res: null, pending: null };
+  unameCheck.pending = LJ_AUTH.checkUsername(val).then(r => {
+    if (unameCheck.name === name) { unameCheck.res = r; unameCheck.pending = null; }
+    return r;
+  });
+  return unameCheck.pending;
+}
 function chkUser(inp) {
   const val = inp.value.trim();
   const st = document.getElementById('uSt'), ic = document.getElementById('uIco');
   clearTimeout(uT);
-  if (val.length < 4) { st.className = 'fs info'; st.textContent = 'Ketik minimal 4 karakter'; ic.textContent = '🔍'; inp.className = 'iw'; return; }
+  inp.classList.remove('o', 'e');
+  if (val.length < 4) { st.className = 'fs info'; st.textContent = 'Ketik minimal 4 karakter'; ic.textContent = '🔍'; return; }
+  if (!/^[a-zA-Z0-9_]{4,20}$/.test(val)) { st.className = 'fs err'; st.textContent = 'Hanya huruf, angka, _ · 4–20 karakter'; ic.textContent = '✗'; inp.classList.add('e'); return; }
   st.className = 'fs info'; st.textContent = 'Memeriksa ketersediaan...'; ic.textContent = '⏳';
-  uT = setTimeout(() => {
-    if (TAKEN.includes(val.toLowerCase())) {
-      st.className = 'fs err'; st.textContent = '✗ Username sudah dipakai orang lain'; ic.textContent = '✗'; inp.classList.add('e');
-    } else if (/^[a-zA-Z0-9_]{4,20}$/.test(val)) {
-      st.className = 'fs ok'; st.textContent = '✓ Username tersedia!'; ic.textContent = '✓'; inp.classList.add('o'); inp.classList.remove('e');
-    } else {
-      st.className = 'fs err'; st.textContent = 'Hanya huruf, angka, _ · Min 4 karakter'; ic.textContent = '✗'; inp.classList.add('e');
-    }
-  }, 750);
+  uT = setTimeout(async () => {
+    const r = await serverCheckUsername(val);
+    if (inp.value.trim() !== val) return;
+    if (r.ok) { st.className = 'fs ok'; st.textContent = '✓ Username tersedia'; ic.textContent = '✓'; inp.classList.add('o'); }
+    else if (r.offline) { st.className = 'fs info'; st.textContent = 'Belum bisa dicek (koneksi). Akan dicek lagi saat lanjut.'; ic.textContent = '🔍'; }
+    else { st.className = 'fs err'; st.textContent = '✗ ' + (r.msg || 'Username sudah dipakai'); ic.textContent = '✗'; inp.classList.add('e'); }
+  }, 500);
 }
 
 // ===== PASSWORD STRENGTH =====

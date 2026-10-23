@@ -177,6 +177,12 @@
        style="justify-content:center;margin-top:12px;">
       ✨ Mulai Konsultasi
     </a>
+    <!-- Belum masuk: tombol Masuk / Daftar (disembunyikan bila sudah login) -->
+    <a href="login.html" id="drawer-login-btn"
+       class="btn btn-soft btn-md w-full"
+       style="justify-content:center;margin-top:10px;">
+      🔐 Masuk / Daftar
+    </a>
 
     <!-- User Profile -->
     <div id="drawer-user-section" style="display:none;margin-top:16px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">
@@ -323,6 +329,8 @@ function updateAccountUI() {
     prof.setAttribute('href', session ? 'profil.html' : 'login.html');
     prof.firstElementChild.textContent = session ? '👤 Profil Saya' : '🔐 Masuk / Daftar';
   }
+  const dl = document.getElementById('drawer-login-btn');
+  if (dl) dl.style.display = session ? 'none' : '';
   if (!el) return;
   if (session) {
     const nama = String(session.nama || session.username || 'Akun');

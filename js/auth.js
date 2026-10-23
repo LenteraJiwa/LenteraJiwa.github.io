@@ -43,25 +43,31 @@ const LJ_AUTH = (function() {
 
   /* ── Register ── */
   // ticket: didapat dari verifyOTP; membuktikan email sudah diverifikasi
-  async function register(data, ticket) {
-    return api({ action: 'register', ticket, data });
+  // otp: untuk akun umum, kode OTP dikirim bersama data (1 request saja).
+  // Server baru langsung membuat sesi, jadi tidak perlu login terpisah.
+  async function register(data, ticket, otp) {
+    const res = await api({ action: 'register', ticket, otp, data });
+    if (res && res.ok && res.token) saveSession(res);
+    return res;
   }
 
   /* ── Login ── */
+  function saveSession(result) {
+    localStorage.setItem(KEY_SESSION, JSON.stringify({
+      token:    result.token,
+      username: result.user.username,
+      nama:     result.user.nama,
+      email:    result.user.email,
+      usia:     result.user.usia,
+      gender:   result.user.gender,
+      role:     result.user.role,
+      loginAt:  new Date().toISOString()
+    }));
+  }
+
   async function login(usernameOrEmail, password) {
     const result = await api({ action: 'login', username: usernameOrEmail, password });
-    if (result.ok) {
-      localStorage.setItem(KEY_SESSION, JSON.stringify({
-        token:    result.token,
-        username: result.user.username,
-        nama:     result.user.nama,
-        email:    result.user.email,
-        usia:     result.user.usia,
-        gender:   result.user.gender,
-        role:     result.user.role,
-        loginAt:  new Date().toISOString()
-      }));
-    }
+    if (result.ok) saveSession(result);
     return result;
   }
 
