@@ -1730,3 +1730,23 @@ body {
 @media (max-width: 1000px) {
   .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
 }
+
+/* ── Tombol akun di navbar (Masuk / nama pengguna) ── */
+.nav-account {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px; border-radius: var(--radius-full);
+  border: 1.5px solid var(--border-mid, rgba(123,111,212,.25));
+  color: var(--text-primary); font-size: 13px; font-weight: 700;
+  white-space: nowrap; text-decoration: none; background: rgba(255,255,255,.6);
+}
+.nav-account:hover { background: var(--lav-100); }
+.nav-account:focus-visible { outline: 3px solid var(--lav-400, #9B8FE4); outline-offset: 2px; }
+.nav-account-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--age-gradient); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 12px;
+}
+@media (max-width: 480px) {
+  .nav-account-name { display: none; }
+  .nav-account { padding: 7px 10px; }
+}

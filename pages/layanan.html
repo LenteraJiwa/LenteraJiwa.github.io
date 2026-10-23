@@ -14,16 +14,16 @@
           Kamu Layak<br>Mendapat <em style="color:var(--age-primary);">Dukungan</em><br>yang Tepat
         </h1>
         <p style="font-size:17px;color:var(--text-secondary);line-height:1.8;max-width:460px;margin-bottom:36px;">
-          Semua psikolog kami berlisensi HIMPSI dengan pengalaman minimal 3 tahun. Sesi bisa dilakukan online maupun tatap muka — sesuai kenyamananmu.
+          Psikolog yang bergabung wajib memiliki izin praktik aktif dan kami periksa sebelum profilnya tampil. Sesi bisa dilakukan online maupun tatap muka — sesuai kenyamananmu.
         </p>
         <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:36px;">
           <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text-secondary);">
             <span style="background:var(--mint-100);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">✓</span>
-            Berlisensi HIMPSI
+            Izin praktik diperiksa
           </div>
           <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text-secondary);">
             <span style="background:var(--sky-100);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">🔒</span>
-            100% Rahasia
+            Dijaga kerahasiaannya
           </div>
           <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text-secondary);">
             <span style="background:var(--sun-100);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">⚡</span>
@@ -37,22 +37,22 @@
       </div>
       <div class="layanan-hero-visual" aria-hidden="true">
         <div class="floating-card fc-1">
-          <div class="fc-emoji">😌</div>
-          <div class="fc-label">Sesi Berikutnya</div>
-          <div class="fc-value">Hari ini, 15.00</div>
-          <div class="fc-sub fc-green">● Slot tersedia</div>
+          <div class="fc-emoji">🌱</div>
+          <div class="fc-label">Obrolan Awal</div>
+          <div class="fc-value">Gratis, 20 menit</div>
+          <div class="fc-sub fc-green">Tanpa komitmen</div>
         </div>
         <div class="floating-card fc-2">
-          <div class="fc-emoji">⭐</div>
-          <div class="fc-label">Rating Psikolog</div>
-          <div class="fc-value">4.9 / 5.0</div>
-          <div class="fc-sub">dari 2.400+ ulasan</div>
+          <div class="fc-emoji">🪪</div>
+          <div class="fc-label">Psikolog</div>
+          <div class="fc-value">Izin praktik diperiksa</div>
+          <div class="fc-sub">sebelum profil tampil</div>
         </div>
         <div class="floating-card fc-3">
-          <div class="fc-emoji">🔒</div>
-          <div class="fc-label">Privasi Terjaga</div>
-          <div class="fc-value">End-to-end encrypted</div>
-          <div class="fc-sub">Data tidak pernah dibagikan</div>
+          <div class="fc-emoji">💻</div>
+          <div class="fc-label">Mode Sesi</div>
+          <div class="fc-value">Online atau tatap muka</div>
+          <div class="fc-sub">sesuai kenyamananmu</div>
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
     <div class="section-header reveal" style="text-align:center;align-items:center;margin-bottom:24px;">
       <div class="section-tag" style="margin:0 auto 16px;">💬 Ruang Obrolan</div>
       <h2 id="chat-heading" class="section-title" style="text-align:center;">Ngobrol <em>Sekarang</em></h2>
-      <p style="color:var(--text-secondary);font-size:15px;max-width:480px;margin:0 auto;">Pilih mode obrolan — langsung, dengan AI, atau tunggu jawaban Pakar kami.</p>
+      <p style="color:var(--text-secondary);font-size:15px;max-width:480px;margin:0 auto;">Ngobrol dengan sesama di ruang Live, atau tanya asisten AI seputar kesehatan jiwa. AI bukan psikolog — untuk konsultasi dengan psikolog, isi form di bawah.</p>
     </div>
     <div class="reveal" id="lj-embedded-chat" style="background:rgba(255,255,255,0.85);backdrop-filter:blur(24px);border:1.5px solid rgba(123,111,212,0.18);border-radius:28px;box-shadow:0 16px 48px rgba(45,37,80,0.12);overflow:hidden;display:flex;flex-direction:column;">
       <div style="background:linear-gradient(135deg,#7B6FD4,#9B8FE4);padding:16px 20px 0;">
@@ -180,7 +180,7 @@
         <div class="pricing-price"><span>Rp</span> 350<span style="font-size:22px;">.000</span></div>
         <div class="pricing-duration">60 menit · per sesi</div>
         <ul class="pricing-features">
-          <li>Psikolog klinis berlisensi HIMPSI</li>
+          <li>Psikolog dengan izin praktik aktif</li>
           <li>Online atau tatap muka</li>
           <li>Rekaman sesi (opsional)</li>
           <li>Ringkasan &amp; rencana tindak lanjut</li>
@@ -290,6 +290,10 @@
         <button type="submit" id="submit-btn" class="btn btn-primary btn-lg w-full btn-ripple" style="justify-content:center;">
           Kirim &amp; Tunggu Konfirmasi ✨
         </button>
+        <div id="booking-error" role="alert" style="display:none;margin-top:16px;background:#FFF4F0;border:1.5px solid #E88B6A;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.65;color:var(--text-primary);">
+          <strong>Maaf, permintaanmu belum terkirim.</strong> Datamu tidak tersimpan, jadi tim kami belum menerimanya. Silakan coba lagi beberapa saat lagi.<br>
+          Jika kamu sedang dalam bahaya atau berpikir untuk menyakiti diri, jangan menunggu: hubungi <strong>Layanan SEJIWA 119 ext 8</strong> atau <strong>112</strong>.
+        </div>
       </form>
       <div class="form-success" id="form-success" aria-live="assertive" role="status">
         <div class="form-success-icon">🌟</div>
@@ -313,7 +317,7 @@
     <div class="reveal" id="faq-list">
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Apakah sesi benar-benar rahasia? <span class="faq-icon">+</span></button>
-        <div class="faq-a">Ya, sepenuhnya. Semua sesi dilindungi oleh kode etik psikologi dan kerahasiaan profesional.</div>
+        <div class="faq-a">Ya. Psikolog terikat kode etik psikologi dan kewajiban menjaga kerahasiaan klien. Data form booking hanya dipakai tim kami untuk mencocokkanmu dengan psikolog.</div>
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Bagaimana cara membatalkan atau menjadwal ulang? <span class="faq-icon">+</span></button>
@@ -321,7 +325,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Apakah psikolog di Lentera Jiwa memiliki lisensi resmi? <span class="faq-icon">+</span></button>
-        <div class="faq-a">Ya. Semua psikolog kami memiliki gelar S2 Psikologi Profesi (M.Psi., Psikolog), berlisensi aktif dari HIMPSI, dan berpengalaman minimal 3 tahun.</div>
+        <div class="faq-a">Ya. Psikolog yang bergabung wajib bergelar Psikolog (M.Psi., Psikolog) dengan izin praktik aktif. Nomor izin praktiknya kami periksa dan tampilkan di profil pada halaman Tentang.</div>
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">Apakah layanan ini tersedia untuk anak-anak dan remaja? <span class="faq-icon">+</span></button>
@@ -346,7 +350,7 @@
         <a href="#booking" class="btn btn-lg btn-ripple" style="background:white;color:var(--lav-800);box-shadow:0 8px 32px rgba(0,0,0,.2);">
           Mulai Konsultasi Gratis ✨
         </a>
-        <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:16px;">Krisis? 119 ext 8 (Into The Light Indonesia)</p>
+        <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:16px;">Krisis? Layanan SEJIWA 119 ext 8 · Darurat 112</p>
       </div>
     </div>
   </div>

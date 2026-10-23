@@ -9,6 +9,47 @@
 
 (function() {
 
+  /* ── KEAMANAN: escape semua teks sebelum masuk innerHTML ──
+     Data dari server (nama, username, pesan) bisa berisi HTML/JS
+     buatan pengguna. Jangan pernah menyisipkannya mentah. */
+  function escHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /* ── KESELAMATAN: deteksi pesan krisis ──
+     Bila pesan mengandung tanda risiko bunuh diri / menyakiti diri,
+     situs langsung menampilkan kartu bantuan dan TIDAK meneruskan
+     pesan ke AI. Daftar ini sengaja luas: lebih baik kartu muncul
+     berlebih daripada terlewat. */
+  var CRISIS_PATTERNS = [
+    /bunuh\s*diri/i, /akhiri\s*hidup/i, /mengakhiri\s*(hidup|nyawa)/i,
+    /(ingin|pengen|pengin|mau|kepingin)\s*(mati|meninggal)/i,
+    /lebih\s*baik\s*(aku|saya|gue|gw)?\s*mati/i,
+    /(gak|ga|nggak|enggak|tidak|tak)\s*(mau|ingin|pengen)\s*hidup/i,
+    /(menyakiti|melukai|nyakitin)\s*diri/i, /self[\s-]*harm/i,
+    /\bsuicid/i, /\bkill\s*myself/i, /\bsayat\s*(tangan|nadi)/i,
+    /\boverdosis\b/i, /\bgantung\s*diri/i, /\blompat\s*dari\b/i
+  ];
+  function isCrisis(text) {
+    return CRISIS_PATTERNS.some(function(re) { return re.test(text); });
+  }
+  var CRISIS_CARD =
+    '<div role="alert" style="background:#FFF4F0;border:1.5px solid #E88B6A;border-radius:16px;padding:14px 16px;font-size:13px;line-height:1.65;color:#2D2550;">' +
+      '<div style="font-weight:800;margin-bottom:6px;">💜 Kamu tidak sendirian. Bantuan tersedia sekarang.</div>' +
+      '<div>Apa yang kamu rasakan itu penting. Tolong hubungi salah satu ini sekarang juga:</div>' +
+      '<ul style="margin:8px 0 8px 18px;padding:0;">' +
+        '<li><b>Layanan SEJIWA: telepon 119, lalu tekan 8</b></li>' +
+        '<li><b>Darurat: 112</b>, atau datang ke IGD rumah sakit terdekat</li>' +
+        '<li>Hubungi orang yang kamu percaya dan minta mereka menemanimu</li>' +
+      '</ul>' +
+      '<div style="font-size:12px;color:#5A527A;">Pesan ini tidak dikirim ke AI. AI tidak bisa menggantikan bantuan manusia saat kamu dalam bahaya.</div>' +
+    '</div>';
+
   function initLayanan() {
     var scheduleChips = document.querySelectorAll('.schedule-chip');
     var modalityBtns  = document.querySelectorAll('.modality-btn');
@@ -68,29 +109,58 @@
           if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Nama perlu diisi.', 'error');
           return;
         }
-        if (!email || !email.value.trim() || !email.value.includes('@')) {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) {
           if (email) email.focus();
           if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Format email belum tepat.', 'error');
           return;
         }
-        if (!telp || !telp.value.trim() || telp.value.trim().length < 8) {
+        if (!telp || !/^(\+62|62|0)[0-9]{8,13}$/.test(telp.value.replace(/[\s-]/g, ''))) {
           if (telp) telp.focus();
-          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Nomor HP kurang valid.', 'error');
+          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Nomor HP kurang valid. Contoh: 081234567890', 'error');
+          return;
+        }
+        var usiaSel = document.getElementById('usia');
+        if (usiaSel && !usiaSel.value) {
+          usiaSel.focus();
+          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Pilih kelompok usia dulu.', 'error');
           return;
         }
 
+        var errBox = document.getElementById('booking-error');
+        if (errBox) errBox.style.display = 'none';
+        var oldLabel = btn ? btn.textContent : '';
         if (btn) {
-          btn.textContent = 'Menghubungkan kamu dengan tim kami... 💜';
+          btn.textContent = 'Mengirim permintaanmu... 💜';
           btn.disabled    = true;
         }
 
-        var timerId = setTimeout(function() {
-          if (bookingForm) bookingForm.style.display = 'none';
+        /* Data benar-benar dikirim ke server. Pesan sukses HANYA tampil
+           bila server menjawab ok:true. Server perlu aksi 'booking'
+           (lihat docs/BACKEND_BOOKING.md). */
+        var val = function(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+        var payload = {
+          action: 'booking',
+          data: {
+            nama: val('nama'), usia: val('usia'), email: val('email'), telp: val('telp'),
+            layanan: val('layanan-pilih'), waktu: val('waktu-val'), mode: val('mode-val'),
+            cerita: val('cerita'), dikirim: new Date().toISOString()
+          }
+        };
+        var timeout = new Promise(function(_, rj) { setTimeout(function() { rj(new Error('timeout')); }, 20000); });
+        Promise.race([
+          fetch(LIVE_API, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) })
+            .then(function(r) { return r.json(); }),
+          timeout
+        ]).then(function(res) {
+          if (!res || res.ok !== true) throw new Error((res && res.msg) || 'Server menolak permintaan.');
+          bookingForm.style.display = 'none';
           var formSuccess = document.getElementById('form-success');
           if (formSuccess) formSuccess.classList.add('is-visible');
-        }, 1400);
-
-        if (window.activeTimers) window.activeTimers.push(timerId);
+        }).catch(function() {
+          if (btn) { btn.textContent = oldLabel; btn.disabled = false; }
+          if (errBox) { errBox.style.display = 'block'; errBox.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Permintaan belum terkirim. Coba lagi nanti.', 'error', 5000);
+        });
       });
     }
   }
@@ -100,53 +170,51 @@
   function initEmbeddedChat() {
     if (!document.getElementById('emb-body')) return;
 
-    var SYS = 'Kamu adalah AI asisten klinis dari Lentera Jiwa. HANYA jawab seputar kesehatan mental, psikologi, emosi, dan kesejahteraan jiwa. Jika di luar topik, jawab: Maaf, pertanyaan itu di luar cakupan Lentera Jiwa. Saya hanya bisa membantu seputar kesehatan jiwa dan psikologi.';
-    var EMB = {tab:'live', replyTarget:null, aiMsgs:[], aiLoading:false, pakarPending:false, LIVE:'lj_chat_live', PAKAR:'lj_chat_pakar'};
+    var SYS = 'Kamu adalah asisten AI edukasi kesehatan jiwa dari Lentera Jiwa. Kamu BUKAN psikolog atau dokter dan tidak boleh mendiagnosis atau meresepkan obat. '
+      + 'HANYA jawab seputar kesehatan mental, psikologi, emosi, dan kesejahteraan jiwa, dengan bahasa Indonesia yang hangat dan singkat. '
+      + 'Jika di luar topik, jawab: Maaf, pertanyaan itu di luar cakupan Lentera Jiwa. '
+      + 'PENTING: Jika pengguna menyebut keinginan bunuh diri, menyakiti diri, ingin mati, atau berada dalam bahaya, jangan memberi saran lain lebih dulu. '
+      + 'Tunjukkan kepedulian, minta mereka segera menghubungi Layanan SEJIWA 119 ext 8 atau nomor darurat 112 atau IGD terdekat, dan menghubungi orang yang mereka percaya. '
+      + 'Untuk masalah yang berat atau berkepanjangan, sarankan berbicara dengan psikolog atau psikiater.';
+    var EMB = {tab:'live', replyTarget:null, aiMsgs:[], aiLoading:false, liveCrisisHeld:false, LIVE:'lj_chat_live', PAKAR:'lj_chat_pakar'};
+
+    /* Riwayat "Pakar" lama berisi balasan otomatis yang menyamar sebagai
+       manusia. Hapus agar tidak lagi tampil sebagai jawaban pakar. */
+    try { localStorage.removeItem(EMB.PAKAR); } catch(e) {}
 
     function sl(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
     function ss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
     function me(){try{return localStorage.getItem('lj_username')||'Anonim';}catch(e){return 'Anonim';}}
     function ts(){return new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
-    function ini(n){return(n||'A').slice(0,2).toUpperCase();}
-    function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+    function ini(n){return escHtml(String(n||'A').slice(0,2).toUpperCase());}
+    function esc(s){return escHtml(s).replace(/\n/g,'<br>');}
+    function bodyNotice(html){var b=document.getElementById('emb-body');if(!b)return;b.insertAdjacentHTML('beforeend',html);scr();}
     function scr(){var b=document.getElementById('emb-body');if(b)b.scrollTop=b.scrollHeight;}
 
     function rLive(m,mine){
-      var rq=m.replyTo?('<div style="background:rgba(123,111,212,0.08);border-left:3px solid #7B6FD4;border-radius:0 8px 8px 0;padding:5px 9px;font-size:11px;color:#5A527A;margin-bottom:5px;">&laquo; <b>'+m.replyTo.user+'</b>: '+m.replyTo.text.slice(0,60)+'</div>'):'';
+      var rq=m.replyTo?('<div style="background:rgba(123,111,212,0.08);border-left:3px solid #7B6FD4;border-radius:0 8px 8px 0;padding:5px 9px;font-size:11px;color:#5A527A;margin-bottom:5px;">&laquo; <b>'+esc(m.replyTo.user)+'</b>: '+esc(String(m.replyTo.text).slice(0,60))+'</div>'):'';
       var bubStyle=mine?'background:linear-gradient(135deg,#7B6FD4,#9B8FE4);color:#fff;border-radius:14px 0 14px 14px':'background:rgba(255,255,255,0.85);color:#2D2550;border-radius:0 14px 14px 14px;border:1px solid rgba(123,111,212,0.12)';
-      var replyBtn=mine?'':('<button onclick="embReply(\''+m.id+'\')" style="opacity:0.6;background:none;border:1px solid rgba(123,111,212,0.2);border-radius:999px;padding:2px 9px;font-size:10px;color:#7B6FD4;cursor:pointer;margin-top:3px;font-family:Nunito,sans-serif;font-weight:700;">&#8617; Balas</button>');
-      return '<div style="display:flex;flex-direction:column;gap:4px;" data-id="'+m.id+'">'
+      var replyBtn=mine?'':('<button onclick="embReply(\''+escHtml(String(m.id).replace(/[^\w-]/g,''))+'\')" style="opacity:0.6;background:none;border:1px solid rgba(123,111,212,0.2);border-radius:999px;padding:2px 9px;font-size:10px;color:#7B6FD4;cursor:pointer;margin-top:3px;font-family:Nunito,sans-serif;font-weight:700;">&#8617; Balas</button>');
+      return '<div style="display:flex;flex-direction:column;gap:4px;" data-id="'+escHtml(m.id)+'">'
         +'<div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8A82A8;font-weight:600;'+(mine?'justify-content:flex-end':'')+'">'
         +'<div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#7B6FD4,#9B8FE4);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;'+(mine?'order:2':'')+'">'
-        +ini(m.user)+'</div><span>'+(mine?'Kamu':m.user)+'</span><span>'+m.ts+'</span></div>'
+        +ini(m.user)+'</div><span>'+(mine?'Kamu':esc(m.user))+'</span><span>'+esc(m.ts)+'</span></div>'
         +'<div style="display:flex;flex-direction:column;'+(mine?'align-items:flex-end':'')+'">'
         +rq+'<div style="padding:9px 13px;font-size:13px;line-height:1.6;max-width:85%;word-break:break-word;'+bubStyle+'">'+esc(m.text)+'</div>'
         +replyBtn+'</div></div>';
     }
 
     function rAI(m){
+      if(m.role==='crisis') return CRISIS_CARD;
       var mine=m.role==='user';
       var bubStyle=mine?'background:linear-gradient(135deg,#7B6FD4,#9B8FE4);color:#fff;border-radius:14px 0 14px 14px':'background:rgba(236,252,243,0.9);color:#2D2550;border-radius:0 14px 14px 14px;border:1px solid rgba(61,184,122,0.2)';
       var avBg=mine?'linear-gradient(135deg,#7B6FD4,#9B8FE4)':'linear-gradient(135deg,#3DB87A,#6FDDB0)';
       return '<div style="display:flex;flex-direction:column;gap:4px;">'
         +'<div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8A82A8;font-weight:600;'+(mine?'justify-content:flex-end':'')+'">'
         +'<div style="width:22px;height:22px;border-radius:50%;background:'+avBg+';display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;'+(mine?'order:2':'')+'">'
-        +(mine?ini(me()):'AI')+'</div><span>'+(mine?'Kamu':'🤖 AI Lentera')+'</span><span>'+m.ts+'</span></div>'
+        +(mine?ini(me()):'AI')+'</div><span>'+(mine?'Kamu':'🤖 AI (bukan psikolog)')+'</span><span>'+esc(m.ts)+'</span></div>'
         +'<div style="display:flex;'+(mine?'justify-content:flex-end':'')+'">'
         +'<div style="padding:9px 13px;font-size:13px;line-height:1.6;max-width:85%;word-break:break-word;'+bubStyle+'">'+esc(m.text)+'</div></div></div>';
-    }
-
-    function rPakar(m,mine){
-      var bubStyle=mine?'background:linear-gradient(135deg,#7B6FD4,#9B8FE4);color:#fff;border-radius:14px 0 14px 14px':'background:rgba(255,255,255,0.85);color:#2D2550;border-radius:0 14px 14px 14px;border:1px solid rgba(123,111,212,0.12)';
-      var stBg=m.status==='pending'?'background:rgba(245,185,66,0.15);color:#d4a92a':'background:rgba(61,184,122,0.15);color:#1a8a54';
-      var st=mine?('<div style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;'+stBg+';">'+(m.status==='pending'?'⏳ Menunggu Pakar':'✅ Terjawab')+'</div>'):'';
-      var rp=m.reply?('<div style="display:flex;flex-direction:column;gap:4px;margin-top:6px;"><div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8A82A8;font-weight:600;"><div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#E88B6A,#F0A882);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;">P</div><span>Pakar</span><span>'+(m.replyTs||ts())+'</span></div><div style="background:rgba(255,255,255,0.85);border-left:3px solid #E88B6A;border-radius:0 14px 14px 14px;padding:9px 13px;font-size:13px;line-height:1.6;color:#2D2550;max-width:85%;">'+esc(m.reply)+'</div></div>'):'';
-      return '<div style="display:flex;flex-direction:column;gap:4px;">'
-        +'<div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8A82A8;font-weight:600;'+(mine?'justify-content:flex-end':'')+'">'
-        +'<div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#7B6FD4,#9B8FE4);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;'+(mine?'order:2':'')+'">'
-        +ini(m.user)+'</div><span>'+(mine?'Kamu':m.user)+'</span><span>'+m.ts+'</span></div>'
-        +'<div style="display:flex;flex-direction:column;'+(mine?'align-items:flex-end':'')+'">'
-        +'<div style="padding:9px 13px;font-size:13px;line-height:1.6;max-width:85%;word-break:break-word;'+bubStyle+'">'+esc(m.text)+'</div>'+st+'</div>'+rp+'</div>';
     }
 
     function embRender(){
@@ -157,12 +225,12 @@
       if(EMB.tab==='live'){
         embRenderLive(); return;
       } else if(EMB.tab==='ai'){
-        if(!EMB.aiMsgs.length){b.innerHTML=empty+'<div style="font-size:36px;margin-bottom:8px;">🤖</div><p style="font-size:13px;line-height:1.65;">Halo! Saya AI Lentera Jiwa.<br>Ceritakan yang ada di pikiranmu 💜</p></div>';}
+        if(!EMB.aiMsgs.length){b.innerHTML=empty+'<div style="font-size:36px;margin-bottom:8px;">🤖</div><p style="font-size:13px;line-height:1.65;">Halo! Saya asisten AI untuk informasi seputar kesehatan jiwa.<br><b>Saya bukan psikolog</b> dan tidak bisa mendiagnosis.</p>'
+          +'<p style="font-size:11.5px;line-height:1.6;margin-top:10px;color:#5A527A;">🔒 Pesanmu diproses oleh layanan AI pihak ketiga (Pollinations.ai). Jangan tuliskan nama lengkap, alamat, nomor HP, atau data pribadi lain.<br>Dalam keadaan darurat hubungi <b>119 ext 8</b> (SEJIWA) atau <b>112</b>.</p></div>';}
         else EMB.aiMsgs.forEach(function(msg){b.insertAdjacentHTML('beforeend',rAI(msg));});
       } else {
-        var pMsgs=sl(EMB.PAKAR,[]),myM=pMsgs.filter(function(x){return x.user===m;});
-        if(!myM.length){b.innerHTML=empty+'<div style="font-size:36px;margin-bottom:8px;">👨‍⚕️</div><p style="font-size:13px;line-height:1.65;">Kirim pertanyaan ke Pakar kami.<br>Jawaban tiba dalam waktu singkat.</p></div>';}
-        else myM.forEach(function(msg){b.insertAdjacentHTML('beforeend',rPakar(msg,true));});
+        b.innerHTML=empty+'<div style="font-size:36px;margin-bottom:8px;">👨‍⚕️</div><p style="font-size:13px;line-height:1.65;"><b>Tanya Pakar belum tersedia.</b><br>Saat ini belum ada psikolog yang menjawab pertanyaan lewat chat ini.</p>'
+          +'<p style="font-size:12px;line-height:1.6;margin-top:10px;">Kamu bisa <a href="#booking" style="color:#7B6FD4;font-weight:700;">mengisi form konsultasi</a> di bawah.<br>Jika darurat, hubungi <b>119 ext 8</b> (SEJIWA) atau <b>112</b>.</p></div>';
       }
       scr();
     }
@@ -173,7 +241,7 @@
       EMB.tab=el.dataset.tab;
       EMB.replyTarget=null;
       document.getElementById('emb-reply-bar').style.display='none';
-      var ph={live:'Tulis pesan ke semua orang…',ai:'Tanyakan seputar kesehatan jiwa…',pakar:'Tulis pertanyaan untuk Pakar…'};
+      var ph={live:'Tulis pesan ke semua orang…',ai:'Tanyakan seputar kesehatan jiwa…',pakar:'Tanya Pakar belum tersedia'};
       document.getElementById('emb-input').placeholder=ph[EMB.tab];
       embRender();
     };
@@ -195,27 +263,55 @@
     window.embSend=function(){
       var inp=document.getElementById('emb-input'),text=inp.value.trim();
       if(!text)return;
-      var m=me();inp.value='';inp.style.height='auto';
+      var crisis=isCrisis(text);
+      if(EMB.tab==='pakar'){
+        /* Belum ada pakar sungguhan: jangan pura-pura menerima pertanyaan. */
+        if(crisis) bodyNotice(CRISIS_CARD);
+        return;
+      }
       if(EMB.tab==='live'){
-        EMB.replyTarget=null;
-        document.getElementById('emb-reply-bar').style.display='none';
+        /* Pesan krisis tidak langsung diposting ke ruang publik.
+           Tampilkan bantuan dulu; jika tetap ingin, kirim sekali lagi. */
+        if(crisis && !EMB.liveCrisisHeld){
+          EMB.liveCrisisHeld=true;
+          bodyNotice(CRISIS_CARD+'<div style="font-size:11.5px;color:#5A527A;text-align:center;">Pesanmu belum dikirim ke ruang obrolan publik. Tekan kirim sekali lagi bila tetap ingin membagikannya.</div>');
+          return;
+        }
+        EMB.liveCrisisHeld=false;
         var token='';
         try{var s=JSON.parse(localStorage.getItem('lj_session'));token=s?s.token:'';}catch(e){}
-        var sUrl=LIVE_API+'?action=sendChat&token='+encodeURIComponent(token)+'&pesan='+encodeURIComponent(text);
-        fetch(sUrl)
+        if(!token){
+          bodyNotice('<div role="status" style="text-align:center;font-size:12.5px;color:#5A527A;padding:8px;">Masuk ke akunmu dulu untuk ikut mengobrol di ruang Live. <a href="login.html" onclick="event.stopPropagation();location.href=\'login.html\';return false;" style="color:#7B6FD4;font-weight:700;">Masuk →</a></div>');
+          return;
+        }
+        inp.value='';inp.style.height='auto';
+        EMB.replyTarget=null;
+        document.getElementById('emb-reply-bar').style.display='none';
+        /* POST: token dan isi pesan tidak lagi muncul di URL */
+        fetch(LIVE_API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'sendChat',token:token,pesan:text})})
         .then(function(r){return r.json();})
-        .then(function(d){if(d.ok)liveGetMessages();else alert('Gagal: '+JSON.stringify(d));})
-        .catch(function(e){alert('Error: '+e.message);});
-      } else if(EMB.tab==='ai'){
-        EMB.aiMsgs.push({role:'user',text:text,ts:ts()});
-        embRender();
-        embCallAI(text);
-      } else {
-        if(EMB.pakarPending){alert('⏳ Pertanyaanmu sedang menunggu jawaban pakar. Sabar ya 💜');return;}
-        var pm={id:'p_'+Date.now(),user:m,text:text,ts:ts(),status:'pending',reply:null};
-        var pms=sl(EMB.PAKAR,[]);pms.push(pm);ss(EMB.PAKAR,pms);
-        EMB.pakarPending=true;embRender();embPakarSim(pm.id,text);
+        .then(function(d){
+          if(d.ok){liveGetMessages();return;}
+          inp.value=text;
+          bodyNotice('<div role="alert" style="text-align:center;font-size:12.5px;color:#C0392B;padding:8px;">Pesan belum terkirim'+(d.msg?': '+esc(d.msg):'.')+'</div>');
+        })
+        .catch(function(){
+          inp.value=text;
+          bodyNotice('<div role="alert" style="text-align:center;font-size:12.5px;color:#C0392B;padding:8px;">Pesan belum terkirim. Periksa koneksi internetmu.</div>');
+        });
+        return;
       }
+      /* Tab AI */
+      inp.value='';inp.style.height='auto';
+      EMB.aiMsgs.push({role:'user',text:text,ts:ts()});
+      if(crisis){
+        /* Pesan krisis TIDAK dikirim ke AI pihak ketiga. */
+        EMB.aiMsgs.push({role:'crisis',ts:ts()});
+        embRender();
+        return;
+      }
+      embRender();
+      embCallAI(text);
     };
 
     window.embKey=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();embSend();}};
@@ -253,26 +349,6 @@
       embRender();
     }
 
-    function embPakarSim(id,q){
-      var delay=8000+Math.random()*10000;
-      var tmpl=[
-        {k:['cemas','anxiety','khawatir','takut'],r:'Kecemasan yang kamu rasakan wajar. Coba teknik napas 4-7-8: tarik 4 detik, tahan 7 detik, buang 8 detik. 💙'},
-        {k:['depresi','sedih','hampa','kosong'],r:'Saya mendengarmu. Perasaan itu nyata dan valid. Kamu tidak sendirian. 💜'},
-        {k:['stress','burnout','capek','lelah'],r:'Burnout adalah sinyal penting. Istirahat bukan kelemahan, itu kebutuhan. 🌿'},
-        {k:['tidur','insomnia','susah tidur'],r:'Coba matikan layar 1 jam sebelum tidur dan buat jadwal tidur tetap. 🌙'}
-      ];
-      setTimeout(function(){
-        var rep='Terima kasih sudah bertanya. Kamu sudah mengambil langkah berani. 🪔';
-        var lq=q.toLowerCase();
-        for(var i=0;i<tmpl.length;i++){if(tmpl[i].k.some(function(k){return lq.includes(k);})){rep=tmpl[i].r;break;}}
-        var pms=sl(EMB.PAKAR,[]),idx=pms.findIndex(function(x){return x.id===id;});
-        if(idx!==-1){pms[idx].status='answered';pms[idx].reply=rep;pms[idx].replyTs=ts();ss(EMB.PAKAR,pms);}
-        EMB.pakarPending=false;
-        if(EMB.tab==='pakar'){embRender();}
-        else{var b=document.getElementById('emb-badge-pakar');if(b){b.textContent='1';b.style.display='flex';}}
-      },delay);
-    }
-
     embRender();
     var oc=Math.floor(Math.random()*40+24);
     var oel=document.getElementById('emb-online');if(oel)oel.textContent=oc;
@@ -297,7 +373,10 @@ async function liveGetMessages() {
     if (data.messages.length === _liveLastCount) return;
     _liveLastCount = data.messages.length;
     _liveMsgs = data.messages;
-    if (typeof embRenderLive === 'function') embRenderLive();
+    /* Render hanya bila tab Live sedang aktif; sebelumnya pesan baru
+       menimpa isi tab AI (termasuk kartu bantuan krisis). */
+    var activeTab = document.querySelector('.emb-tab.active');
+    if (activeTab && activeTab.dataset.tab === 'live' && typeof embRenderLive === 'function') embRenderLive();
   } catch(e) {}
 }
 
@@ -316,18 +395,19 @@ function embRenderLive() {
   b.innerHTML = '';
   msgs.forEach(function(msg) {
     var mine = msg.username === m;
-    var waktu = new Date(msg.timestamp).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+    var dt = new Date(msg.timestamp);
+    var waktu = isNaN(dt.getTime()) ? '' : dt.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
     var rq = '';
     var bubStyle = mine
       ? 'background:linear-gradient(135deg,#7B6FD4,#9B8FE4);color:#fff;border-radius:14px 0 14px 14px'
       : 'background:rgba(255,255,255,0.85);color:#2D2550;border-radius:0 14px 14px 14px;border:1px solid rgba(123,111,212,0.12)';
-    var ini = (msg.nama || msg.username || '?').slice(0,2).toUpperCase();
+    var ini = escHtml(String(msg.nama || msg.username || '?').slice(0,2).toUpperCase());
     var html = '<div style="display:flex;flex-direction:column;gap:4px;">'
       + '<div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#8A82A8;font-weight:600;' + (mine ? 'justify-content:flex-end' : '') + '">'
       + '<div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#7B6FD4,#9B8FE4);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;' + (mine ? 'order:2' : '') + '">'
-      + ini + '</div><span>' + (mine ? 'Kamu' : (msg.nama || msg.username)) + '</span><span>' + waktu + '</span></div>'
+      + ini + '</div><span>' + (mine ? 'Kamu' : escHtml(msg.nama || msg.username)) + '</span><span>' + waktu + '</span></div>'
       + '<div style="display:flex;flex-direction:column;' + (mine ? 'align-items:flex-end' : '') + '">'
-      + '<div style="padding:9px 13px;font-size:13px;line-height:1.6;max-width:85%;word-break:break-word;' + bubStyle + '">' + String(msg.pesan).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>'
+      + '<div style="padding:9px 13px;font-size:13px;line-height:1.6;max-width:85%;word-break:break-word;' + bubStyle + '">' + escHtml(msg.pesan) + '</div>'
       + '</div></div>';
     b.insertAdjacentHTML('beforeend', html);
   });
@@ -338,6 +418,8 @@ function liveStartPolling() {
   liveGetMessages();
   if (_livePolling) clearInterval(_livePolling);
   _livePolling = setInterval(liveGetMessages, 4000);
+  /* Didaftarkan agar dihentikan main.js saat pindah halaman */
+  if (window.activeTimers) window.activeTimers.push(_livePolling);
 }
 
 function liveStopPolling() {

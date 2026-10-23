@@ -18,13 +18,13 @@ const PAGE_MAP = {
   'index.html':        {
     file:  'pages/utama.html',
     title: 'Beranda',
-    js:    [],
+    js:    ['js/beranda.js'],
     css:   ['css/pages/utama.css'],
   },
   '':                  {
     file:  'pages/utama.html',
     title: 'Beranda',
-    js:    [],
+    js:    ['js/beranda.js'],
     css:   ['css/pages/utama.css'],
   },
   'layanan.html':      {
@@ -54,13 +54,13 @@ const PAGE_MAP = {
   'tentang.html':      {
     file:  'pages/tentang.html',
     title: 'Tentang Kami',
-    js:    [],
+    js:    ['js/beranda.js'],
     css:   ['css/pages/tentang.css'],
   },
   'profil.html':       {
     file:  'pages/profil.html',
     title: 'Profil Saya',
-    js:    ['js/auth.js', 'js/profil.js'],
+    js:    ['js/profil.js'],
     css:   ['css/pages/profil.css'],
   },
 };
@@ -284,6 +284,9 @@ const App = {
       const hashPart    = href.includes('#') ? href.split('#')[1] : null;
       const pageName    = hrefClean.split('/').pop() || '';
 
+      /* Halaman yang tidak dikenal SPA (mis. login.html) dimuat biasa oleh browser */
+      if (pageName !== '' && !PAGE_MAP[pageName]) return;
+
       const normalizedTarget  = pageName === '' ? 'index.html' : pageName;
       const normalizedCurrent = this._currentPage === '' ? 'index.html' : this._currentPage;
 
@@ -326,6 +329,9 @@ const App = {
 
     const appContent = document.getElementById('app-content');
     if (!appContent) return;
+
+    /* Lepas kunci scroll dari drawer artikel/buku yang mungkin masih terbuka */
+    document.body.style.overflow = '';
 
     const pageConf    = PAGE_MAP[page];
     const fileToFetch = pageConf ? pageConf.file : 'pages/utama.html';
@@ -421,9 +427,8 @@ const App = {
 
     this.initParticles();
     this.updateAgeUI(this.age, false);
-    this._ageCardsInited = false;
-    this.initAgeCards();
     this.updateNavActiveLinks(page);
+    if (typeof window.LJ_updateAccountUI === 'function') window.LJ_updateAccountUI();
   },
 
   updateNavActiveLinks(page) {
@@ -527,6 +532,12 @@ const App = {
       card.addEventListener('click', () => {
         this.setAge(card.getAttribute('data-age-val'));
       });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.setAge(card.getAttribute('data-age-val'));
+        }
+      });
     });
   },
 
@@ -550,17 +561,8 @@ const App = {
       });
     }
 
-    document.querySelectorAll('.hero-ages [data-age-val], .nav-drawer-age[data-age-val]').forEach(card => {
-      if (card.dataset.ljAgeBound) return;
-      card.dataset.ljAgeBound = '1';
-      card.addEventListener('click', () => this.setAge(card.getAttribute('data-age-val')));
-      card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          this.setAge(card.getAttribute('data-age-val'));
-        }
-      });
-    });
+    /* Catatan: kartu usia di dalam #app-content sudah ditangani delegasi di atas.
+       Memasang listener per-kartu lagi membuat setAge terpanggil dua kali. */
   },
 
   initRipple() {
@@ -716,6 +718,14 @@ function initialLoad() {
   const appContent = document.getElementById('app-content');
   if (!appContent) return;
 
+  /* Datang dari 404.html (refresh/link langsung ke /layanan.html dll.):
+     URL berbentuk ?p=layanan.html — pulihkan alamatnya tanpa reload. */
+  const params = new URLSearchParams(window.location.search);
+  const fromRedirect = params.get('p');
+  if (fromRedirect && PAGE_MAP[fromRedirect]) {
+    const base = window.location.pathname.replace(/[^/]*$/, '');
+    window.history.replaceState({ page: fromRedirect }, '', base + fromRedirect + window.location.hash);
+  }
   const page     = window.location.pathname.split('/').pop() || '';
   const pageConf = PAGE_MAP[page] || PAGE_MAP['index.html'];
   const fileToFetch = pageConf.file;

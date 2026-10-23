@@ -65,4 +65,6 @@ window.profilShowToast = function(msg) {
   const session = LJ_AUTH.getSession();
   if (!session) { window.location.href = 'login.html'; return; }
   loadProfile(session);
+  const portal = document.getElementById('profil-portal');
+  if (portal && (session.role === 'psikolog' || session.role === 'admin')) portal.hidden = false;
 })();

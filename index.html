@@ -115,6 +115,7 @@
              aria-label="Mode konten aktif">
           ☀️ Dewasa
         </div>
+        <a id="nav-account" href="login.html" class="nav-account" aria-label="Masuk ke akun">Masuk</a>
         <a href="layanan.html" class="nav-cta btn-ripple" aria-label="Mulai konsultasi">
           ✨ Konsultasi
         </a>
@@ -158,7 +159,7 @@
     <a href="perpustakaan.html" class="nav-drawer-link"><span>📚 Buku &amp; Jurnal</span><span class="arrow">→</span></a>
     <a href="tes.html"          class="nav-drawer-link"><span>🧪 Tes Psikologi</span>   <span class="arrow">→</span></a>
     <a href="tentang.html"      class="nav-drawer-link"><span>💜 Tentang Kami</span>    <span class="arrow">→</span></a>
-    <a href="profil.html"       class="nav-drawer-link"><span>👤 Profil Saya</span>     <span class="arrow">→</span></a>
+    <a href="profil.html"       class="nav-drawer-link" id="drawer-profile-link"><span>👤 Profil Saya</span>     <span class="arrow">→</span></a>
   </nav>
 
   <div class="nav-drawer-footer">
@@ -263,7 +264,7 @@
         <span aria-hidden="true">🔒</span>
         <span>Data Anda Aman &amp; Rahasia</span>
       </div>
-      <span>Krisis? Into The Light: <strong style="color:rgba(255,255,255,0.65);">119 ext 8</strong></span>
+      <span>Krisis? SEJIWA: <strong style="color:rgba(255,255,255,0.65);">119 ext 8</strong> · Darurat: <strong style="color:rgba(255,255,255,0.65);">112</strong></span>
     </div>
 
   </div>
@@ -288,7 +289,6 @@
 // ── User drawer ──
 function initDrawerUser() {
   const session = LJ_AUTH.getSession();
-  console.log('SESSION:', JSON.stringify(session));
   const section = document.getElementById('drawer-user-section');
   if (!section) return;
   if (session) {
@@ -313,8 +313,40 @@ function toggleLogout() {
   }
 }
 
+// Tombol akun di navbar: "Masuk" bila belum login, nama + avatar bila sudah
+function updateAccountUI() {
+  const el = document.getElementById('nav-account');
+  const prof = document.getElementById('drawer-profile-link');
+  // LJ_AUTH dideklarasikan dengan const, jadi tidak ada di window.LJ_AUTH
+  const session = (typeof LJ_AUTH !== 'undefined' && LJ_AUTH.getSession()) || null;
+  if (prof) {
+    prof.setAttribute('href', session ? 'profil.html' : 'login.html');
+    prof.firstElementChild.textContent = session ? '👤 Profil Saya' : '🔐 Masuk / Daftar';
+  }
+  if (!el) return;
+  if (session) {
+    const nama = String(session.nama || session.username || 'Akun');
+    el.textContent = '';
+    const av = document.createElement('span');
+    av.className = 'nav-account-avatar';
+    av.textContent = nama.charAt(0).toUpperCase();
+    const nm = document.createElement('span');
+    nm.className = 'nav-account-name';
+    nm.textContent = nama.split(' ')[0].slice(0, 12);
+    el.append(av, nm);
+    el.setAttribute('href', 'profil.html');
+    el.setAttribute('aria-label', 'Profil saya: ' + nama);
+  } else {
+    el.textContent = 'Masuk';
+    el.setAttribute('href', 'login.html');
+    el.setAttribute('aria-label', 'Masuk ke akun');
+  }
+}
+window.LJ_updateAccountUI = updateAccountUI;
+
 document.addEventListener('DOMContentLoaded', function() {
   setTimeout(initDrawerUser, 800);
+  setTimeout(updateAccountUI, 0);
 });
 window.addEventListener('load', function() {
   initDrawerUser();

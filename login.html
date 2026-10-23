@@ -466,10 +466,10 @@ select option{background:#082218;color:#fff}
         <!-- Mahasiswa: perlu login -->
         <div class="role-single" id="rcM" onclick="pickRole('mhs')">
           <div class="rc-badge">✓</div>
-          <span class="role-single-ico">🎓</span>
+          <span class="role-single-ico">🔐</span>
           <div class="role-single-text">
-            <span class="rc-name">Login Mahasiswa</span>
-            <span class="rc-desc">Akses penuh dengan akun terverifikasi</span>
+            <span class="rc-name">Masuk ke Akun</span>
+            <span class="rc-desc">Akun umum, mahasiswa, atau psikolog</span>
           </div>
         </div>
 
@@ -479,7 +479,7 @@ select option{background:#082218;color:#fff}
 
         <div class="lnks" style="margin-top:1rem">
           <a onclick="go('scForgot','r')">Lupa kata sandi?</a>
-          <a onclick="go('scR1','r')">Daftar akun mahasiswa →</a>
+          <a onclick="go('scR1','r')">Daftar akun baru →</a>
         </div>
       </div>
 
@@ -487,7 +487,7 @@ select option{background:#082218;color:#fff}
       <div class="sc" id="scL" style="display:none">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.1rem">
           <a onclick="go('scW','l')" style="color:var(--text-w3);cursor:pointer;font-size:1rem;line-height:1">←</a>
-          <div style="font-size:.7rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase">Login Mahasiswa</div>
+          <div style="font-size:.7rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase">Masuk ke Akun</div>
         </div>
         <div class="sc-title" style="font-size:1.35rem">Selamat Datang Kembali</div>
         <div class="sc-sub">Masuk dengan akun mahasiswa terverifikasi</div>
@@ -504,11 +504,6 @@ select option{background:#082218;color:#fff}
             <span class="ico" onclick="tPw('lP',this)">👁</span>
           </div>
         </div>
-        <div class="cap-row">
-          <div class="cap-box" id="lCap" onclick="tCap('lCap')"></div>
-          <span class="cap-txt">Saya bukan robot</span>
-          <div class="cap-logo">reCAPTCHA<br><small style="font-size:.57rem">Privasi · Ketentuan</small></div>
-        </div>
         <button class="btn btn-p" onclick="doLogin()">Masuk ke Akun 🔐</button>
         <div class="div">atau</div>
         <button class="btn btn-g" onclick="go('scR1','r')" style="font-size:.83rem">Belum punya akun? Daftar Sekarang</button>
@@ -521,33 +516,50 @@ select option{background:#082218;color:#fff}
       <div class="sc" id="scForgot" style="display:none">
         <div style="text-align:center;font-size:2.2rem;margin-bottom:.7rem;margin-top:.5rem">🔑</div>
         <div class="sc-title" style="text-align:center;font-size:1.3rem">Lupa Kata Sandi?</div>
-        <div class="sc-sub" style="text-align:center">Kami kirimkan tautan pemulihan ke email Anda</div>
+        <div class="sc-sub" style="text-align:center" id="fSub">Kami kirimkan kode pemulihan 6 digit ke email akunmu</div>
         <div class="nf" id="fNf"></div>
         <div class="fg">
-          <label class="lbl">Alamat Email</label>
-          <div class="iw"><input type="email" id="fE" placeholder="email@domain.com"></div>
+          <label class="lbl" for="fE">Alamat Email Akun</label>
+          <div class="iw"><input type="email" id="fE" placeholder="email@domain.com" autocomplete="email"></div>
         </div>
-        <div class="cap-row">
-          <div class="cap-box" id="fCap" onclick="tCap('fCap')"></div>
-          <span class="cap-txt">Saya bukan robot</span>
-          <div class="cap-logo">reCAPTCHA<br><small style="font-size:.57rem">Privasi · Ketentuan</small></div>
+        <div id="fStep2" style="display:none">
+          <div class="fg">
+            <label class="lbl" for="fO">Kode dari Email</label>
+            <div class="iw"><input type="text" id="fO" inputmode="numeric" maxlength="6" placeholder="6 digit" autocomplete="one-time-code"></div>
+          </div>
+          <div class="fg">
+            <label class="lbl" for="fP">Kata Sandi Baru</label>
+            <div class="iw"><input type="password" id="fP" placeholder="Min. 8 karakter" autocomplete="new-password"></div>
+          </div>
+          <div class="fg">
+            <label class="lbl" for="fPC">Ulangi Kata Sandi Baru</label>
+            <div class="iw"><input type="password" id="fPC" placeholder="Ketik ulang" autocomplete="new-password"></div>
+          </div>
         </div>
-        <button class="btn btn-p" onclick="doForgot()">Kirim Tautan Pemulihan</button>
+        <button class="btn btn-p" id="fBtn" onclick="doForgot()">Kirim Kode Pemulihan</button>
         <div style="text-align:center;margin-top:.9rem">
-          <a onclick="go('scW','l')" class="lnk">← Kembali ke halaman masuk</a>
+          <a href="javascript:void(0)" onclick="go('scW','l')" class="lnk">← Kembali ke halaman masuk</a>
         </div>
       </div>
 
-      <!-- ===== REG STEP 1: Info Pribadi ===== -->
       <div class="sc" id="scR1" style="display:none">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:.8rem">
           <a onclick="go('scW','l')" style="color:var(--text-w3);cursor:pointer;font-size:1rem">←</a>
-          <div style="font-size:.7rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase">Pendaftaran Mahasiswa</div>
+          <div style="font-size:.7rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase">Pendaftaran Akun</div>
         </div>
         <div class="sbar" id="sb1"></div>
         <div class="sc-title" style="font-size:1.2rem">Info Pribadi</div>
         <div class="sc-sub" style="font-size:.8rem;margin-bottom:1.1rem">Langkah 1 dari 3 — Data diri kamu</div>
         <div class="nf" id="r1Nf"></div>
+
+        <div class="fg">
+          <label class="lbl">Jenis Akun *</label>
+          <div class="gend-row" role="radiogroup" aria-label="Jenis akun">
+            <div class="gopt topt on" role="radio" aria-checked="true" tabindex="0" data-tipe="umum" onclick="pickTipe('umum')">🙂 Umum (18+)</div>
+            <div class="gopt topt" role="radio" aria-checked="false" tabindex="0" data-tipe="mahasiswa" onclick="pickTipe('mahasiswa')">🎓 Mahasiswa</div>
+          </div>
+          <div class="fs info" id="tipeSt">Akun umum: cukup data dasar + verifikasi email.</div>
+        </div>
 
         <div class="fg">
           <label class="lbl">Username *</label>
@@ -561,25 +573,20 @@ select option{background:#082218;color:#fff}
           <label class="lbl">Nama Lengkap *</label>
           <div class="iw"><input type="text" id="rN" placeholder="Sesuai identitas resmi"></div>
         </div>
-        <div class="g2">
-          <div class="fg">
-            <label class="lbl">Tempat Tinggal *</label>
-            <div class="iw"><input type="text" id="rK" placeholder="Kota / Kabupaten"></div>
-          </div>
-          <div class="fg">
-            <label class="lbl">Usia *</label>
-            <div class="iw"><input type="number" id="rA" placeholder="Tahun" min="15" max="80"></div>
-          </div>
+        <div class="fg">
+          <label class="lbl">Usia *</label>
+          <div class="iw"><input type="number" id="rA" placeholder="Tahun" min="18" max="100"></div>
         </div>
         <div class="fg">
           <label class="lbl">Jenis Kelamin *</label>
           <div class="gend-row">
-            <div class="gopt" onclick="pickG(this,'L')">Laki-laki</div>
-            <div class="gopt" onclick="pickG(this,'P')">Perempuan</div>
-            <div class="gopt" onclick="pickG(this,'X')">Lainnya</div>
+            <div class="gopt gsex" onclick="pickG(this,'L')">Laki-laki</div>
+            <div class="gopt gsex" onclick="pickG(this,'P')">Perempuan</div>
+            <div class="gopt gsex" onclick="pickG(this,'X')">Lainnya</div>
           </div>
         </div>
 
+        <div id="mhsFields" style="display:none">
         <div class="fg">
           <label class="lbl">Universitas *</label>
           <div class="dw">
@@ -603,6 +610,7 @@ select option{background:#082218;color:#fff}
             <label class="lbl">NIM *</label>
             <div class="iw"><input type="text" id="rNIM" placeholder="No. Induk Mhs."></div>
           </div>
+        </div>
         </div>
 
         <div class="btn-row" style="margin-top:.6rem">
@@ -642,7 +650,7 @@ select option{background:#082218;color:#fff}
           <div class="fs info" id="eSt"></div>
         </div>
         <div class="fg">
-          <label class="lbl">Nomor Telepon *</label>
+          <label class="lbl" id="phLbl">Nomor Telepon (opsional)</label>
           <div class="iw"><input type="tel" id="rPh" placeholder="08xx-xxxx-xxxx" oninput="vPh(this)" maxlength="16"></div>
           <div class="fs info" id="phSt"></div>
         </div>
@@ -674,8 +682,8 @@ select option{background:#082218;color:#fff}
           <p style="font-size:.7rem;color:var(--text-w3)">Tidak terima? <a onclick="resOtp()" style="color:var(--teal);cursor:pointer">Kirim ulang</a></p>
         </div>
 
-        <!-- Upload KTM -->
-        <div class="fg">
+        <!-- Upload KTM (khusus mahasiswa) -->
+        <div class="fg" id="ktmBlock" style="display:none">
           <label class="lbl">Foto KTM *</label>
           <div class="fzone" id="ktmZ">
             <input type="file" id="ktmF" accept="image/jpeg,image/png,image/webp,.pdf" onchange="hFile(this)">
@@ -728,8 +736,8 @@ select option{background:#082218;color:#fff}
 let cur = 'scW';
 let wRole = null;
 let gen = '';
+let tipeAkun = 'umum';
 let mA2 = 0, mB2 = 0, mOp = '';
-const caps = {};
 const TAKEN = ['admin','user','test','mahasiswa','root','support','info'];
 const UNIVS = [
   'Universitas Indonesia','Universitas Gadjah Mada','Institut Teknologi Bandung',
@@ -805,10 +813,10 @@ function pickRole(r) {
   pill.style.display = '';
   pill.innerHTML = r === 'guest'
     ? '🌍 Sebagai <strong>Pengunjung</strong>, Anda langsung masuk ke halaman utama tanpa perlu akun.'
-    : '🎓 Sebagai <strong>Mahasiswa</strong>, silakan login dengan akun terverifikasi.';
+    : '🔐 Masuk dengan akunmu (umum, mahasiswa, atau psikolog).';
   const btn = document.getElementById('wBtn');
   btn.disabled = false;
-  btn.textContent = r === 'guest' ? '🌿 Masuk sebagai Pengunjung' : '🔐 Login Mahasiswa';
+  btn.textContent = r === 'guest' ? '🌿 Masuk sebagai Pengunjung' : '🔐 Masuk ke Akun';
   btn.className = r === 'guest' ? 'btn btn-p' : 'btn btn-a';
 }
 
@@ -822,18 +830,13 @@ function wAction() {
     setTimeout(() => {
       c.style.transform = '';
       c.style.opacity = '';
-      alert('🌿 Selamat datang, Pengunjung!\n\nAnda akan dialihkan ke halaman utama.');
+      window.location.href = 'index.html';
     }, 400);
   } else {
     go('scL', 'r');
   }
 }
 
-// ===== CAPTCHA =====
-function tCap(id) {
-  caps[id] = !caps[id];
-  document.getElementById(id).classList.toggle('on', !!caps[id]);
-}
 
 // ===== SHOW/HIDE PW =====
 function tPw(id, ic) {
@@ -847,22 +850,62 @@ async function doLogin() {
   const nf = document.getElementById('lNf');
   const u = g('lU'), p = g('lP');
   if (!u || !p) { sN(nf, 'err', 'Harap isi username dan kata sandi.'); return; }
-  if (!caps['lCap']) { sN(nf, 'err', 'Selesaikan verifikasi reCAPTCHA terlebih dahulu.'); return; }
   sN(nf, 'ok', '⏳ Sedang masuk...');
   const res = await LJ_AUTH.login(u, p);
   if (!res.ok) { sN(nf, 'err', res.msg); return; }
   sN(nf, 'ok', '✓ Login berhasil! Selamat datang, ' + res.user.nama + ' 👋');
-  setTimeout(function() { window.location.href = 'index.html'; }, 1000);
+  const role = res.user && res.user.role;
+  setTimeout(function() { window.location.href = (role === 'psikolog' || role === 'admin') ? 'portal.html' : 'index.html'; }, 1000);
 }
 
 // ===== FORGOT =====
-function doForgot() {
+// Dua langkah: (1) minta kode ke email, (2) isi kode + sandi baru.
+let forgotStep = 1;
+async function doForgot() {
   const nf = document.getElementById('fNf');
-  const em = g('fE');
-  if (!/^[^@]+@[^@]+\.[^@]{2,}$/.test(em)) { sN(nf, 'err', 'Masukkan alamat email yang valid.'); return; }
-  if (!caps['fCap']) { sN(nf, 'err', 'Selesaikan reCAPTCHA terlebih dahulu.'); return; }
-  sN(nf, 'ok', '📩 Tautan pemulihan dikirim ke ' + em);
+  const btn = document.getElementById('fBtn');
+  const em = g('fE').trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(em)) { sN(nf, 'err', 'Masukkan alamat email yang valid.'); return; }
+  btn.disabled = true;
+  try {
+    if (forgotStep === 1) {
+      sN(nf, 'ok', '⏳ Mengirim kode...');
+      const r = await LJ_AUTH.sendResetOTP(em);
+      if (!r.ok) { sN(nf, 'err', /tidak dikenal/i.test(r.msg || '') ? 'Fitur pemulihan belum aktif di server. Hubungi admin Lentera Jiwa.' : (r.msg || 'Gagal mengirim kode.')); return; }
+      forgotStep = 2;
+      document.getElementById('fStep2').style.display = '';
+      document.getElementById('fE').readOnly = true;
+      document.getElementById('fSub').textContent = 'Cek emailmu (juga folder Spam), lalu masukkan kode dan kata sandi baru.';
+      btn.textContent = 'Simpan Kata Sandi Baru';
+      sN(nf, 'ok', r.msg || 'Jika email ini terdaftar, kode pemulihan sudah dikirim.');
+      document.getElementById('fO').focus();
+      return;
+    }
+    const otp = g('fO').trim(), pw = g('fP'), pwc = g('fPC');
+    if (!/^[0-9]{6}$/.test(otp)) { sN(nf, 'err', 'Masukkan kode 6 digit dari email.'); return; }
+    if (pw.length < 8) { sN(nf, 'err', 'Kata sandi baru minimal 8 karakter.'); return; }
+    if (pw !== pwc) { sN(nf, 'err', 'Kata sandi baru tidak cocok.'); return; }
+    sN(nf, 'ok', '⏳ Menyimpan kata sandi baru...');
+    const r = await LJ_AUTH.resetPassword(em, otp, pw);
+    if (!r.ok) { sN(nf, 'err', r.msg || 'Gagal mengubah kata sandi.'); return; }
+    sN(nf, 'ok', '✅ ' + (r.msg || 'Kata sandi berhasil diubah.'));
+    forgotStep = 1;
+    ['fO', 'fP', 'fPC'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fStep2').style.display = 'none';
+    document.getElementById('fE').readOnly = false;
+    btn.textContent = 'Kirim Kode Pemulihan';
+    document.getElementById('lU').value = em;
+    setTimeout(() => go('scL', 'l'), 1500);
+  } finally {
+    btn.disabled = false;
+  }
 }
+
+// Tekan Enter di kolom login = klik Masuk
+['lU', 'lP'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
+});
 
 // ===== STEP BARS — 3 langkah (R1, R2, R3) =====
 const sNames = ['Info Pribadi', 'Keamanan', 'Verifikasi'];
@@ -894,15 +937,16 @@ function goR(n) {
 // ===== VALIDATE STEP 1 =====
 async function v1() {
   const nf = document.getElementById('r1Nf');
-  const u = g('rU'), nm = g('rN'), kt = g('rK'), ag = g('rA');
+  const u = g('rU'), nm = g('rN'), ag = g('rA');
+  const mhs = tipeAkun === 'mahasiswa';
   if (!u || u.length < 4) { sN(nf, 'err', 'Username minimal 4 karakter.'); return; }
   if (!nm) { sN(nf, 'err', 'Nama lengkap harus diisi.'); return; }
-  if (!kt) { sN(nf, 'err', 'Tempat tinggal harus diisi.'); return; }
-  if (!ag || +ag < 15 || +ag > 80) { sN(nf, 'err', 'Usia harus antara 15–80 tahun.'); return; }
+  if (mhs && (!ag || +ag < 15 || +ag > 80)) { sN(nf, 'err', 'Usia harus antara 15–80 tahun.'); return; }
+  if (!mhs && (!ag || +ag < 18 || +ag > 100)) { sN(nf, 'err', 'Akun umum untuk usia 18 tahun ke atas. Kamu tetap bisa membaca artikel dan mencoba tes tanpa akun.'); return; }
   if (!gen) { sN(nf, 'err', 'Pilih jenis kelamin terlebih dahulu.'); return; }
-  if (!document.getElementById('univV').value) { sN(nf, 'err', 'Pilih universitas Anda.'); return; }
-  if (!g('rSem')) { sN(nf, 'err', 'Pilih semester.'); return; }
-  if (!g('rNIM')) { sN(nf, 'err', 'NIM harus diisi.'); return; }
+  if (mhs && !document.getElementById('univV').value.trim()) { sN(nf, 'err', 'Isi nama universitas Anda.'); return; }
+  if (mhs && !g('rSem')) { sN(nf, 'err', 'Pilih semester.'); return; }
+  if (mhs && !g('rNIM')) { sN(nf, 'err', 'NIM harus diisi.'); return; }
   sN(nf, 'ok', '⏳ Memeriksa ketersediaan username...');
   const chk = await LJ_AUTH.checkUsername(u);
   if (!chk.ok) { sN(nf, 'err', chk.msg); return; }
@@ -917,7 +961,8 @@ async function v2() {
   if (pw.length < 8) { sN(nf, 'err', 'Kata sandi minimal 8 karakter.'); return; }
   if (pw !== pwc) { sN(nf, 'err', 'Kata sandi tidak cocok.'); return; }
   if (!/^[^@]+@[^@]+\.[^@]{2,}$/.test(em)) { sN(nf, 'err', 'Format email tidak valid.'); return; }
-  if (!/^(\+62|62|0)[0-9]{8,13}$/.test(ph.replace(/[-\s]/g, ''))) { sN(nf, 'err', 'Format nomor telepon tidak valid.'); return; }
+  const phClean = ph.replace(/[-\s]/g, '');
+  if ((tipeAkun === 'mahasiswa' || phClean) && !/^(\+62|62|0)[0-9]{8,13}$/.test(phClean)) { sN(nf, 'err', tipeAkun === 'mahasiswa' ? 'Format nomor telepon tidak valid.' : 'Nomor telepon tidak valid. Kosongkan saja jika tidak ingin mengisi.'); return; }
   sN(nf, 'ok', '📩 Mengirim kode OTP ke ' + em + '...');
   const otpRes = await LJ_AUTH.sendOTP(em);
   if (!otpRes.ok) { sN(nf, 'err', 'Gagal kirim OTP: ' + otpRes.msg); return; }
@@ -926,36 +971,66 @@ async function v2() {
 }
 
 // ===== SUBMIT REG =====
+// Tiket dari verifyOTP disimpan agar percobaan ulang (mis. upload gagal)
+// tidak perlu memverifikasi OTP lagi. Tiket hanya berlaku untuk satu email.
+// Backend lama tidak mengirim tiket: dipakai mode 'LEGACY' agar pendaftaran
+// tetap berjalan sampai backend versi baru dipasang.
+let regTicket = null, regTicketEmail = '', ktmUploaded = false, ktmUrlLegacy = '';
+
 async function subReg() {
   const nf = document.getElementById('r3Nf');
   const otps = document.querySelectorAll('#scR3 .oti');
   const otp = [...otps].map(i => i.value).join('');
-  if (otp.length < 6) { sN(nf, 'err', 'Masukkan kode OTP 6 digit dari email.'); return; }
-  sN(nf, 'ok', '⏳ Memverifikasi OTP...');
-  const otpCheck = await LJ_AUTH.verifyOTP(g('rE'), otp);
-  if (!otpCheck.ok) { sN(nf, 'err', otpCheck.msg); return; }
-  if (!document.getElementById('ktmF').files[0]) { sN(nf, 'err', 'Upload foto KTM Anda terlebih dahulu.'); return; }
+  const email = g('rE').trim().toLowerCase();
+  // 1) Semua pemeriksaan lokal dulu, supaya OTP tidak terpakai sia-sia
+  if (!regTicket && otp.length < 6) { sN(nf, 'err', 'Masukkan kode OTP 6 digit dari email.'); return; }
+  const mhs = tipeAkun === 'mahasiswa';
+  const ktmFile = document.getElementById('ktmF').files[0];
+  if (mhs && !ktmFile && !ktmUploaded) { sN(nf, 'err', 'Upload foto KTM Anda terlebih dahulu.'); return; }
   const exp = mOp === '+' ? mA2 + mB2 : mOp === '-' ? mA2 - mB2 : mA2 * mB2;
   if (parseInt(g('mA')) !== exp) { sN(nf, 'err', 'Jawaban verifikasi keamanan salah. Coba lagi.'); return; }
   if (!document.getElementById('tCk').checked) { sN(nf, 'err', 'Anda harus menyetujui Syarat & Ketentuan.'); return; }
   const regData = {
-    username: g('rU'), nama: g('rN'), email: g('rE'),
+    username: g('rU'), nama: g('rN'), email: email,
     phone: g('rPh'), password: g('rP'),
     usia: g('rA'), gender: gen,
-    univ: document.getElementById('univV').value,
-    nim: g('rNIM'), semester: g('rSem')
+    univ: mhs ? document.getElementById('univV').value.trim() : '',
+    nim: mhs ? g('rNIM') : '', semester: mhs ? g('rSem').replace('+', '') : '',
+    tipe: tipeAkun
   };
-  sN(nf, 'ok', '⏳ Mengupload foto KTM...');
-  const ktmFile = document.getElementById('ktmF').files[0];
-  const uploadRes = await LJ_AUTH.uploadPhoto(ktmFile);
-  if (!uploadRes.ok) { sN(nf, 'err', 'Gagal upload foto KTM: ' + uploadRes.msg); return; }
-  regData.ktmUrl = uploadRes.url;
+  // 2) Verifikasi OTP → tiket
+  if (!regTicket || regTicketEmail !== email) {
+    sN(nf, 'ok', '⏳ Memverifikasi OTP...');
+    const otpCheck = await LJ_AUTH.verifyOTP(email, otp);
+    if (!otpCheck.ok) { sN(nf, 'err', otpCheck.msg || 'Kode OTP salah.'); return; }
+    regTicket = otpCheck.ticket || 'LEGACY'; regTicketEmail = email; ktmUploaded = false; ktmUrlLegacy = '';
+  }
+  // 3) Upload KTM dengan tiket (khusus mahasiswa)
+  if (mhs && !ktmUploaded) {
+    sN(nf, 'ok', '⏳ Mengupload foto KTM...');
+    const uploadRes = await LJ_AUTH.uploadPhoto(ktmFile, regTicket === 'LEGACY' ? undefined : regTicket);
+    if (!uploadRes.ok) { sN(nf, 'err', 'Gagal upload foto KTM: ' + (uploadRes.msg || 'coba lagi.')); if (/verifikasi/i.test(uploadRes.msg || '')) regTicket = null; return; }
+    ktmUploaded = true;
+    ktmUrlLegacy = uploadRes.url || '';
+  }
+  if (regTicket === 'LEGACY' && ktmUrlLegacy) regData.ktmUrl = ktmUrlLegacy;
+  // 4) Daftar
   sN(nf, 'ok', '⏳ Mendaftarkan akun...');
-  const res = await LJ_AUTH.register(regData);
-  if (!res.ok) { sN(nf, 'err', res.msg); return; }
+  const res = await LJ_AUTH.register(regData, regTicket === 'LEGACY' ? undefined : regTicket);
+  if (!res.ok) { sN(nf, 'err', res.msg); if (/verifikasi/i.test(res.msg || '')) { regTicket = null; ktmUploaded = false; } return; }
+  regTicket = null; ktmUploaded = false;
   // Auto login setelah register
   const loginRes = await LJ_AUTH.login(regData.username, regData.password);
-  document.getElementById('sucM').innerHTML = `Akun <strong>Mahasiswa</strong> atas nama <strong>${res.user.nama}</strong> berhasil dibuat!<br>Kamu sudah masuk secara otomatis.`;
+  // Bangun pesan dengan textContent: nama berasal dari input pengguna
+  // dan tidak boleh disisipkan sebagai HTML (mencegah XSS).
+  const sucM = document.getElementById('sucM');
+  sucM.textContent = '';
+  const bold = t => { const b = document.createElement('strong'); b.textContent = t; return b; };
+  sucM.append('Akun ', bold(mhs ? 'Mahasiswa' : 'Umum'), ' atas nama ', bold((res.user && res.user.nama) || regData.nama), ' berhasil dibuat!');
+  sucM.append(document.createElement('br'));
+  sucM.append(loginRes && loginRes.ok
+    ? 'Kamu sudah masuk secara otomatis.'
+    : 'Silakan masuk dengan username dan kata sandimu.');
   go('scSuc', 'r');
   confetti();
 }
@@ -1013,12 +1088,37 @@ function vPh(inp) {
 
 // ===== GENDER =====
 function pickG(el, val) {
-  document.querySelectorAll('.gopt').forEach(g => g.classList.remove('on'));
+  document.querySelectorAll('.gsex').forEach(g => g.classList.remove('on'));
   el.classList.add('on'); gen = val;
 }
 
+// Jenis akun: umum (18+, HP opsional, tanpa KTM) atau mahasiswa
+function pickTipe(t) {
+  tipeAkun = t === 'mahasiswa' ? 'mahasiswa' : 'umum';
+  document.querySelectorAll('.topt').forEach(o => {
+    const on = o.dataset.tipe === tipeAkun;
+    o.classList.toggle('on', on); o.setAttribute('aria-checked', String(on));
+  });
+  const mhs = tipeAkun === 'mahasiswa';
+  document.getElementById('mhsFields').style.display = mhs ? '' : 'none';
+  document.getElementById('ktmBlock').style.display = mhs ? '' : 'none';
+  document.getElementById('phLbl').textContent = mhs ? 'Nomor Telepon *' : 'Nomor Telepon (opsional)';
+  document.getElementById('rA').min = mhs ? 15 : 18;
+  document.getElementById('rA').max = mhs ? 80 : 100;
+  document.getElementById('tipeSt').textContent = mhs
+    ? 'Akun mahasiswa: perlu data kampus dan foto KTM untuk verifikasi.'
+    : 'Akun umum: cukup data dasar + verifikasi email.';
+}
+document.querySelectorAll('.topt').forEach(o => o.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickTipe(o.dataset.tipe); }
+}));
+
 // ===== UNIVERSITY SEARCH =====
 function sUniv(q) {
+  // Nama yang diketik langsung dipakai; daftar hanya sebagai saran
+  document.getElementById('univV').value = q.trim();
+  const st = document.getElementById('univSt');
+  if (st) { st.className = 'fs info'; st.textContent = q.trim().length >= 3 ? 'Tidak ada di daftar? Tidak apa-apa, tulis nama lengkap kampusmu.' : ''; }
   const dd = document.getElementById('univDD');
   const res = UNIVS.filter(u => u.toLowerCase().includes(q.toLowerCase()));
   dd.innerHTML = res.length ? res.slice(0, 10).map(u => `<div class="di" onclick="pUniv('${u.replace(/'/g, "\\'")}')">${u}</div>`).join('') : '<div class="dem">Tidak ditemukan</div>';
@@ -1044,10 +1144,14 @@ function oN(inp, i) {
   const all = document.querySelectorAll('#scR3 .oti');
   if (inp.value && i < all.length - 1) all[i + 1].focus();
 }
-function resOtp() {
+async function resOtp() {
+  const nf = document.getElementById('r3Nf');
   document.querySelectorAll('#scR3 .oti').forEach(i => i.value = '');
   document.querySelectorAll('#scR3 .oti')[0].focus();
-  alert('Kode OTP baru dikirim ke email Anda.');
+  regTicket = null; ktmUploaded = false;
+  sN(nf, 'ok', '📩 Mengirim kode baru...');
+  const r = await LJ_AUTH.sendOTP(g('rE').trim().toLowerCase());
+  sN(nf, r.ok ? 'ok' : 'err', r.ok ? '✅ Kode OTP baru terkirim ke email kamu.' : (r.msg || 'Gagal mengirim kode.'));
 }
 
 // ===== FILE UPLOAD =====

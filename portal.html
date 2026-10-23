@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Portal Psikolog — Lentera Jiwa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/portal.css">
+</head>
+<body class="portal-body">
+
+<header class="portal-top">
+  <a href="index.html" class="portal-brand" aria-label="Kembali ke situs Lentera Jiwa">🪔 Lentera <strong>Jiwa</strong> <span class="portal-badge">Portal</span></a>
+  <div class="portal-user">
+    <span id="pt-user" class="portal-user-name">…</span>
+    <button type="button" class="portal-btn portal-btn-ghost" id="pt-logout">Keluar</button>
+  </div>
+</header>
+
+<main class="portal-main" id="pt-main" aria-live="polite">
+  <div class="portal-card" id="pt-gate">
+    <p>Memeriksa akunmu…</p>
+  </div>
+
+  <div id="pt-app" hidden>
+    <nav class="portal-tabs" role="tablist" aria-label="Menu portal">
+      <button type="button" role="tab" class="portal-tab" data-tab="profil" aria-selected="true">👤 Profil Psikolog</button>
+      <button type="button" role="tab" class="portal-tab" data-tab="konten" aria-selected="false">📚 Artikel &amp; Buku</button>
+      <button type="button" role="tab" class="portal-tab" data-tab="admin" aria-selected="false" hidden>🛡️ Admin</button>
+    </nav>
+
+    <!-- ══ PROFIL ══ -->
+    <section class="portal-panel" data-panel="profil" role="tabpanel">
+      <div class="portal-card">
+        <h1 class="portal-h1">Profil Psikolog</h1>
+        <p class="portal-help">Profil ini tampil di halaman <strong>Tentang → Tim Kami</strong> setelah admin memverifikasi nomor izin praktikmu. Mengubah nomor izin akan meminta verifikasi ulang.</p>
+        <div id="pf-status" class="portal-status"></div>
+        <form id="pf-form" novalidate>
+          <div class="portal-grid2">
+            <label class="portal-field">Nama tampil *
+              <input name="namaTampil" maxlength="80" required placeholder="Contoh: Andini Prasetya">
+            </label>
+            <label class="portal-field">Gelar
+              <input name="gelar" maxlength="60" placeholder="Contoh: M.Psi., Psikolog">
+            </label>
+            <label class="portal-field">Nomor izin praktik (SIPP/SIPPK) *
+              <input name="nomorIzin" maxlength="60" required placeholder="Nomor dari HIMPSI">
+            </label>
+            <label class="portal-field">Pengalaman (tahun) *
+              <input name="pengalamanTahun" type="number" min="0" max="60" required>
+            </label>
+          </div>
+          <label class="portal-field">Spesialisasi
+            <input name="spesialisasi" maxlength="160" placeholder="Contoh: Psikologi klinis dewasa, kecemasan, trauma">
+          </label>
+          <label class="portal-field">Topik (pisahkan dengan koma, maks. 6)
+            <input name="topik" maxlength="200" placeholder="Contoh: Kecemasan, Burnout, CBT">
+          </label>
+          <fieldset class="portal-field portal-checks">
+            <legend>Kelompok usia yang dilayani *</legend>
+            <label><input type="checkbox" name="usiaLayanan" value="anak"> 🌱 Anak</label>
+            <label><input type="checkbox" name="usiaLayanan" value="remaja"> 🌙 Remaja</label>
+            <label><input type="checkbox" name="usiaLayanan" value="dewasa"> ☀️ Dewasa</label>
+            <label><input type="checkbox" name="usiaLayanan" value="lansia"> 🌸 Lansia</label>
+          </fieldset>
+          <label class="portal-field">Kutipan singkat (opsional)
+            <textarea name="kutipan" maxlength="280" rows="2" placeholder="Satu kalimat tentang caramu mendampingi klien"></textarea>
+          </label>
+          <label class="portal-field">Link foto di Google Drive (opsional)
+            <input name="fotoLink" maxlength="300" placeholder="https://drive.google.com/file/d/…">
+            <span class="portal-hint">Atur berbagi foto: <em>Siapa saja yang memiliki link → Pelihat</em>.</span>
+          </label>
+          <button type="submit" class="portal-btn">Simpan Profil</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ══ KONTEN ══ -->
+    <section class="portal-panel" data-panel="konten" role="tabpanel" hidden>
+      <div class="portal-card">
+        <h2 class="portal-h1" id="kt-title">Tambah Konten</h2>
+        <details class="portal-guide">
+          <summary>Cara menyiapkan file di Google Drive</summary>
+          <ol>
+            <li><strong>Artikel:</strong> tulis di <em>Google Docs</em>. Pakai gaya <em>Judul 1/Judul 2</em> untuk subjudul, daftar berpoin, cetak tebal/miring, dan link — semuanya ikut tampil di situs.</li>
+            <li>Klik <em>Bagikan</em> di dokumen → tambahkan email admin Lentera Jiwa sebagai <em>Pelihat</em> (atau pilih <em>Siapa saja yang memiliki link</em>).</li>
+            <li>Salin link dokumen dan tempel di kolom di bawah.</li>
+            <li><strong>Buku/materi:</strong> unggah PDF ke Drive dan atur <em>Siapa saja yang memiliki link → Pelihat</em>, <strong>hanya</strong> untuk materi milikmu sendiri atau yang memang boleh dibagikan bebas. Untuk buku komersial, cukup isi <em>link luar</em> (toko, perpustakaan, iPusnas).</li>
+            <li>Isi di situs ikut berubah saat dokumen diedit (tunggu hingga ±6 jam, atau simpan ulang konten di sini agar langsung diperbarui).</li>
+          </ol>
+        </details>
+        <div id="kt-status" class="portal-status"></div>
+        <form id="kt-form" novalidate>
+          <input type="hidden" name="id">
+          <div class="portal-grid2">
+            <label class="portal-field">Jenis *
+              <select name="tipe">
+                <option value="artikel">📝 Artikel (Google Docs)</option>
+                <option value="buku">📚 Buku / Materi</option>
+              </select>
+            </label>
+            <label class="portal-field">Status
+              <select name="status">
+                <option value="draf">Draf (belum tampil)</option>
+                <option value="terbit">Terbitkan (tampil di situs)</option>
+              </select>
+            </label>
+          </div>
+          <label class="portal-field">Judul *
+            <input name="judul" maxlength="150" required>
+          </label>
+          <label class="portal-field">Ringkasan *
+            <textarea name="ringkasan" maxlength="500" rows="3" required placeholder="2–3 kalimat yang tampil di kartu"></textarea>
+          </label>
+          <fieldset class="portal-field portal-checks">
+            <legend>Untuk kelompok usia *</legend>
+            <label><input type="checkbox" name="usia" value="anak"> 🌱 Anak</label>
+            <label><input type="checkbox" name="usia" value="remaja"> 🌙 Remaja</label>
+            <label><input type="checkbox" name="usia" value="dewasa"> ☀️ Dewasa</label>
+            <label><input type="checkbox" name="usia" value="lansia"> 🌸 Lansia</label>
+          </fieldset>
+          <label class="portal-field">Topik (pisahkan dengan koma)
+            <input name="topik" maxlength="200" placeholder="Contoh: Kecemasan, Mindfulness">
+          </label>
+          <label class="portal-field"><span id="kt-file-label">Link Google Docs artikel *</span>
+            <input name="fileLink" maxlength="300" placeholder="https://docs.google.com/document/d/…">
+          </label>
+          <label class="portal-field" id="kt-luar-wrap" hidden>Link luar (toko/perpustakaan, opsional)
+            <input name="linkLuar" maxlength="300" placeholder="https://…">
+          </label>
+          <div class="portal-actions">
+            <button type="submit" class="portal-btn" id="kt-submit">Simpan Konten</button>
+            <button type="button" class="portal-btn portal-btn-ghost" id="kt-reset">Batal / Baru</button>
+          </div>
+        </form>
+      </div>
+      <div class="portal-card">
+        <h2 class="portal-h2" id="kt-list-title">Konten Saya</h2>
+        <div id="kt-list" class="portal-list"><p class="portal-help">Memuat…</p></div>
+      </div>
+    </section>
+
+    <!-- ══ ADMIN ══ -->
+    <section class="portal-panel" data-panel="admin" role="tabpanel" hidden>
+      <div class="portal-card">
+        <h2 class="portal-h1">Kelola Psikolog</h2>
+        <p class="portal-help">Psikolog mendaftar dulu sebagai akun <em>umum</em> di situs, lalu cari akunnya di sini dan jadikan <strong>psikolog</strong>. Setelah ia mengisi profil, periksa nomor izin praktiknya (SIPP) lalu klik <strong>Verifikasi</strong> agar profilnya tampil.</p>
+        <form id="ad-search" class="portal-search" novalidate>
+          <input name="q" maxlength="80" placeholder="Cari email, username, atau nama (min. 2 huruf)" aria-label="Cari pengguna">
+          <button type="submit" class="portal-btn">Cari</button>
+          <button type="button" class="portal-btn portal-btn-ghost" id="ad-all">Semua psikolog</button>
+        </form>
+        <div id="ad-status" class="portal-status"></div>
+        <div id="ad-list" class="portal-list"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="portal-toast" id="pt-toast" role="status" aria-live="polite"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/portal.js"></script>
+</body>
+</html>

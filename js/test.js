@@ -17,6 +17,7 @@ const TestEngine = {
   current:  0,
 
   start(id) {
+    this._locked = false;
     const lj = window.LJ;
     if (!lj || !lj.TES_DATA) { console.error('tes.js not loaded'); return; }
 
@@ -82,10 +83,13 @@ const TestEngine = {
         if (this.answers[this.current] === i) btn.classList.add('is-selected');
 
         btn.addEventListener('click', () => {
+          /* Cegah klik ganda melompati soal berikutnya */
+          if (this._locked) return;
+          this._locked = true;
           optsEl.querySelectorAll('.test-option').forEach(b => b.classList.remove('is-selected'));
           btn.classList.add('is-selected');
           this.answers[this.current] = i;
-          setTimeout(() => this.next(), 380);
+          setTimeout(() => { this._locked = false; this.next(); }, 380);
         });
 
         btn.style.opacity   = '0';
@@ -113,12 +117,48 @@ const TestEngine = {
   },
 
   prev() {
+    if (this._locked) return;
     if (this.current > 0) { this.current--; this.renderQuestion(); }
   },
 
   skip() {
+    if (this._locked) return;
     this.answers[this.current] = null;
     this.next();
+  },
+
+  /* Kembali ke mode menjawab, mulai dari soal pertama yang dilewati */
+  resumeSkipped() {
+    const idx = this.answers.findIndex(a => a === null || a === undefined);
+    this.current = idx >= 0 ? idx : 0;
+    const testEngineEl  = document.getElementById('test-engine');
+    const resultsEl     = document.getElementById('test-results');
+    if (resultsEl) { resultsEl.classList.remove('is-active'); resultsEl.innerHTML = ''; }
+    if (testEngineEl) testEngineEl.classList.add('is-active');
+    this.renderQuestion();
+    if (testEngineEl) window.scrollTo({ top: testEngineEl.offsetTop - 120, behavior: 'smooth' });
+  },
+
+  _crisisCard() {
+    return (
+      '<div role="alert" style="max-width:640px;margin:0 auto 24px;background:#FFF4F0;border:1.5px solid #E88B6A;border-radius:18px;padding:18px 20px;font-size:14px;line-height:1.7;color:var(--text-primary);">' +
+        '<div style="font-weight:800;font-size:15px;margin-bottom:6px;">💜 Kamu tidak harus menghadapi ini sendirian</div>' +
+        'Jika kamu merasa sangat tertekan, berpikir untuk menyakiti diri, atau merasa tidak aman, hubungi bantuan sekarang:' +
+        '<ul style="margin:8px 0 8px 20px;padding:0;">' +
+          '<li><strong>Layanan SEJIWA: telepon 119, lalu tekan 8</strong></li>' +
+          '<li><strong>Darurat: 112</strong>, atau datang ke IGD rumah sakit terdekat</li>' +
+          '<li>Ceritakan pada orang yang kamu percaya hari ini</li>' +
+        '</ul>' +
+        '<span style="font-size:12.5px;color:var(--text-secondary);">Hasil tes ini bukan diagnosis, tapi skormu menunjukkan bahwa dukungan dari profesional akan sangat membantu.</span>' +
+      '</div>'
+    );
+  },
+
+  _skippedNote(r, totalItems) {
+    if (!r || r.answered === undefined || r.answered >= r.scoredItems) return '';
+    const n = r.scoredItems - r.answered;
+    return '<p role="note" style="max-width:640px;margin:0 auto 20px;text-align:center;font-size:13px;color:var(--text-muted);">' +
+      'Kamu melewati ' + n + ' soal. Nilainya diperkirakan dari jawabanmu yang lain, jadi hasil ini sedikit kurang akurat.</p>';
   },
 
   showResults() {
@@ -132,19 +172,42 @@ const TestEngine = {
 
     let html = '';
 
+    /* Jangan hitung hasil bila terlalu banyak soal dilewati */
+    const comp = lj.checkCompleteness ? lj.checkCompleteness(this.tesId, this.answers) : { ok: true };
+    if (!comp.ok) {
+      resultsEl.innerHTML =
+        '<div class="result-hero">' +
+          '<div class="result-level-badge" style="background:var(--lav-100);color:var(--lav-800);">Jawaban belum cukup</div>' +
+          '<h2 class="result-headline">Hasilnya belum bisa dihitung</h2>' +
+          '<p class="result-desc">Kamu menjawab ' + comp.answered + ' dari ' + comp.total + ' soal. ' +
+          'Agar hasilnya bermakna, minimal ' + comp.required + ' soal perlu dijawab. Tidak apa-apa jika ragu: pilih jawaban yang paling mendekati.</p>' +
+        '</div>' +
+        '<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">' +
+          '<button onclick="TestEngine.resumeSkipped()" class="btn btn-primary btn-lg">Jawab soal yang terlewat →</button>' +
+          '<button onclick="TestEngine.reset()" class="btn btn-soft btn-lg">Pilih tes lain</button>' +
+        '</div>';
+      window.scrollTo({ top: resultsEl.offsetTop - 120, behavior: 'smooth' });
+      return;
+    }
+
     try {
+      let r = null;
       if (this.tesId === 'wellbeing') {
-        const r = lj.calculateWellbeingScore(this.answers);
+        r = lj.calculateWellbeingScore(this.answers);
         html = this._renderWellbeingResult(r);
       } else if (this.tesId === 'stres') {
-        const r = lj.calculateStresScore(this.answers);
+        r = lj.calculateStresScore(this.answers);
         html = this._renderStresResult(r);
       } else if (this.tesId === 'kepribadian') {
-        const r = lj.calculateKepribadianScore(this.answers);
+        r = lj.calculateKepribadianScore(this.answers);
         html = this._renderKepribadianResult(r);
       }
+      const urgent = r && r.result && r.result.urgent;
+      html = (urgent ? this._crisisCard() : '') + this._skippedNote(r) + html;
     } catch(err) {
-      html = '<div class="result-hero"><p style="color:var(--peach-600);">⚠️ Beberapa pertanyaan belum dijawab. Hasil mungkin kurang akurat.</p></div>';
+      console.error('[TestEngine]', err);
+      html = '<div class="result-hero"><p style="color:var(--peach-600);">⚠️ Maaf, hasil tes gagal dihitung.</p></div>' +
+        '<div style="display:flex;justify-content:center;margin-bottom:20px;"><button onclick="TestEngine.reset()" class="btn btn-soft btn-lg">Kembali ke pilihan tes</button></div>';
     }
 
     resultsEl.innerHTML = html;
@@ -172,7 +235,8 @@ const TestEngine = {
       engagement:'Keterlibatan',
       relationships:'Hubungan',
       meaning:'Makna Hidup',
-      negative_affect:'Emosi Negatif',
+      negative_affect:'Bebas Emosi Negatif',
+      accomplishment:'Pencapaian & Percaya Diri',
       resilience:'Resiliensi',
       physical_mental:'Fisik & Mental'
     };
@@ -283,7 +347,8 @@ const TestEngine = {
       '</div>' +
       '<div class="result-personality-grid">' + traitCards + '</div>' +
       '<div class="result-dimensions" style="margin-bottom:20px;">' + profileDetails + '</div>' +
-      '<div class="result-disclaimer" role="note">📋 Profil kepribadian bersifat deskriptif, bukan preskriptif. Tidak ada tipe yang lebih baik dari yang lain.</div>' +
+      '<div class="result-disclaimer" role="note">📋 Profil kepribadian bersifat deskriptif, bukan preskriptif. Tidak ada tipe yang lebih baik dari yang lain. ' +
+        'Pada <strong>N (Neurotisisme)</strong>, persentase tinggi berarti kamu lebih peka terhadap emosi dan stres, bukan berarti lebih buruk.</div>' +
       '<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">' +
         '<a href="layanan.html" class="btn btn-primary btn-lg btn-ripple">Diskusikan dengan Psikolog ✨</a>' +
         '<button onclick="TestEngine.reset()" class="btn btn-soft btn-lg">Coba Tes Lain →</button>' +
@@ -295,7 +360,7 @@ const TestEngine = {
     return (
       '<div class="result-disclaimer" role="note">📋 Hasil ini didasarkan pada jawabanmu hari ini dan bersifat indikatif. Untuk pemahaman lebih mendalam, konsultasikan hasilmu dengan psikolog kami.</div>' +
       '<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">' +
-        '<a href="layanan.html" class="btn btn-primary btn-lg btn-ripple">' + result.cta + '</a>' +
+        '<a href="' + (result.ctaHref || 'layanan.html') + '" class="btn btn-primary btn-lg btn-ripple">' + result.cta + '</a>' +
         '<button onclick="TestEngine.reset()" class="btn btn-soft btn-lg">Coba Tes Lain →</button>' +
       '</div>'
     );

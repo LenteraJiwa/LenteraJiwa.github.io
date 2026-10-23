@@ -359,9 +359,19 @@ const DIMENSION_INSIGHTS = {
     low:  'Kehilangan rasa makna sering mendahului atau menyertai depresi dan burnout. Ini perlu diperhatikan serius — eksplorasi nilai-nilai dan tujuan jangka panjangmu.',
     high: 'Rasa makna yang kuat dalam hidupmu adalah prediktor kuat dari resiliensi dan kepuasan jangka panjang.',
   },
+  /* Skor dimensi ini dibalik: makin tinggi = makin JARANG sedih/hampa/
+     pikiran negatif. Karena itu label tampilannya "Bebas Emosi Negatif". */
   negative_affect: {
-    high_distress: 'Tingkat distres yang kamu laporkan cukup signifikan. Kami menyarankan untuk mempertimbangkan berbicara dengan profesional.',
-    low_distress:  'Level emosi negatif yang kamu alami masih dalam rentang yang bisa dikelola dengan strategi self-care yang tepat.',
+    low:  'Kamu cukup sering mengalami perasaan sedih, hampa, atau pikiran negatif tentang diri sendiri. Ini cukup signifikan — kami menyarankan untuk mempertimbangkan berbicara dengan profesional.',
+    high: 'Emosi negatif yang kamu alami masih dalam rentang yang bisa dikelola dengan strategi self-care yang tepat.',
+  },
+  accomplishment: {
+    low:  'Kepercayaan diri dan rasa berkembangmu sedang rendah. Mulailah dari target kecil yang bisa dicapai minggu ini, lalu rayakan setiap kemajuan.',
+    high: 'Kamu merasa mampu menghadapi tantangan dan melihat dirimu berkembang. Ini sumber motivasi yang kuat.',
+  },
+  physical_mental: {
+    low:  'Kebutuhan dasar seperti tidur, makan teratur, dan bergerak sedang terabaikan. Merawat tubuh adalah langkah pertama merawat pikiran.',
+    high: 'Kamu cukup baik merawat kebutuhan fisik dasarmu — fondasi penting untuk suasana hati yang stabil.',
   },
   resilience: {
     low:  'Resiliensi bukan karakter bawaan — ini adalah keterampilan yang bisa dipelajari dan diperkuat. Workshop dan konseling kami dirancang khusus untuk ini.',
@@ -445,10 +455,10 @@ const PERSONALITY_TRAITS = {
     high: { label: 'Empatik & Kolaboratif',  desc: 'Kamu sangat peduli pada orang lain, kooperatif, dan menjadi perekat sosial dalam kelompok. Empatimu adalah hadiah bagi orang-orang di sekitarmu.' },
   },
   N: {
-    name: 'Stabilitas Emosional',
+    name: 'Neurotisisme (Kepekaan Emosi)',
     thresholds: { low: 8, high: 15 },
     low:  { label: 'Stabil & Tangguh',       desc: 'Kamu cenderung tenang di bawah tekanan dan tidak mudah terguncang. Stabilitas emosionalmu membuat orang nyaman bersandar padamu.' },
-    mid:  { label: 'Sensitif & Seimbang',    desc: 'Kamu memiliki sensitivitas emosional yang sehat — bisa merasakan dengan dalam namun tetap bisa mengelola diri.' },
+    mid:  { label: 'Cukup Peka & Seimbang',  desc: 'Kamu memiliki sensitivitas emosional yang sehat — bisa merasakan dengan dalam namun tetap bisa mengelola diri.' },
     high: { label: 'Sensitif & Mendalam',    desc: 'Kamu merasakan emosi dengan intensitas tinggi — baik yang menyenangkan maupun yang menantang. Sensitivitasmu adalah kekuatan kreatif, namun perlu strategi regulasi yang baik.' },
   },
 };
@@ -456,6 +466,56 @@ const PERSONALITY_TRAITS = {
 /* ══════════════════════════════════════════════════════════
    BAGIAN III — FUNGSI KALKULASI PSIKOMETRIK
    ══════════════════════════════════════════════════════════ */
+
+/* Minimal proporsi soal (yang dihitung skornya) yang harus dijawab
+   agar hasil boleh ditampilkan. Sebelumnya soal yang dilewati dihitung
+   0, sehingga melewati semua soal memberi vonis "At Risk". */
+const MIN_ANSWER_RATIO = 0.8;
+
+function _isAnswered(a) { return a !== undefined && a !== null; }
+
+/**
+ * Hitung skor per soal. Soal yang dijawab memakai tabel scores[];
+ * soal yang dilewati diisi rata-rata jawaban pengguna di kelompok
+ * (dimensi/trait) yang sama, atau rata-rata keseluruhan bila satu
+ * kelompok kosong. Soal informational diberi null.
+ */
+function _scoreItems(questions, answers, groupKey) {
+  const raw = questions.map((q, i) =>
+    q.informational ? null : (_isAnswered(answers[i]) ? q.scores[answers[i]] : undefined));
+  const sums = {}, counts = {};
+  let allSum = 0, allN = 0;
+  questions.forEach((q, i) => {
+    if (raw[i] === null || raw[i] === undefined) return;
+    const g = q[groupKey];
+    sums[g] = (sums[g] || 0) + raw[i];
+    counts[g] = (counts[g] || 0) + 1;
+    allSum += raw[i]; allN++;
+  });
+  const allMean = allN ? allSum / allN : 0;
+  let answered = 0, scored = 0;
+  const scores = questions.map((q, i) => {
+    if (raw[i] === null) return null;
+    scored++;
+    if (raw[i] !== undefined) { answered++; return raw[i]; }
+    const g = q[groupKey];
+    return counts[g] ? sums[g] / counts[g] : allMean;
+  });
+  return { scores, answered, scored };
+}
+
+/**
+ * checkCompleteness(tesId, answers)
+ * @returns {{ ok, answered, required, total }}
+ */
+function checkCompleteness(tesId, answers) {
+  const tes = TES_DATA[tesId];
+  if (!tes) return { ok: false, answered: 0, required: 0, total: 0 };
+  const scoredQs = tes.questions.filter(q => !q.informational);
+  const answered = tes.questions.filter((q, i) => !q.informational && _isAnswered(answers[i])).length;
+  const required = Math.ceil(scoredQs.length * MIN_ANSWER_RATIO);
+  return { ok: answered >= required, answered, required, total: scoredQs.length };
+}
 
 /**
  * calculateWellbeingScore(answers)
@@ -473,16 +533,12 @@ function calculateWellbeingScore(answers) {
 
   let total = 0;
   const dimScores = {};
+  const scored = _scoreItems(WELLBEING_QUESTIONS, answers, 'dimension');
 
   WELLBEING_QUESTIONS.forEach((q, idx) => {
     /* Item 20 tidak masuk total */
-    if (q.informational) return;
-
-    const answerIdx = answers[idx];
-    if (answerIdx === undefined || answerIdx === null) return;
-
-    /* Ambil nilai dari tabel scores[] — sudah handle reverse */
-    const score = q.scores[answerIdx];
+    const score = scored.scores[idx];
+    if (score === null) return;
     total += score;
 
     /* Akumulasi per dimensi */
@@ -490,8 +546,8 @@ function calculateWellbeingScore(answers) {
     dimScores[q.dimension] += score;
   });
 
-  /* Pastikan tidak ada floating point error */
-  total = Math.round(total * 100) / 100;
+  /* Skor dibulatkan ke bilangan bulat agar cocok dengan rentang interpretasi */
+  total = Math.round(total);
 
   /* Max per dimensi (untuk normalisasi) */
   const maxTotal = 57;
@@ -521,7 +577,8 @@ function calculateWellbeingScore(answers) {
     }
   });
 
-  return { total, maxTotal, percentile, result, dimensions: dimensionReport };
+  return { total, maxTotal, percentile, result, dimensions: dimensionReport,
+           answered: scored.answered, scoredItems: scored.scored };
 }
 
 /**
@@ -537,19 +594,17 @@ function calculateStresScore(answers) {
 
   let total = 0;
   const subScores = {};
+  const scored = _scoreItems(STRES_QUESTIONS, answers, 'subdimension');
 
   STRES_QUESTIONS.forEach((q, idx) => {
-    const answerIdx = answers[idx];
-    if (answerIdx === undefined || answerIdx === null) return;
-
-    const score = q.scores[answerIdx];
+    const score = scored.scores[idx];
     total += score;
 
     if (!subScores[q.subdimension]) subScores[q.subdimension] = 0;
     subScores[q.subdimension] += score;
   });
 
-  total = Math.round(total * 100) / 100;
+  total = Math.round(total);
   const maxTotal = 45;
   const percentile = Math.round((total / maxTotal) * 100);
 
@@ -597,7 +652,8 @@ function calculateStresScore(answers) {
     cynicism:   { raw: cynRaw, max: maxCyn, pct: cynPct },
   };
 
-  return { total, maxTotal, percentile, result, subdimensions: subScores, burnoutProfile, burnoutDetail };
+  return { total, maxTotal, percentile, result, subdimensions: subScores, burnoutProfile, burnoutDetail,
+           answered: scored.answered, scoredItems: scored.scored };
 }
 
 /**
@@ -614,13 +670,10 @@ function calculateKepribadianScore(answers) {
   }
 
   const traitRaw = { O: 0, C: 0, E: 0, A: 0, N: 0 };
+  const scored = _scoreItems(KEPRIBADIAN_QUESTIONS, answers, 'trait');
 
   KEPRIBADIAN_QUESTIONS.forEach((q, idx) => {
-    const answerIdx = answers[idx];
-    if (answerIdx === undefined || answerIdx === null) return;
-
-    const score = q.scores[answerIdx];
-    traitRaw[q.trait] += score;
+    traitRaw[q.trait] += scored.scores[idx];
   });
 
   const profiles = {};
@@ -645,7 +698,7 @@ function calculateKepribadianScore(answers) {
     };
   });
 
-  return { traits: traitRaw, profiles };
+  return { traits: traitRaw, profiles, answered: scored.answered, scoredItems: scored.scored };
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -953,6 +1006,8 @@ Object.assign(window.LJ, {
   calculateWellbeingScore,
   calculateStresScore,
   calculateKepribadianScore,
+  checkCompleteness,
+  MIN_ANSWER_RATIO,
   /* Raw question sets */
   WELLBEING_QUESTIONS,
   STRES_QUESTIONS,

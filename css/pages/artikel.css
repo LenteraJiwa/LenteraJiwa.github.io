@@ -348,3 +348,12 @@
   .article-body           { padding: 32px 20px 60px; }
   .article-drawer-header  { padding: 14px 20px; }
 }
+
+/* ── Isi dari Google Docs: daftar bernomor, tabel, link ── */
+ol.article-ul { list-style: decimal; padding-left: 22px; }
+ol.article-ul li { padding-left: 4px; }
+ol.article-ul li::before { content: none; display: none; }
+.article-table { border-collapse: collapse; width: 100%; margin: 0 0 18px; font-size: 14px; }
+.article-table th, .article-table td { border: 1px solid var(--border-mid, rgba(123,111,212,.2)); padding: 8px 10px; text-align: left; vertical-align: top; }
+.article-table th { background: var(--lav-100); font-weight: 800; }
+#article-content a { color: var(--lav-800, #3F3592); text-decoration: underline; font-weight: 700; }

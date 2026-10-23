@@ -1,0 +1,64 @@
+/* ============================================================
+   Portal psikolog & admin
+   ============================================================ */
+.portal-body { background: var(--bg-base, #F7F5FF); min-height: 100vh; color: var(--text-primary); font-family: 'Nunito', system-ui, sans-serif; }
+.portal-top {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 20px; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-mid, rgba(123,111,212,.18));
+}
+.portal-brand { font-family: 'Fraunces', serif; font-size: 18px; color: var(--text-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.portal-badge { font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800; background: var(--lav-100); color: var(--lav-800); padding: 3px 9px; border-radius: 999px; }
+.portal-user { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.portal-user-name { font-size: 13px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+.portal-main { max-width: 880px; margin: 0 auto; padding: 20px 16px 80px; }
+.portal-card { background: #fff; border: 1px solid var(--border-mid, rgba(123,111,212,.18)); border-radius: 20px; padding: 22px; margin-bottom: 18px; box-shadow: 0 6px 24px rgba(45,37,80,.06); }
+.portal-h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; margin: 0 0 8px; }
+.portal-h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 21px; margin: 0 0 12px; }
+.portal-help { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 14px; }
+.portal-hint { display: block; font-size: 12px; color: var(--text-secondary); margin-top: 4px; font-weight: 600; }
+.portal-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.portal-tab { border: 1.5px solid var(--border-mid, rgba(123,111,212,.25)); background: #fff; color: var(--text-primary); border-radius: 999px; padding: 9px 16px; font: 700 14px 'Nunito', sans-serif; cursor: pointer; }
+.portal-tab[aria-selected="true"] { background: var(--lav-600, #6A5EC8); border-color: var(--lav-600, #6A5EC8); color: #fff; }
+.portal-tab:focus-visible, .portal-btn:focus-visible, .portal-field input:focus-visible, .portal-field select:focus-visible, .portal-field textarea:focus-visible { outline: 3px solid var(--lav-400, #9B8FE4); outline-offset: 2px; }
+.portal-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+@media (max-width: 640px) { .portal-grid2 { grid-template-columns: 1fr; } }
+.portal-field { display: block; font-size: 13px; font-weight: 800; color: var(--text-primary); margin-bottom: 14px; border: 0; padding: 0; }
+.portal-field input, .portal-field select, .portal-field textarea {
+  display: block; width: 100%; box-sizing: border-box; margin-top: 6px;
+  font: 500 15px 'Nunito', sans-serif; color: var(--text-primary);
+  border: 1.5px solid var(--border-mid, rgba(123,111,212,.25)); border-radius: 12px; padding: 10px 12px; background: #fff;
+}
+.portal-checks { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.portal-checks legend { margin-bottom: 6px; }
+.portal-checks label { font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+.portal-btn { border: 0; background: var(--lav-600, #6A5EC8); color: #fff; border-radius: 999px; padding: 10px 20px; font: 800 14px 'Nunito', sans-serif; cursor: pointer; }
+.portal-btn[disabled] { opacity: .6; cursor: wait; }
+.portal-btn-ghost { background: transparent; color: var(--lav-800, #3F3592); border: 1.5px solid var(--border-mid, rgba(123,111,212,.3)); }
+.portal-btn-sm { padding: 6px 12px; font-size: 12.5px; }
+.portal-btn-danger { background: #B33A2B; }
+.portal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.portal-status { font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+.portal-status:empty { display: none; }
+.portal-status.ok { background: #EAF7F0; color: #145C3A; border-radius: 12px; padding: 10px 14px; }
+.portal-status.err { background: #FFF1EE; color: #8A2A1E; border-radius: 12px; padding: 10px 14px; }
+.portal-status.info { background: var(--lav-100); color: var(--lav-800); border-radius: 12px; padding: 10px 14px; }
+.portal-guide { background: var(--lav-100, #EFECFF); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; font-size: 14px; line-height: 1.65; }
+.portal-guide summary { cursor: pointer; font-weight: 800; }
+.portal-guide ol { margin: 8px 0 0 18px; padding: 0; }
+.portal-search { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.portal-search input { flex: 1 1 220px; font: 500 15px 'Nunito', sans-serif; border: 1.5px solid var(--border-mid, rgba(123,111,212,.25)); border-radius: 12px; padding: 10px 12px; }
+.portal-list { display: flex; flex-direction: column; gap: 10px; }
+.portal-item { border: 1px solid var(--border-mid, rgba(123,111,212,.18)); border-radius: 14px; padding: 12px 14px; display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; }
+.portal-item-main { min-width: 0; flex: 1 1 260px; }
+.portal-item-title { font-weight: 800; font-size: 15px; word-break: break-word; }
+.portal-item-meta { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; line-height: 1.6; word-break: break-word; }
+.portal-item-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.portal-pill { display: inline-block; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 2px 9px; margin-right: 4px; }
+.portal-pill.terbit, .portal-pill.ya { background: #DDF5E8; color: #145C3A; }
+.portal-pill.draf, .portal-pill.tidak { background: #FFF2D6; color: #7A5200; }
+.portal-pill.role { background: var(--lav-100); color: var(--lav-800); }
+.portal-toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(120%); background: #2D2550; color: #fff; padding: 12px 18px; border-radius: 14px; font-size: 14px; font-weight: 700; transition: transform .25s ease; max-width: calc(100vw - 32px); z-index: 50; }
+.portal-toast.show { transform: translateX(-50%) translateY(0); }
+@media (prefers-reduced-motion: reduce) { .portal-toast { transition: none; } }

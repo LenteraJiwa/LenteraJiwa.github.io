@@ -6,10 +6,10 @@
 <!-- ══ HEADER ══ -->
 <header style="padding-top:60px;padding-bottom:52px;text-align:center;">
   <div class="container">
-    <div class="section-tag reveal" style="justify-content:center;margin:0 auto 18px;">🧪 Tes Tervalidasi</div>
+    <div class="section-tag reveal" style="justify-content:center;margin:0 auto 18px;">🧪 Tes Refleksi Diri</div>
     <h1 class="section-title reveal" style="text-align:center;max-width:600px;margin:0 auto 20px;">Kenali Dirimu Lebih <em>Dalam</em></h1>
     <p class="section-intro reveal" style="text-align:center;margin:0 auto 12px;">
-      Instrumen tervalidasi secara psikometrik. Gratis, anonim, dan hasilnya langsung kamu lihat.
+      Kuis refleksi diri yang terinspirasi dari skala psikologi populer. Gratis, tanpa akun, dan hasilnya langsung kamu lihat. Jawabanmu tidak dikirim ke server.
     </p>
     <p role="note" class="reveal" style="font-size:13px;color:var(--text-muted);text-align:center;max-width:480px;margin:0 auto;">
       Tes ini bukan diagnosis. Hasilnya adalah titik awal untuk memahami dirimu — bukan label permanen.
@@ -33,7 +33,7 @@
                   onclick="TestEngine.start('wellbeing')">
             Mulai Tes ✨
           </button>
-          <div class="tes-basis">Diadaptasi dari WEMWBS, WHO-5 &amp; PERMA Profiler (α = .87)</div>
+          <div class="tes-basis">Terinspirasi dari konsep WHO-5 &amp; PERMA. Belum divalidasi secara psikometrik.</div>
         </div>
 
         <div class="tes-selector-card" data-tes="kepribadian" role="listitem" tabindex="0" aria-label="Mulai Tes Profil Kepribadian">
@@ -45,7 +45,7 @@
                   onclick="TestEngine.start('kepribadian')">
             Mulai Tes ✨
           </button>
-          <div class="tes-basis">Diadaptasi dari Big Five Inventory, NEO-PI-R (Costa &amp; McCrae, 1992)</div>
+          <div class="tes-basis">Terinspirasi dari teori kepribadian Big Five. Belum divalidasi secara psikometrik.</div>
         </div>
 
         <div class="tes-selector-card" data-tes="stres" role="listitem" tabindex="0" aria-label="Mulai Tes Stres dan Burnout">
@@ -57,18 +57,18 @@
                   onclick="TestEngine.start('stres')">
             Mulai Tes ✨
           </button>
-          <div class="tes-basis">Diadaptasi dari MBI-GS (Schaufeli, 1996) &amp; PSS-10 (Cohen, 1983), α = .83</div>
+          <div class="tes-basis">Terinspirasi dari konsep burnout & stres yang dirasakan. Belum divalidasi secara psikometrik.</div>
         </div>
 
       </div>
     </div>
 
     <!-- ══ FULL TEST ENGINE ══ -->
-    <div id="test-engine" role="main" aria-label="Tes psikologi aktif">
+    <div id="test-engine" role="region" aria-label="Tes psikologi aktif">
       <div class="test-engine-header">
         <div class="test-q-counter" id="q-counter" aria-live="polite">Pertanyaan 1 dari 20</div>
         <div class="test-progress-outer" aria-hidden="true">
-          <div class="test-progress-inner" id="test-progress" style="width:0%;"></div>
+          <div class="test-progress-inner" id="test-progress" style="transform:scaleX(0);transform-origin:left;"></div>
         </div>
       </div>
       <p class="test-question-text" id="test-question" aria-live="polite"></p>
@@ -84,7 +84,7 @@
     </div>
 
     <!-- ══ RESULTS ══ -->
-    <div id="test-results" role="main" aria-label="Hasil tes psikologi" aria-live="polite"></div>
+    <div id="test-results" role="region" aria-label="Hasil tes psikologi" aria-live="polite"></div>
 
   </div>
 </section>

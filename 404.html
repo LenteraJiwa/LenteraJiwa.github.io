@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Lentera Jiwa</title>
+<script>
+/* GitHub Pages menampilkan file ini untuk alamat yang tidak ada sebagai file,
+   misalnya saat halaman /layanan.html di-refresh. Halaman SPA dialihkan ke
+   index.html?p=<halaman>; index.html lalu memulihkan alamat aslinya. */
+(function () {
+  var SPA = ['layanan.html', 'artikel.html', 'perpustakaan.html', 'tes.html', 'tentang.html', 'profil.html'];
+  var parts = location.pathname.split('/');
+  var page = parts.pop();
+  var base = parts.join('/') + '/';
+  if (SPA.indexOf(page) !== -1) {
+    location.replace(base + '?p=' + encodeURIComponent(page) + location.hash);
+  }
+})();
+</script>
+<style>
+  body{font-family:system-ui,sans-serif;background:#F7F5FF;color:#2D2550;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;text-align:center;padding:24px}
+  a{color:#5B4FC4;font-weight:700}
+</style>
+</head>
+<body>
+  <main>
+    <div style="font-size:48px">🪔</div>
+    <h1 style="font-weight:400">Halaman tidak ditemukan</h1>
+    <p>Alamat yang kamu buka tidak ada. <a href="./">Kembali ke Beranda</a></p>
+    <p style="font-size:13px;color:#5A527A">Butuh bantuan segera? Layanan SEJIWA <strong>119 ext 8</strong> · Darurat <strong>112</strong></p>
+  </main>
+</body>
+</html>
