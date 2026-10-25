@@ -1883,3 +1883,7 @@ a.footer-bottom-badge:hover { border-color: rgba(196,190,255,.45); }
   .hero .age-unit { display: none; }
   .hero .age-card-range::after { content: ' th'; }
 }
+/* Isi kolom grid tidak boleh melebarkan kolom melebihi layar (dulu tombol panjang
+   "Mulai Tes Lengkap (20 soal)" membuat halaman HP meluber ke samping) */
+.grid > * { min-width: 0; }
+#tes-demo-full { white-space: normal; text-align: center; line-height: 1.3; }

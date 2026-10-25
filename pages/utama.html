@@ -124,7 +124,7 @@
   <div class="container">
     <div class="trust-strip reveal" role="list" aria-label="Komitmen platform">
       <span class="trust-badge" role="listitem">🧑‍⚕️ Psikolog diverifikasi izin praktiknya</span>
-      <span class="trust-badge" role="listitem">✍️ Artikel ditulis oleh psikolog</span>
+      <span class="trust-badge" role="listitem">✍️ Artikel ditulis atau ditinjau psikolog</span>
       <span class="trust-badge" role="listitem">📋 Tes refleksi diri, bukan diagnosis</span>
       <span class="trust-badge" role="listitem">🇮🇩 Dikembangkan untuk konteks Indonesia</span>
       <span class="trust-badge" role="listitem">🆘 Darurat: SEJIWA 119 ext 8 · 112</span>
@@ -142,25 +142,25 @@
     </div>
 
     <div class="grid grid-3">
-      <article class="layanan-card reveal card-hover" onclick="window.LJ.App.navigateTo('layanan.html')">
+      <article class="layanan-card reveal card-hover" onclick="if(!event.target.closest('a'))window.LJ.App.navigateTo('layanan.html')">
         <div class="layanan-icon-wrap" style="background:var(--lav-100);" aria-hidden="true">💬</div>
         <h3 class="layanan-title">Konsultasi Individual</h3>
         <p class="layanan-desc">Sesi private bersama psikolog berpengalaman. Aman, rahasia, dan nyaman — online maupun tatap muka. Sesi pertama gratis, 20 menit, tanpa komitmen.</p>
-        <a href="layanan.html" class="layanan-cta" aria-label="Jadwalkan sesi konsultasi individual">Jadwalkan Sesi →</a>
+        <a href="layanan.html#booking" class="layanan-cta" data-pilih-layanan="individual" aria-label="Jadwalkan sesi konsultasi individual">Jadwalkan Sesi →</a>
       </article>
 
-      <article class="layanan-card reveal reveal-d2 card-hover" onclick="window.LJ.App.navigateTo('layanan.html')">
+      <article class="layanan-card reveal reveal-d2 card-hover" onclick="if(!event.target.closest('a'))window.LJ.App.navigateTo('layanan.html')">
         <div class="layanan-icon-wrap" style="background:var(--sky-100);" aria-hidden="true">👨‍👩‍👧‍👦</div>
         <h3 class="layanan-title">Terapi Keluarga</h3>
         <p class="layanan-desc">Membangun kedekatan dan komunikasi yang sehat antar anggota keluarga dalam suasana yang hangat. Cocok untuk semua komposisi dan dinamika keluarga.</p>
         <a href="layanan.html" class="layanan-cta" aria-label="Pelajari lebih tentang terapi keluarga">Pelajari Lebih →</a>
       </article>
 
-      <article class="layanan-card reveal reveal-d3 card-hover" onclick="window.LJ.App.navigateTo('layanan.html')">
+      <article class="layanan-card reveal reveal-d3 card-hover" onclick="if(!event.target.closest('a'))window.LJ.App.navigateTo('layanan.html')">
         <div class="layanan-icon-wrap" style="background:var(--peach-100);" aria-hidden="true">🌿</div>
         <h3 class="layanan-title">Workshop Kelompok</h3>
         <p class="layanan-desc">Bertumbuh bersama dalam kelompok kecil yang suportif. Program mindfulness, stres, dan pengembangan diri berbasis CBT dan ACT.</p>
-        <a href="layanan.html" class="layanan-cta" aria-label="Lihat jadwal workshop kelompok">Lihat Jadwal →</a>
+        <a href="layanan.html#booking" class="layanan-cta" data-pilih-layanan="workshop" aria-label="Tanya jadwal workshop kelompok lewat formulir">Tanya Jadwal →</a>
       </article>
     </div>
   </div>
@@ -191,7 +191,7 @@
       <div>
         <div class="section-tag">📝 Konten &amp; Edukasi</div>
         <h2 id="artikel-heading" class="section-title">Artikel untuk <em>Setiap</em> Jiwa</h2>
-        <p class="section-intro">Artikel terbaru dari psikolog di Lentera Jiwa, disesuaikan untuk setiap kelompok usia.</p>
+        <p class="section-intro">Artikel terbaru dari tim Lentera Jiwa, disesuaikan untuk setiap kelompok usia.</p>
       </div>
       <a href="artikel.html" class="btn btn-soft btn-md" style="flex-shrink:0;align-self:flex-end;" aria-label="Lihat semua artikel">
         Semua Artikel →
@@ -223,9 +223,6 @@
           <div style="flex:1;">
             <div class="tes-name">Wellbeing Emosional</div>
             <div class="tes-info">20 pertanyaan · ~10 menit</div>
-            <div class="progress-bar" style="margin-top:10px;" aria-hidden="true">
-              <div class="progress-fill animate" style="width:35%;"></div>
-            </div>
           </div>
           <span class="tes-arrow" aria-hidden="true">→</span>
         </div>
@@ -236,9 +233,6 @@
           <div style="flex:1;">
             <div class="tes-name">Profil Kepribadian</div>
             <div class="tes-info">30 pertanyaan · ~15 menit</div>
-            <div class="progress-bar" style="margin-top:10px;" aria-hidden="true">
-              <div class="progress-fill" style="width:0%;"></div>
-            </div>
           </div>
           <span class="tes-arrow" aria-hidden="true">→</span>
         </div>
@@ -249,9 +243,6 @@
           <div style="flex:1;">
             <div class="tes-name">Stres &amp; Burnout</div>
             <div class="tes-info">15 pertanyaan · ~8 menit</div>
-            <div class="progress-bar" style="margin-top:10px;" aria-hidden="true">
-              <div class="progress-fill" style="width:0%;"></div>
-            </div>
           </div>
           <span class="tes-arrow" aria-hidden="true">→</span>
         </div>
@@ -268,10 +259,11 @@
       <div id="tes-demo-panel" class="tes-demo-panel reveal reveal-d2" aria-live="polite">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
           <span id="tes-demo-title" style="font-size:14px;font-weight:700;color:var(--age-primary);">😌 Wellbeing Emosional</span>
-          <span id="tes-demo-pct" style="font-size:13px;color:var(--text-muted);font-weight:600;" aria-live="polite">0% selesai</span>
+          <span id="tes-demo-pct" style="font-size:13px;color:var(--text-muted);font-weight:600;" aria-live="polite">Contoh 1 dari 4</span>
         </div>
+        <p style="font-size:12.5px;color:var(--text-muted);margin:-10px 0 14px;">🧪 Coba 4 pertanyaan contoh. Jawaban tidak disimpan.</p>
         <div class="progress-bar" style="margin-bottom:28px;" aria-hidden="true">
-          <div id="tes-demo-fill" class="progress-fill animate" style="width:0%;"></div>
+          <div id="tes-demo-fill" class="progress-fill animate" style="width:25%;"></div>
         </div>
         <p id="tes-demo-q" class="tes-demo-question">"Dalam dua minggu terakhir, seberapa sering kamu merasa optimis tentang masa depan?"</p>
         <div id="tes-demo-opts" role="group" aria-label="Pilihan jawaban">
@@ -280,8 +272,8 @@
           <button class="tes-demo-option btn-ripple">Lebih dari separuh waktu</button>
           <button class="tes-demo-option btn-ripple">Hampir setiap hari</button>
         </div>
-        <a href="tes.html" class="btn btn-primary btn-lg btn-ripple w-full" style="margin-top:20px;justify-content:center;" aria-label="Mulai tes lengkap">
-          Mulai Tes Lengkap ✨
+        <a href="tes.html" id="tes-demo-full" class="btn btn-primary btn-lg btn-ripple w-full" style="margin-top:20px;justify-content:center;" aria-label="Mulai tes lengkap">
+          Mulai Tes Lengkap (20 soal) ✨
         </a>
       </div>
     </div>
@@ -295,7 +287,7 @@
       <div>
         <div class="section-tag">📚 Perpustakaan Digital</div>
         <h2 id="buku-heading" class="section-title">Buku &amp; Materi <em>Pilihan</em></h2>
-        <p class="section-intro">Dipilih oleh psikolog di Lentera Jiwa — untuk semua usia dan kebutuhan.</p>
+        <p class="section-intro">Dipilih atau ditinjau tim Lentera Jiwa, untuk semua usia dan kebutuhan.</p>
       </div>
       <a href="perpustakaan.html" class="btn btn-soft btn-md" style="flex-shrink:0;align-self:flex-end;" aria-label="Buka perpustakaan digital">
         Perpustakaan →

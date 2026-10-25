@@ -36,6 +36,11 @@
     else location.href = page;
   }
 
+  /* ── Tautan "Jadwalkan Sesi"/"Tanya Jadwal": pilih layanan di formulir ── */
+  document.querySelectorAll('[data-pilih-layanan]').forEach(a => a.addEventListener('click', () => {
+    try { sessionStorage.setItem('lj_pilih_layanan', a.dataset.pilihLayanan); } catch (e) {}
+  }));
+
   /* ── Statistik ── */
   const statEls = document.querySelectorAll('[data-stat]');
   if (statEls.length) {

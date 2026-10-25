@@ -58,6 +58,14 @@
 
     if (!bookingForm && scheduleChips.length === 0) return;
 
+    // Datang dari Beranda ("Jadwalkan Sesi" / "Tanya Jadwal"): pilih layanannya
+    try {
+      var pilih = sessionStorage.getItem('lj_pilih_layanan');
+      var sel = document.getElementById('layanan-pilih');
+      if (pilih && sel && sel.querySelector('option[value="' + pilih + '"]')) sel.value = pilih;
+      sessionStorage.removeItem('lj_pilih_layanan');
+    } catch (e) {}
+
     scheduleChips.forEach(function(chip) {
       chip.addEventListener('click', function() {
         scheduleChips.forEach(function(c) { c.classList.remove('is-selected'); });

@@ -1,13 +1,9 @@
 /* ============================================================
-   LENTERA JIWA — tes.js  (v2.0 — Full Psychometric Implementation)
-   
-   Instrumen diadaptasi dari:
-   - WEMWBS (Tennant et al., 2007) + WHO-5 + PERMA Profiler
-   - Maslach Burnout Inventory–GS (Schaufeli et al., 1996)
-   - Big Five / NEO-PI-R (Costa & McCrae, 1992)
-   
-   Reliabilitas estimasi Wellbeing: α = .87
-   Reliabilitas estimasi Stres:     α = .83
+   LENTERA JIWA — tes.js
+   Kuis refleksi diri (bukan diagnosis, belum divalidasi secara
+   psikometrik). Butir soal ditulis sendiri, terinspirasi konsep
+   WHO-5 & PERMA, teori Big Five, serta konsep burnout & stres.
+   Jangan menambahkan klaim reliabilitas/validitas tanpa studi.
    ============================================================ */
 
 'use strict';
@@ -714,8 +710,8 @@ const TES_DATA = {
     total: 20,
     questions: WELLBEING_QUESTIONS,
     calculate: calculateWellbeingScore,
-    disclaimer: 'Diadaptasi dari WEMWBS, WHO-5, dan PERMA Profiler. Reliabilitas estimasi: α = .87',
-    basis: 'Warwick-Edinburgh Mental Wellbeing Scale (Tennant et al., 2007)',
+    disclaimer: 'Kuis refleksi diri, terinspirasi konsep WHO-5 & PERMA. Belum divalidasi secara psikometrik.',
+    basis: 'Terinspirasi konsep WHO-5 & PERMA (bukan instrumen aslinya)',
   },
   kepribadian: {
     id: 'kepribadian',
@@ -725,8 +721,8 @@ const TES_DATA = {
     total: 30,
     questions: KEPRIBADIAN_QUESTIONS,
     calculate: calculateKepribadianScore,
-    disclaimer: 'Diadaptasi dari Big Five Inventory (Costa & McCrae, 1992) dan NEO-PI-R.',
-    basis: 'Big Five Personality Inventory — versi adaptasi Indonesia (Ramdhani, 2012, UGM)',
+    disclaimer: 'Kuis refleksi diri, terinspirasi teori kepribadian Big Five. Belum divalidasi secara psikometrik.',
+    basis: 'Terinspirasi teori Big Five (bukan instrumen aslinya)',
   },
   stres: {
     id: 'stres',
@@ -736,14 +732,18 @@ const TES_DATA = {
     total: 15,
     questions: STRES_QUESTIONS,
     calculate: calculateStresScore,
-    disclaimer: 'Diadaptasi dari Maslach Burnout Inventory–GS dan PSS-10. Reliabilitas estimasi: α = .83',
-    basis: 'Maslach Burnout Inventory (Schaufeli et al., 1996) & Perceived Stress Scale (Cohen et al., 1983)',
+    disclaimer: 'Kuis refleksi diri, terinspirasi konsep burnout & stres yang dirasakan. Belum divalidasi secara psikometrik.',
+    basis: 'Terinspirasi konsep burnout & stres yang dirasakan (bukan instrumen aslinya)',
   },
 };
 
 /* ══════════════════════════════════════════════════════════
    BAGIAN V — TES MANAGER (UI Engine)
    ══════════════════════════════════════════════════════════ */
+
+/* Panel di Beranda hanya CONTOH beberapa pertanyaan (jawaban tidak disimpan).
+   Tes sungguhan ada di halaman Tes. */
+const DEMO_N = 4;
 
 const TesManager = {
   currentTes: null,
@@ -753,7 +753,16 @@ const TesManager = {
 
   init() {
     this.initTesCards();
-    this.initDemoOptions();
+    // Beranda: panel contoh langsung aktif (dulu pilihan awal hanya berubah warna, tidak berjalan)
+    const panel = document.getElementById('tes-demo-panel');
+    const card = document.querySelector('.tes-card.is-active[data-tes-id]') || document.querySelector('.tes-card[data-tes-id]');
+    if (panel && card) {
+      this.currentTes = TES_DATA[card.getAttribute('data-tes-id')];
+      this.currentQ = 0; this.answers = []; this._busy = false;
+      if (this.currentTes) this._updateDemoPanelDOM(this.currentTes, this.currentTes.questions[0], 0);
+    } else {
+      this.initDemoOptions();
+    }
   },
 
   /* ── Select test card ──────────────────────────────────── */
@@ -762,6 +771,10 @@ const TesManager = {
       card.addEventListener('click', () => {
         const id = card.getAttribute('data-tes-id');
         this.selectTes(id, card);
+      });
+      // Enter / Spasi juga memilih kartu (sebelumnya hanya klik)
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.selectTes(card.getAttribute('data-tes-id'), card); }
       });
     });
   },
@@ -776,8 +789,9 @@ const TesManager = {
     this.mode       = 'demo';
 
     /* Active state */
-    document.querySelectorAll('[data-tes-id]').forEach(c => c.classList.remove('is-active'));
-    if (cardEl) cardEl.classList.add('is-active');
+    document.querySelectorAll('[data-tes-id]').forEach(c => { c.classList.remove('is-active'); c.setAttribute('aria-pressed', 'false'); });
+    if (cardEl) { cardEl.classList.add('is-active'); cardEl.setAttribute('aria-pressed', 'true'); }
+    this._busy = false;
 
     this.renderDemo(tes);
   },
@@ -810,9 +824,11 @@ const TesManager = {
     const optsEl  = document.getElementById('tes-demo-opts');
 
     if (titleEl) titleEl.textContent = `${tes.icon} ${tes.title}`;
-    if (pctEl)   pctEl.textContent   = `${Math.round(pct)}% selesai`;
-    if (fillEl)  fillEl.style.width  = `${pct}%`;
+    if (pctEl)   pctEl.textContent   = `Contoh 1 dari ${DEMO_N}`;
+    if (fillEl)  fillEl.style.width  = `${100 / DEMO_N}%`;
     if (qEl)     qEl.textContent     = `"${q.text}"`;
+    const full = document.getElementById('tes-demo-full');
+    if (full) full.textContent = `Mulai Tes Lengkap (${tes.total} soal) ✨`;
 
     if (optsEl) {
       optsEl.innerHTML = '';
@@ -830,6 +846,9 @@ const TesManager = {
     btn.setAttribute('aria-label', `Pilih: ${text}`);
 
     btn.addEventListener('click', () => {
+      // Klik dua kali cepat tidak boleh melompati pertanyaan
+      if (this._busy) return;
+      this._busy = true;
       /* Deselect all */
       container.querySelectorAll('.tes-demo-option').forEach(b => {
         b.classList.remove('is-selected');
@@ -851,8 +870,9 @@ const TesManager = {
     if (!tes) return;
 
     this.currentQ++;
+    this._busy = false;
 
-    if (this.currentQ >= tes.questions.length || this.currentQ >= 4) {
+    if (this.currentQ >= tes.questions.length || this.currentQ >= DEMO_N) {
       /* Demo uses only first 4 questions, then prompts for full test */
       this.showDemoComplete();
       return;
@@ -879,8 +899,8 @@ const TesManager = {
     if (optsEl) optsEl.style.opacity = '0';
 
     setTimeout(() => {
-      if (fillEl) fillEl.style.width = `${pct}%`;
-      if (pctEl)  pctEl.textContent  = `${Math.round(pct)}% selesai`;
+      if (fillEl) fillEl.style.width = `${((this.currentQ + 1) / DEMO_N) * 100}%`;
+      if (pctEl)  pctEl.textContent  = `Contoh ${this.currentQ + 1} dari ${DEMO_N}`;
 
       if (qEl) {
         qEl.textContent = `"${q.text}"`;
@@ -915,12 +935,16 @@ const TesManager = {
     const pctEl  = document.getElementById('tes-demo-pct');
 
     if (fillEl) fillEl.style.width  = '100%';
-    if (pctEl)  pctEl.textContent   = '100% demo selesai ✓';
+    if (pctEl)  pctEl.textContent   = 'Contoh selesai ✓';
+    const total = this.currentTes ? this.currentTes.total : '';
 
     if (qEl) {
       qEl.style.opacity = '0';
       setTimeout(() => {
-        qEl.innerHTML = '<em>Bagus! Kamu sudah mencoba demo singkat ini. Mulai tes lengkap untuk melihat hasil akuratmu.</em>';
+        qEl.textContent = '';
+        const em = document.createElement('em');
+        em.textContent = `Itu tadi ${DEMO_N} pertanyaan contoh. Jawabanmu tidak disimpan dan tidak dinilai. Kerjakan tes lengkap (${total} soal) untuk melihat hasilmu.`;
+        qEl.append(em);
         qEl.style.opacity = '1';
       }, 220);
     }
