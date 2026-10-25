@@ -38,7 +38,7 @@
     grid.textContent = '';
     empty.style.display = 'none';
     if (count) count.textContent = shown.length + ' buku';
-    if (!LIST.length) return showEmpty('Koleksi sedang disiapkan', 'Psikolog kami sedang memilih buku dan materi pertama. Kembali lagi nanti, ya.', false);
+    if (!LIST.length) return showEmpty('Koleksi sedang disiapkan', 'Buku dan materi pertama sedang dipilih. Kembali lagi nanti, ya.', false);
     if (!shown.length) return showEmpty('Belum ada buku untuk pilihan ini', 'Coba kata kunci lain atau pilih "Semua".', true);
     shown.forEach(b => {
       const card = el('div', 'book-card');

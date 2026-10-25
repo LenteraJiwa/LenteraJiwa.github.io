@@ -49,7 +49,7 @@
   function render(filter) {
     const shown = LIST.filter(a => filter === 'semua' || (a.usia || []).indexOf(filter) >= 0);
     grid.textContent = '';
-    if (!LIST.length) return message('Artikel sedang disiapkan.', 'Psikolog kami sedang menulis artikel pertama. Kembali lagi nanti, ya.');
+    if (!LIST.length) return message('Artikel sedang disiapkan.', 'Artikel pertama sedang disiapkan. Kembali lagi nanti, ya.');
     if (!shown.length) return message('Belum ada artikel untuk kelompok usia ini.', 'Coba pilih "Semua".');
     shown.forEach(a => grid.append(card(a)));
     grid.setAttribute('aria-busy', 'false');

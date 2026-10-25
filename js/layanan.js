@@ -58,7 +58,14 @@
 
     if (!bookingForm && scheduleChips.length === 0) return;
 
-    // Datang dari Beranda ("Jadwalkan Sesi" / "Tanya Jadwal"): pilih layanannya
+    // Tombol "Daftar Minat" di kartu layanan: langsung pilih layanannya di formulir
+    document.querySelectorAll('[data-pilih-layanan]').forEach(function(a) {
+      a.addEventListener('click', function() {
+        var sel = document.getElementById('layanan-pilih');
+        if (sel && sel.querySelector('option[value="' + a.getAttribute('data-pilih-layanan') + '"]')) sel.value = a.getAttribute('data-pilih-layanan');
+      });
+    });
+    // Datang dari Beranda ("Daftar Minat"): pilih layanannya
     try {
       var pilih = sessionStorage.getItem('lj_pilih_layanan');
       var sel = document.getElementById('layanan-pilih');
@@ -238,7 +245,7 @@
         else EMB.aiMsgs.forEach(function(msg){b.insertAdjacentHTML('beforeend',rAI(msg));});
       } else {
         b.innerHTML=empty+'<div style="font-size:36px;margin-bottom:8px;">👨‍⚕️</div><p style="font-size:13px;line-height:1.65;"><b>Tanya Pakar belum tersedia.</b><br>Saat ini belum ada psikolog yang menjawab pertanyaan lewat chat ini.</p>'
-          +'<p style="font-size:12px;line-height:1.6;margin-top:10px;">Kamu bisa <a href="#booking" style="color:#7B6FD4;font-weight:700;">mengisi form konsultasi</a> di bawah.<br>Jika darurat, hubungi <b>119 ext 8</b> (SEJIWA) atau <b>112</b>.</p></div>';
+          +'<p style="font-size:12px;line-height:1.6;margin-top:10px;">Kamu bisa <a href="#bantuan" style="color:#7B6FD4;font-weight:700;">melihat pilihan bantuan</a> yang tersedia sekarang.<br>Jika darurat, hubungi <b>119 ext 8</b> (SEJIWA) atau <b>112</b>.</p></div>';
       }
       scr();
     }
@@ -358,8 +365,7 @@
     }
 
     embRender();
-    var oc=Math.floor(Math.random()*40+24);
-    var oel=document.getElementById('emb-online');if(oel)oel.textContent=oc;
+    // (Dulu di sini angka "Online" ACAK 24–63. Dihapus: angka palsu.)
     liveStartPolling();
   }
 

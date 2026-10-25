@@ -59,7 +59,7 @@
     LJ_AUTH.apiGet('getKonten', { tipe: 'artikel' }).then(r => {
       if (!r.ok) return info(homeArt, 'artikel-card', 'Artikel belum bisa dimuat. Periksa koneksi internetmu.', loadArt);
       const list = (r.konten || []).slice(0, 3);
-      if (!list.length) return info(homeArt, 'artikel-card', '📭 Artikel pertama sedang ditulis oleh psikolog kami.');
+      if (!list.length) return info(homeArt, 'artikel-card', '📭 Artikel pertama sedang disiapkan.');
       homeArt.textContent = '';
       list.forEach(a => {
         const c = el('article', 'artikel-card card-hover');

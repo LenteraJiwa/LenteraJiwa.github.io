@@ -235,3 +235,8 @@
   .form-row        { grid-template-columns: 1fr; }
   .schedule-grid   { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* HP: jarak atas tidak dihitung dua kali (ruang menu 88 px sudah ada di <main>) */
+@media (max-width: 480px) {
+  .layanan-hero { padding-top: 16px !important; padding-bottom: 32px !important; gap: 24px; }
+}

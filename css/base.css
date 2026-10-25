@@ -1887,3 +1887,25 @@ a.footer-bottom-badge:hover { border-color: rgba(196,190,255,.45); }
    "Mulai Tes Lengkap (20 soal)" membuat halaman HP meluber ke samping) */
 .grid > * { min-width: 0; }
 #tes-demo-full { white-space: normal; text-align: center; line-height: 1.3; }
+
+/* Layanan belum dibuka: lencana "Sedang disiapkan" & kartu bantuan */
+.soon-badge {
+  display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
+  padding: 5px 12px; margin: 4px 0 14px; border-radius: 999px;
+  background: var(--sun-100, #FFF6D6); color: #8A6400; font-size: 12.5px; font-weight: 700;
+}
+.soon-badge::before { content: '🗓️'; }
+.pricing-card .soon-badge { margin: 10px 0 6px; }
+.help-card {
+  display: flex; gap: 14px; align-items: flex-start; padding: 18px;
+  background: rgba(255,255,255,.75); border: 1px solid var(--border-mid, rgba(123,111,212,.2));
+  border-radius: 18px;
+}
+.help-card.help-urgent { border-color: rgba(232,139,106,.45); background: #FFF7F3; }
+.help-ico { font-size: 26px; flex-shrink: 0; line-height: 1; }
+.help-t { font-weight: 800; font-size: 15.5px; color: var(--text-primary); margin-bottom: 4px; }
+.help-d { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+.help-a {
+  display: inline-flex; align-items: center; min-height: 40px; margin-top: 10px; padding: 0 16px;
+  border-radius: 999px; background: #C0392B; color: #fff; font-weight: 800; font-size: 14px; text-decoration: none;
+}

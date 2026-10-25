@@ -358,7 +358,7 @@ const TestEngine = {
 
   _renderResultFooter(result) {
     return (
-      '<div class="result-disclaimer" role="note">📋 Hasil ini didasarkan pada jawabanmu hari ini dan bersifat indikatif. Untuk pemahaman lebih mendalam, konsultasikan hasilmu dengan psikolog kami.</div>' +
+      '<div class="result-disclaimer" role="note">📋 Hasil ini didasarkan pada jawabanmu hari ini dan bersifat indikatif. Untuk pemahaman lebih mendalam, bicarakan hasilmu dengan psikolog atau konselor profesional.</div>' +
       '<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">' +
         '<a href="' + (result.ctaHref || 'layanan.html') + '" class="btn btn-primary btn-lg btn-ripple">' + result.cta + '</a>' +
         '<button onclick="TestEngine.reset()" class="btn btn-soft btn-lg">Coba Tes Lain →</button>' +
