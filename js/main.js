@@ -373,14 +373,7 @@ const App = {
 
             this.afterPageLoad(page);
 
-            if (hash) {
-              setTimeout(() => {
-                const target = document.getElementById(hash);
-                if (target) {
-                  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }, 200);
-            }
+            if (hash) scrollToHash(hash);
 
             if (pageConf && pageConf.js && pageConf.js.length > 0) {
               pageConf.js.forEach(src => this.loadPageScript(src));
@@ -714,6 +707,30 @@ const ToastManager = {
    INITIAL PAGE LOAD
    PERBAIKAN: loadPageStyles HARUS selesai sebelum inject HTML
    ══════════════════════════════════════════════════════════ */
+/* Gulir ke bagian tujuan (#id), memperhitungkan menu atas yang menempel.
+   Diulang setelah konten di atasnya (statistik, gambar) selesai dimuat,
+   karena konten itu bisa mendorong posisi tujuan. */
+function scrollToHash(hash) {
+  const go = (smooth) => {
+    let t = null;
+    try { t = document.getElementById(decodeURIComponent(hash)); } catch (e) { return; }
+    if (!t) return null;
+    const nav = document.querySelector('.navbar, #navbar, header');
+    const fixed = nav && /fixed|sticky/.test(getComputedStyle(nav).position);
+    const off = (fixed ? nav.offsetHeight : 0) + 16;
+    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - off, behavior: smooth ? 'smooth' : 'auto' });
+    return off;
+  };
+  setTimeout(() => go(true), 150);
+  [800, 1600, 2600].forEach(ms => setTimeout(() => {
+    const t = document.getElementById(hash);
+    if (!t) return;
+    const nav = document.querySelector('.navbar, #navbar, header');
+    const want = (nav && /fixed|sticky/.test(getComputedStyle(nav).position) ? nav.offsetHeight : 0) + 16;
+    if (Math.abs(t.getBoundingClientRect().top - want) > 40) go(false);
+  }, ms));
+}
+
 function initialLoad() {
   const appContent = document.getElementById('app-content');
   if (!appContent) return;
@@ -779,12 +796,7 @@ function initialLoad() {
 
         App.updateNavActiveLinks(page);
 
-        if (window.location.hash) {
-          const target = document.querySelector(window.location.hash);
-          if (target) {
-            setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-          }
-        }
+        if (window.location.hash) scrollToHash(window.location.hash.slice(1));
 
         /* Prefetch halaman lain saat browser idle */
         const prefetchPages = Object.values(PAGE_MAP)

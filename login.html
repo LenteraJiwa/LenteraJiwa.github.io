@@ -171,16 +171,16 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 /* Animasi slide — dipakai via JS classList */
 .sc.slide-out-left{
-  animation:slideOutLeft 0.42s cubic-bezier(.77,0,.18,1) forwards;
+  animation:slideOutLeft 0.2s cubic-bezier(.77,0,.18,1) forwards;
 }
 .sc.slide-out-right{
-  animation:slideOutRight 0.42s cubic-bezier(.77,0,.18,1) forwards;
+  animation:slideOutRight 0.2s cubic-bezier(.77,0,.18,1) forwards;
 }
 .sc.slide-in-right{
-  animation:slideInRight 0.42s cubic-bezier(.77,0,.18,1) forwards;
+  animation:slideInRight 0.22s cubic-bezier(.77,0,.18,1) forwards;
 }
 .sc.slide-in-left{
-  animation:slideInLeft 0.42s cubic-bezier(.77,0,.18,1) forwards;
+  animation:slideInLeft 0.22s cubic-bezier(.77,0,.18,1) forwards;
 }
 
 @keyframes slideOutLeft{
@@ -218,7 +218,7 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 .rc-ico{font-size:2rem;display:block;margin-bottom:.5rem;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
 .rc:hover .rc-ico,.rc.on .rc-ico{transform:scale(1.18) rotate(-6deg)}
 .rc-name{font-size:.9rem;font-weight:600;color:var(--text-w);display:block}
-.rc-desc{font-size:.71rem;color:var(--text-w3);display:block;margin-top:.3rem;line-height:1.4}
+.rc-desc{font-size:.8rem;color:var(--text-w3);display:block;margin-top:.3rem;line-height:1.4}
 
 /* === INFO PILL === */
 .pill{
@@ -240,8 +240,8 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 .role-single:hover{border-color:rgba(0,200,150,.35);background:rgba(0,200,150,.07)}
 .role-single.on{border-color:var(--teal);background:rgba(0,200,150,.1)}
 .role-single-ico{font-size:1.8rem;flex-shrink:0}
-.role-single-text .rc-name{display:block;font-size:.9rem;font-weight:600;color:var(--text-w)}
-.role-single-text .rc-desc{display:block;font-size:.72rem;color:var(--text-w3);margin-top:.2rem;line-height:1.4}
+.role-single-text .rc-name{display:block;font-size:.97rem;font-weight:600;color:var(--text-w)}
+.role-single-text .rc-desc{display:block;font-size:.8rem;color:var(--text-w3);margin-top:.2rem;line-height:1.4}
 .role-single .rc-badge{top:50%;right:12px;transform:translateY(-50%) scale(0)}
 .role-single.on .rc-badge{transform:translateY(-50%) scale(1);opacity:1}
 
@@ -263,6 +263,7 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 .btn-a:not(:disabled):active{transform:scale(.97)}
 .btn-row{display:flex;gap:10px}
 .btn-row .btn{flex:1}
+.btn-row .btn-g{flex:0 0 auto!important;width:auto;padding-left:1.1rem;padding-right:1.1rem;white-space:nowrap}
 
 /* Ripple */
 .ripple-el{position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);animation:rpl .65s linear;pointer-events:none}
@@ -270,22 +271,25 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 /* === FORM === */
 .fg{margin-bottom:1rem}
-.lbl{display:block;font-size:.74rem;font-weight:600;color:var(--text-w2);margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+.lbl{display:block;font-size:.78rem;font-weight:600;color:var(--text-w2);margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
 .iw{position:relative}
 .iw input,.iw select{
   width:100%;padding:.72rem 1rem;
   background:var(--inp-bg);border:1.5px solid var(--inp-border);
   border-radius:var(--r3);font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:.88rem;color:var(--text-w);outline:none;
-  transition:all .22s ease;-webkit-appearance:none;appearance:none;
+  font-size:.95rem;color:var(--text-w);outline:none;min-height:46px;
+  transition:border-color .22s ease,background-color .22s ease,box-shadow .22s ease;-webkit-appearance:none;appearance:none;
 }
 .iw input::placeholder{color:var(--text-w3)}
 .iw input:focus,.iw select:focus{border-color:var(--teal);background:rgba(0,200,150,.06);box-shadow:0 0 0 3px rgba(0,200,150,.14)}
 .iw input.e{border-color:var(--err)}
 .iw input.o{border-color:var(--ok)}
-.ico{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-w3);font-size:.88rem;user-select:none;transition:color .2s}
+.ico{position:absolute;right:.25rem;top:50%;transform:translateY(-50%);width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:10px;cursor:pointer;color:var(--text-w3);font-size:1rem;user-select:none;transition:color .2s}
+span.ico{pointer-events:none}
+button.ico:focus-visible,.back:focus-visible,.lnk:focus-visible,.role-single:focus-visible,.gopt:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .ico:hover{color:var(--text-w2)}
-.fs{font-size:.72rem;margin-top:3px;min-height:13px;transition:all .2s}
+.fs{font-size:.78rem;margin-top:4px;min-height:14px;transition:all .2s;line-height:1.45}
+.fs:empty{min-height:0;margin-top:0}
 .fs.ok{color:var(--ok)}.fs.err{color:var(--err)}.fs.info{color:var(--text-w3)}
 
 /* grid 2 cols */
@@ -295,7 +299,7 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 /* password bar */
 .pw-bar{height:3px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:7px;overflow:hidden}
 .pw-fill{height:100%;width:0;border-radius:3px;transition:width .4s,background .4s}
-.pw-lbl{font-size:.68rem;color:var(--text-w3);margin-top:3px}
+.pw-lbl{font-size:.76rem;color:var(--text-w3);margin-top:3px}
 
 /* captcha */
 .cap-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border:1.5px solid var(--inp-border);border-radius:var(--r3);padding:.7rem 1rem;margin-bottom:1rem}
@@ -309,12 +313,12 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 .math-c{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1.5px solid var(--inp-border);border-radius:var(--r3);padding:.6rem 1rem;margin-bottom:1rem}
 .math-q{font-weight:600;font-size:.95rem;color:var(--teal);font-family:'Cormorant Garamond',serif;font-size:1.1rem}
 .math-c input{width:60px!important;text-align:center;font-weight:700}
-.ref{background:none;border:none;cursor:pointer;color:var(--teal2);font-size:1.1rem;padding:0;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.ref{background:none;border:none;cursor:pointer;color:var(--teal2);font-size:1.25rem;padding:0;width:42px;height:42px;border-radius:10px;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
 .ref:hover{transform:rotate(200deg)}
 
 /* step bar */
 .sbar{display:flex;align-items:center;margin-bottom:1.3rem}
-.sd{width:25px;height:25px;border-radius:50%;border:2px solid rgba(255,255,255,.18);color:var(--text-w3);font-size:.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.sd{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.18);color:var(--text-w3);font-size:.8rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .4s cubic-bezier(.34,1.56,.64,1)}
 .sd.act{border-color:var(--teal);color:var(--teal);background:rgba(0,200,150,.1);transform:scale(1.12)}
 .sd.dn{border-color:var(--teal);background:var(--teal);color:#fff}
 .sl{flex:1;height:2px;background:rgba(255,255,255,.08);transition:background .5s}
@@ -322,7 +326,7 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 /* gender */
 .gend-row{display:flex;gap:8px}
-.gopt{flex:1;border:1.5px solid rgba(255,255,255,.13);border-radius:var(--r3);padding:.5rem .3rem;text-align:center;cursor:pointer;font-size:.8rem;color:var(--text-w2);transition:all .25s cubic-bezier(.34,1.56,.64,1);user-select:none}
+.gopt{flex:1;border:1.5px solid rgba(255,255,255,.13);border-radius:var(--r3);padding:.7rem .4rem;min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;font-size:.88rem;color:var(--text-w2);transition:all .25s cubic-bezier(.34,1.56,.64,1);user-select:none}
 .gopt:hover{border-color:rgba(0,200,150,.35);background:rgba(0,200,150,.06)}
 .gopt.on{border-color:var(--teal);background:rgba(0,200,150,.1);color:var(--teal);font-weight:600}
 
@@ -341,18 +345,19 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 .fzone input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .fzi{font-size:1.7rem;margin-bottom:5px;display:block}
 .fzl{font-size:.82rem;color:var(--text-w2)}
-.fzh{font-size:.7rem;color:var(--text-w3);margin-top:3px}
+.fzh{font-size:.78rem;color:var(--text-w3);margin-top:3px}
 .fprev{display:none;margin-top:8px;background:rgba(0,200,150,.07);border-radius:var(--r3);padding:6px 10px;font-size:.77rem;color:var(--ok);align-items:center;gap:6px}
 
 /* otp */
 .otp-row{display:flex;gap:8px;justify-content:center;margin:.8rem 0}
-.oti{width:44px!important;height:48px;text-align:center;font-size:1.15rem;font-weight:700;padding:0!important;border:2px solid rgba(255,255,255,.14)!important}
-.oti:focus{border-color:var(--teal)!important}
+.oti{width:46px;height:52px;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:700;padding:0;color:var(--text-w);background:var(--inp-bg);border:2px solid rgba(255,255,255,.16);border-radius:var(--r3);outline:none;caret-color:var(--teal);transition:border-color .2s,background .2s}
+.oti:focus{background:rgba(0,200,150,.06);box-shadow:0 0 0 3px rgba(0,200,150,.14)}
+.oti:focus{border-color:var(--teal)}
 
 /* checkbox */
 .ckrow{display:flex;gap:9px;align-items:flex-start;margin-bottom:.9rem}
-.ckrow input[type=checkbox]{width:16px;height:16px;accent-color:var(--teal);flex-shrink:0;margin-top:2px;cursor:pointer}
-.ckrow label{font-size:.78rem;color:var(--text-w2);cursor:pointer}
+.ckrow input[type=checkbox]{width:20px;height:20px;accent-color:var(--teal);flex-shrink:0;margin-top:2px;cursor:pointer}
+.ckrow label{font-size:.84rem;line-height:1.5;color:var(--text-w2);cursor:pointer}
 .ckrow a{color:var(--teal);text-decoration:none}
 
 /* select */
@@ -360,7 +365,7 @@ canvas#cvs{position:fixed;inset:0;z-index:0;pointer-events:none}
 select option{background:#082218;color:#fff}
 
 /* notif */
-.nf{padding:.68rem 1rem;border-radius:var(--r3);font-size:.8rem;margin-bottom:.9rem;display:none;animation:fadePill .3s ease}
+.nf{padding:.7rem 1rem;border-radius:var(--r3);font-size:.86rem;line-height:1.5;margin-bottom:.9rem;display:none;animation:fadePill .3s ease}
 .nf.show{display:block}
 .nf.ok{background:rgba(76,217,168,.09);color:var(--ok);border:1px solid rgba(76,217,168,.22)}
 .nf.err{background:rgba(255,107,107,.09);color:var(--err);border:1px solid rgba(255,107,107,.22)}
@@ -376,15 +381,26 @@ select option{background:#082218;color:#fff}
 .suc-m{font-size:.83rem;color:var(--text-w2);line-height:1.7;margin-bottom:1.5rem}
 
 /* links */
-.lnks{display:flex;justify-content:space-between;align-items:center;margin-top:1.1rem;font-size:.78rem}
+.lnks{display:flex;justify-content:center;align-items:center;margin-top:.8rem;font-size:.88rem}
 .lnks a{color:var(--teal);cursor:pointer;text-decoration:none;transition:opacity .2s}
 .lnks a:hover{opacity:.7;text-decoration:underline}
-.lnk{color:var(--teal);cursor:pointer;text-decoration:none;font-size:.79rem;transition:opacity .2s}
+.lnk{color:var(--teal);cursor:pointer;text-decoration:none;font-size:.88rem;transition:opacity .2s;background:none;border:0;font-family:inherit;padding:.65rem .5rem;min-height:40px;display:inline-flex;align-items:center;border-radius:8px}
+.lnk:disabled{color:var(--text-w3);cursor:default;opacity:1}
+.lnk-sm{font-size:.84rem;padding:.55rem .35rem}
+/* tombol kembali */
+.back{width:40px;height:40px;margin:-8px 0 -8px -10px;padding:0;display:inline-flex;align-items:center;justify-content:center;background:none;border:0;border-radius:10px;color:var(--text-w2);font-size:1.25rem;line-height:1;cursor:pointer;font-family:system-ui,sans-serif}
+.back:hover{background:rgba(255,255,255,.07);color:var(--text-w)}
+.sc-head{display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.sc-head span{line-height:1;font-size:.76rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase}
+.signed{background:rgba(245,185,66,.08);border:1px solid rgba(245,185,66,.25);border-radius:var(--r3);padding:.8rem 1rem;margin-bottom:1.1rem;font-size:.86rem;color:var(--text-w2);line-height:1.5}
+.signed strong{color:var(--text-w)}
+.signed .row{display:flex;gap:8px;margin-top:.6rem}
+.signed .btn{padding:.6rem;font-size:.84rem}
 .lnk:hover{opacity:.7}
 
 /* === RESPONSIVE MOBILE === */
 @media(max-width:480px){
-  .stage{padding:1rem .4rem;align-items:flex-start;padding-top:3rem}
+  .stage{padding:1rem .75rem;align-items:flex-start;padding-top:1.25rem}
   .card{max-width:100%;border-radius:20px}
   .sc{padding:1.3rem 1.3rem 1.7rem}
   .logo-area{padding:1.8rem 1.3rem 0}
@@ -395,14 +411,27 @@ select option{background:#082218;color:#fff}
   .g2{grid-template-columns:1fr}
   .gend-row{flex-wrap:wrap}
   .otp-row{gap:6px}
-  .oti{width:38px!important;height:42px}
-  .btn-row{flex-direction:column}
-  .lnks{flex-direction:column;gap:9px;text-align:center}
+  .oti{width:40px;height:48px}
+  .iw input,.iw select,.oti{font-size:16px}
 }
 @media(min-width:481px) and (max-width:899px){
-  .card{max-width:430px}
-  .stage{padding:1.5rem .75rem}
-  .oti{width:40px!important;height:44px}
+  .card{max-width:480px}
+  .stage{padding:1.5rem 1rem}
+  .iw input,.iw select,.oti{font-size:16px}
+}
+@media(max-width:340px){
+  .btn-row{flex-direction:column-reverse}
+  .oti{width:36px;height:44px}
+  .otp-row{gap:4px}
+}
+/* Perangkat sentuh (HP & tablet, termasuk mendatar): isian 16px agar tidak di-zoom & mudah dibaca */
+@media(pointer:coarse){
+  .iw input,.iw select,.oti{font-size:16px}
+}
+/* Hormati pengaturan 'kurangi animasi' di HP/laptop */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  #cvs,.leaves{display:none}
 }
 </style>
 </head>
@@ -425,12 +454,7 @@ select option{background:#082218;color:#fff}
       <div class="pc-lamp">🪔</div>
       <div class="pc-logo-t">Lentera <em>Jiwa</em></div>
       <div class="pc-logo-s">Merawat Jiwa · Menerangi Perjalanan</div>
-      <p class="pc-tagline">Platform kesehatan jiwa khusus mahasiswa. Aman, terverifikasi, dan terpercaya.</p>
-      <div class="pc-dots">
-        <div class="pc-dot a"></div>
-        <div class="pc-dot"></div>
-        <div class="pc-dot"></div>
-      </div>
+      <p class="pc-tagline">Ruang aman untuk merawat kesehatan jiwa, bagi mahasiswa dan masyarakat umum.</p>
     </div>
   </div>
 
@@ -454,7 +478,9 @@ select option{background:#082218;color:#fff}
         <div class="sc-sub" style="text-align:center">Pilih cara akses yang sesuai untukmu</div>
 
         <!-- Pengunjung: tombol langsung masuk tanpa role card -->
-        <div class="role-single" id="rcG" onclick="pickRole('guest')">
+        <div class="signed" id="signedBox" style="display:none"></div>
+
+        <div class="role-single" id="rcG" onclick="pickRole('guest')" role="button" tabindex="0" aria-pressed="false">
           <div class="rc-badge">✓</div>
           <span class="role-single-ico">🌍</span>
           <div class="role-single-text">
@@ -464,7 +490,7 @@ select option{background:#082218;color:#fff}
         </div>
 
         <!-- Mahasiswa: perlu login -->
-        <div class="role-single" id="rcM" onclick="pickRole('mhs')">
+        <div class="role-single" id="rcM" onclick="pickRole('mhs')" role="button" tabindex="0" aria-pressed="false">
           <div class="rc-badge">✓</div>
           <span class="role-single-ico">🔐</span>
           <div class="role-single-text">
@@ -473,52 +499,45 @@ select option{background:#082218;color:#fff}
           </div>
         </div>
 
-        <!-- Belum punya akun -->
-        <div class="role-single" id="rcN" onclick="go('scR1','r')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();go('scR1','r')}">
-          <span class="role-single-ico">✨</span>
-          <div class="role-single-text">
-            <span class="rc-name">Buat Akun Baru</span>
-            <span class="rc-desc">Gratis · akun umum (18+) atau mahasiswa</span>
-          </div>
-        </div>
-
         <div class="pill" id="wPill" style="display:none"></div>
 
-        <button class="btn btn-p" id="wBtn" onclick="wAction()" disabled>Pilih cara masuk →</button>
+        <button type="button" class="btn btn-p" id="wBtn" onclick="wAction()" disabled>Pilih cara masuk →</button>
 
-        <div class="lnks" style="margin-top:1rem">
-          <a onclick="go('scForgot','r')">Lupa kata sandi?</a>
-          <a onclick="go('scR1','r')">Daftar akun baru →</a>
+        <div class="lnks" style="margin-top:.9rem;justify-content:space-between">
+          <button type="button" class="lnk" onclick="openForgot()">Lupa kata sandi?</button>
+          <button type="button" class="lnk" onclick="go('scR1','r')">Daftar akun baru →</button>
         </div>
       </div>
 
       <!-- ===== LOGIN MAHASISWA ===== -->
       <div class="sc" id="scL" style="display:none">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.1rem">
-          <a onclick="go('scW','l')" style="color:var(--text-w3);cursor:pointer;font-size:1rem;line-height:1">←</a>
-          <div style="font-size:.7rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase">Masuk ke Akun</div>
+        <div class="sc-head">
+          <button type="button" class="back" onclick="go('scW','l')" aria-label="Kembali">←</button>
+          <span>Masuk ke Akun</span>
         </div>
         <div class="sc-title" style="font-size:1.35rem">Selamat Datang Kembali</div>
-        <div class="sc-sub">Masuk dengan akun mahasiswa terverifikasi</div>
-        <div class="nf" id="lNf"></div>
+        <div class="sc-sub">Masuk dengan akun umum, mahasiswa, atau psikolog</div>
+        <div class="nf" id="lNf" role="alert" aria-live="polite"></div>
 
+        <form id="loginForm" onsubmit="event.preventDefault();doLogin()" novalidate>
         <div class="fg">
-          <label class="lbl">Username / Email</label>
-          <div class="iw"><input type="text" id="lU" placeholder="username atau email@domain.com"></div>
+          <label class="lbl" for="lU">Username / Email</label>
+          <div class="iw"><input type="text" id="lU" name="username" placeholder="username atau email@domain.com" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
         </div>
         <div class="fg">
-          <label class="lbl">Kata Sandi</label>
+          <label class="lbl" for="lP">Kata Sandi</label>
           <div class="iw">
-            <input type="password" id="lP" placeholder="••••••••" style="padding-right:2.8rem">
-            <span class="ico" onclick="tPw('lP',this)">👁</span>
+            <input type="password" id="lP" name="password" placeholder="••••••••" autocomplete="current-password" style="padding-right:3rem">
+            <button type="button" class="ico" onclick="tPw('lP',this)" aria-label="Tampilkan kata sandi">👁</button>
           </div>
         </div>
-        <button class="btn btn-p" onclick="doLogin()">Masuk ke Akun 🔐</button>
-        <div class="div">atau</div>
-        <button class="btn btn-g" onclick="go('scR1','r')" style="font-size:.83rem">Belum punya akun? Daftar Sekarang</button>
-        <div style="text-align:center;margin-top:.9rem">
-          <a onclick="go('scForgot','r')" class="lnk">Lupa kata sandi?</a>
+        <button type="submit" class="btn btn-p">Masuk ke Akun 🔐</button>
+        </form>
+        <div style="text-align:center;margin-top:.4rem">
+          <button type="button" class="lnk" onclick="openForgot()">Lupa kata sandi?</button>
         </div>
+        <div class="div">atau</div>
+        <button type="button" class="btn btn-g" onclick="go('scR1','r')" style="font-size:.88rem">Belum punya akun? Daftar Sekarang</button>
       </div>
 
       <!-- ===== FORGOT ===== -->
@@ -526,10 +545,10 @@ select option{background:#082218;color:#fff}
         <div style="text-align:center;font-size:2.2rem;margin-bottom:.7rem;margin-top:.5rem">🔑</div>
         <div class="sc-title" style="text-align:center;font-size:1.3rem">Lupa Kata Sandi?</div>
         <div class="sc-sub" style="text-align:center" id="fSub">Kami kirimkan kode pemulihan 6 digit ke email akunmu</div>
-        <div class="nf" id="fNf"></div>
+        <div class="nf" id="fNf" role="alert" aria-live="polite"></div>
         <div class="fg">
           <label class="lbl" for="fE">Alamat Email Akun</label>
-          <div class="iw"><input type="email" id="fE" placeholder="email@domain.com" autocomplete="email"></div>
+          <div class="iw"><input type="email" id="fE" placeholder="email@domain.com" autocomplete="email" autocapitalize="none" spellcheck="false"></div>
         </div>
         <div id="fStep2" style="display:none">
           <div class="fg">
@@ -538,31 +557,35 @@ select option{background:#082218;color:#fff}
           </div>
           <div class="fg">
             <label class="lbl" for="fP">Kata Sandi Baru</label>
-            <div class="iw"><input type="password" id="fP" placeholder="Min. 8 karakter" autocomplete="new-password"></div>
+            <div class="iw"><input type="password" id="fP" placeholder="Min. 8 karakter" autocomplete="new-password" style="padding-right:3rem"><button type="button" class="ico" onclick="tPw('fP',this)" aria-label="Tampilkan kata sandi">👁</button></div>
           </div>
           <div class="fg">
             <label class="lbl" for="fPC">Ulangi Kata Sandi Baru</label>
-            <div class="iw"><input type="password" id="fPC" placeholder="Ketik ulang" autocomplete="new-password"></div>
+            <div class="iw"><input type="password" id="fPC" placeholder="Ketik ulang" autocomplete="new-password" style="padding-right:3rem"><button type="button" class="ico" onclick="tPw('fPC',this)" aria-label="Tampilkan kata sandi">👁</button></div>
           </div>
         </div>
-        <button class="btn btn-p" id="fBtn" onclick="doForgot()">Kirim Kode Pemulihan</button>
-        <div style="text-align:center;margin-top:.9rem">
-          <a href="javascript:void(0)" onclick="go('scW','l')" class="lnk">← Kembali ke halaman masuk</a>
+        <button type="button" class="btn btn-p" id="fBtn" onclick="doForgot()">Kirim Kode Pemulihan</button>
+        <div id="fStep2Links" class="lnks" style="display:none;justify-content:space-between">
+          <button type="button" class="lnk lnk-sm" id="fResend" onclick="forgotResend()">Kirim ulang kode</button>
+          <button type="button" class="lnk lnk-sm" onclick="forgotReset()">Ganti email</button>
+        </div>
+        <div style="text-align:center;margin-top:.4rem">
+          <button type="button" class="lnk" onclick="closeForgot()">← Kembali ke halaman masuk</button>
         </div>
       </div>
 
       <div class="sc" id="scR1" style="display:none">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:.8rem">
-          <a onclick="go('scW','l')" style="color:var(--text-w3);cursor:pointer;font-size:1rem">←</a>
-          <div style="font-size:.7rem;color:var(--text-w3);letter-spacing:.08em;text-transform:uppercase">Pendaftaran Akun</div>
+        <div class="sc-head">
+          <button type="button" class="back" onclick="go('scW','l')" aria-label="Kembali">←</button>
+          <span>Pendaftaran Akun</span>
         </div>
         <div class="sbar" id="sb1"></div>
         <div class="sc-title" style="font-size:1.2rem">Info Pribadi</div>
         <div class="sc-sub" style="font-size:.8rem;margin-bottom:1.1rem">Langkah 1 dari 3 — Data diri kamu</div>
-        <div class="nf" id="r1Nf"></div>
+        <div class="nf" id="r1Nf" role="alert" aria-live="polite"></div>
 
         <div class="fg">
-          <label class="lbl">Jenis Akun *</label>
+          <label class="lbl" id="lblTipe">Jenis Akun *</label>
           <div class="gend-row" role="radiogroup" aria-label="Jenis akun">
             <div class="gopt topt on" role="radio" aria-checked="true" tabindex="0" data-tipe="umum" onclick="pickTipe('umum')">🙂 Umum (18+)</div>
             <div class="gopt topt" role="radio" aria-checked="false" tabindex="0" data-tipe="mahasiswa" onclick="pickTipe('mahasiswa')">🎓 Mahasiswa</div>
@@ -571,33 +594,33 @@ select option{background:#082218;color:#fff}
         </div>
 
         <div class="fg">
-          <label class="lbl">Username *</label>
+          <label class="lbl" for="rU">Username *</label>
           <div class="iw">
-            <input type="text" id="rU" placeholder="min. 4 karakter (huruf, angka, _)" oninput="chkUser(this)" style="padding-right:2.5rem">
-            <span class="ico" id="uIco">🔍</span>
+            <input type="text" id="rU" placeholder="min. 4 karakter (huruf, angka, _)" oninput="chkUser(this)" style="padding-right:3rem" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20">
+            <span class="ico" id="uIco" aria-hidden="true">🔍</span>
           </div>
           <div class="fs info" id="uSt">Pilih username yang unik</div>
         </div>
         <div class="fg">
-          <label class="lbl">Nama Lengkap *</label>
-          <div class="iw"><input type="text" id="rN" placeholder="Sesuai identitas resmi"></div>
+          <label class="lbl" for="rN">Nama Lengkap *</label>
+          <div class="iw"><input type="text" id="rN" placeholder="Sesuai identitas resmi" autocomplete="name" autocapitalize="words" maxlength="60"></div>
         </div>
         <div class="fg">
-          <label class="lbl">Usia *</label>
-          <div class="iw"><input type="number" id="rA" placeholder="Tahun" min="18" max="100"></div>
+          <label class="lbl" for="rA">Usia *</label>
+          <div class="iw"><input type="number" id="rA" placeholder="Tahun" min="18" max="100" inputmode="numeric" autocomplete="off"></div>
         </div>
         <div class="fg">
-          <label class="lbl">Jenis Kelamin *</label>
-          <div class="gend-row">
-            <div class="gopt gsex" onclick="pickG(this,'L')">Laki-laki</div>
-            <div class="gopt gsex" onclick="pickG(this,'P')">Perempuan</div>
-            <div class="gopt gsex" onclick="pickG(this,'X')">Lainnya</div>
+          <label class="lbl" id="lblSex">Jenis Kelamin *</label>
+          <div class="gend-row" role="radiogroup" aria-labelledby="lblSex">
+            <div class="gopt gsex" role="radio" aria-checked="false" tabindex="0" onclick="pickG(this,'L')">Laki-laki</div>
+            <div class="gopt gsex" role="radio" aria-checked="false" tabindex="0" onclick="pickG(this,'P')">Perempuan</div>
+            <div class="gopt gsex" role="radio" aria-checked="false" tabindex="0" onclick="pickG(this,'X')">Lainnya</div>
           </div>
         </div>
 
         <div id="mhsFields" style="display:none">
         <div class="fg">
-          <label class="lbl">Universitas *</label>
+          <label class="lbl" for="univS">Universitas *</label>
           <div class="dw">
             <div class="iw"><input type="text" id="univS" placeholder="Ketik nama universitas..." oninput="sUniv(this.value)" onfocus="oUniv()" autocomplete="off"></div>
             <input type="hidden" id="univV">
@@ -607,7 +630,7 @@ select option{background:#082218;color:#fff}
         </div>
         <div class="g2">
           <div class="fg">
-            <label class="lbl">Semester *</label>
+            <label class="lbl" for="rSem">Semester *</label>
             <div class="iw">
               <select id="rSem"><option value="">-- Pilih --</option>
                 <option>1</option><option>2</option><option>3</option><option>4</option>
@@ -616,17 +639,17 @@ select option{background:#082218;color:#fff}
             </div>
           </div>
           <div class="fg">
-            <label class="lbl">NIM *</label>
-            <div class="iw"><input type="text" id="rNIM" placeholder="No. Induk Mhs."></div>
+            <label class="lbl" for="rNIM">NIM *</label>
+            <div class="iw"><input type="text" id="rNIM" placeholder="No. Induk Mhs." autocomplete="off" autocapitalize="characters" maxlength="30"></div>
           </div>
         </div>
         </div>
 
         <div class="btn-row" style="margin-top:.6rem">
-          <button class="btn btn-g" onclick="go('scW','l')" style="flex:.35">← Batal</button>
-          <button class="btn btn-p" onclick="v1()" style="flex:1">Lanjutkan →</button>
+          <button type="button" class="btn btn-g" onclick="go('scW','l')" style="flex:.35">← Batal</button>
+          <button type="button" class="btn btn-p" onclick="v1()" style="flex:1">Lanjutkan →</button>
         </div>
-        <div style="text-align:center;margin-top:.8rem;font-size:.77rem;color:var(--text-w3)">Sudah punya akun? <a onclick="go('scL','l')" class="lnk">Masuk di sini</a></div>
+        <div style="text-align:center;margin-top:.5rem;font-size:.86rem;color:var(--text-w3)">Sudah punya akun? <button type="button" onclick="go('scL','l')" class="lnk" style="padding-left:.2rem">Masuk di sini</button></div>
       </div>
 
       <!-- ===== REG STEP 2: Keamanan & Kontak ===== -->
@@ -634,33 +657,33 @@ select option{background:#082218;color:#fff}
         <div class="sbar" id="sb2"></div>
         <div class="sc-title" style="font-size:1.2rem">Keamanan & Kontak</div>
         <div class="sc-sub" style="font-size:.8rem;margin-bottom:1.1rem">Langkah 2 dari 3</div>
-        <div class="nf" id="r2Nf"></div>
+        <div class="nf" id="r2Nf" role="alert" aria-live="polite"></div>
 
         <div class="fg">
-          <label class="lbl">Kata Sandi *</label>
+          <label class="lbl" for="rP">Kata Sandi *</label>
           <div class="iw">
-            <input type="password" id="rP" placeholder="Min. 8 karakter" oninput="chkStr(this)" style="padding-right:2.5rem">
-            <span class="ico" onclick="tPw('rP',this)">👁</span>
+            <input type="password" id="rP" placeholder="Min. 8 karakter" oninput="chkStr(this)" style="padding-right:3rem" autocomplete="new-password">
+            <button type="button" class="ico" onclick="tPw('rP',this)" aria-label="Tampilkan kata sandi">👁</button>
           </div>
           <div class="pw-bar"><div class="pw-fill" id="pwF"></div></div>
           <div class="pw-lbl" id="pwL">Belum diisi</div>
         </div>
         <div class="fg">
-          <label class="lbl">Ulangi Kata Sandi *</label>
+          <label class="lbl" for="rPC">Ulangi Kata Sandi *</label>
           <div class="iw">
-            <input type="password" id="rPC" placeholder="Ketik ulang" oninput="chkMatch(this)" style="padding-right:2.5rem">
-            <span class="ico" onclick="tPw('rPC',this)">👁</span>
+            <input type="password" id="rPC" placeholder="Ketik ulang" oninput="chkMatch(this)" style="padding-right:3rem" autocomplete="new-password">
+            <button type="button" class="ico" onclick="tPw('rPC',this)" aria-label="Tampilkan kata sandi">👁</button>
           </div>
           <div class="fs info" id="pmSt"></div>
         </div>
         <div class="fg">
-          <label class="lbl">Email *</label>
-          <div class="iw"><input type="email" id="rE" placeholder="email@domain.com" oninput="vE(this)"></div>
+          <label class="lbl" for="rE">Email *</label>
+          <div class="iw"><input type="email" id="rE" placeholder="email@domain.com" oninput="vE(this)" autocomplete="email" autocapitalize="none" spellcheck="false" inputmode="email"></div>
           <div class="fs info" id="eSt"></div>
         </div>
         <div class="fg">
-          <label class="lbl" id="phLbl">Nomor Telepon (opsional)</label>
-          <div class="iw"><input type="tel" id="rPh" placeholder="08xx-xxxx-xxxx" oninput="vPh(this)" maxlength="16"></div>
+          <label class="lbl" id="phLbl" for="rPh">Nomor Telepon (opsional)</label>
+          <div class="iw"><input type="tel" id="rPh" placeholder="08xx-xxxx-xxxx" oninput="vPh(this)" maxlength="16" autocomplete="tel"></div>
           <div class="fs info" id="phSt"></div>
         </div>
 
@@ -675,46 +698,46 @@ select option{background:#082218;color:#fff}
         <div class="sbar" id="sb3"></div>
         <div class="sc-title" style="font-size:1.2rem">Verifikasi & Selesai</div>
         <div class="sc-sub" style="font-size:.8rem;margin-bottom:1.1rem">Langkah 3 dari 3</div>
-        <div class="nf" id="r3Nf"></div>
+        <div class="nf" id="r3Nf" role="alert" aria-live="polite"></div>
 
         <div style="background:rgba(0,200,150,.06);border:1px solid rgba(0,200,150,.2);border-radius:var(--r3);padding:.85rem 1rem;margin-bottom:1rem">
-          <p style="font-size:.77rem;color:var(--teal);font-weight:600;margin-bottom:3px">📧 Kode OTP Email</p>
-          <p style="font-size:.72rem;color:var(--text-w3);margin-bottom:9px">Kode 6 digit dikirim ke email Anda</p>
-          <div class="otp-row">
-            <input class="iw oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,0)">
-            <input class="iw oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,1)">
-            <input class="iw oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,2)">
-            <input class="iw oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,3)">
-            <input class="iw oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,4)">
-            <input class="iw oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,5)">
+          <p style="font-size:.86rem;color:var(--teal);font-weight:600;margin-bottom:3px">📧 Kode OTP Email</p>
+          <p style="font-size:.8rem;color:var(--text-w3);margin-bottom:9px" id="otpInfo">Kode 6 digit dikirim ke email kamu</p>
+          <div class="otp-row" role="group" aria-label="Kode OTP 6 digit">
+            <input class="oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,0)" aria-label="Digit 1" autocomplete="one-time-code">
+            <input class="oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,1)" aria-label="Digit 2" autocomplete="off">
+            <input class="oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,2)" aria-label="Digit 3" autocomplete="off">
+            <input class="oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,3)" aria-label="Digit 4" autocomplete="off">
+            <input class="oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,4)" aria-label="Digit 5" autocomplete="off">
+            <input class="oti" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" oninput="oN(this,5)" aria-label="Digit 6" autocomplete="off">
           </div>
-          <p style="font-size:.7rem;color:var(--text-w3)">Tidak terima? <a onclick="resOtp()" style="color:var(--teal);cursor:pointer">Kirim ulang</a></p>
+          <p style="font-size:.84rem;color:var(--text-w3);margin:0">Tidak terima? <button type="button" class="lnk lnk-sm" id="otpResend" onclick="resOtp()">Kirim ulang</button></p>
         </div>
 
         <!-- Upload KTM (khusus mahasiswa) -->
         <div class="fg" id="ktmBlock" style="display:none">
-          <label class="lbl">Foto KTM *</label>
+          <label class="lbl" for="ktmF">Foto KTM *</label>
           <div class="fzone" id="ktmZ">
             <input type="file" id="ktmF" accept="image/jpeg,image/png,image/webp,.pdf" onchange="hFile(this)">
             <span class="fzi">📷</span>
-            <p class="fzl">Klik atau seret foto KTM</p>
+            <p class="fzl">Ketuk untuk memilih foto KTM</p>
             <p class="fzh">JPG, PNG, PDF · Maks. 5 MB</p>
           </div>
           <div class="fprev" id="fPrev">📎 <span id="fNm"></span><span id="fSz" style="color:var(--text-w3)"></span></div>
           <div class="fs info" id="fSt"></div>
         </div>
 
-        <label class="lbl" style="margin-bottom:5px;display:block">Verifikasi Keamanan *</label>
+        <label class="lbl" for="mA" style="margin-bottom:5px;display:block">Verifikasi Keamanan *</label>
         <div class="math-c">
           <span class="math-q" id="mQ"></span>
           <span style="font-size:.85rem;color:var(--text-w3)"> = </span>
-          <div class="iw"><input type="text" id="mA" placeholder="?" style="width:60px;text-align:center;font-weight:700"></div>
-          <button class="ref" onclick="gMath()" type="button">↻</button>
+          <div class="iw"><input type="text" id="mA" placeholder="?" inputmode="numeric" autocomplete="off" maxlength="4" style="width:64px;text-align:center;font-weight:700"></div>
+          <button class="ref" onclick="gMath()" type="button" aria-label="Ganti soal">↻</button>
         </div>
 
         <div class="ckrow">
           <input type="checkbox" id="tCk">
-          <label for="tCk">Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> Lentera Jiwa</label>
+          <label for="tCk">Saya sudah membaca dan menyetujui <a href="tentang.html#privasi" target="_blank" rel="noopener">Komitmen Privasi &amp; Etika</a> Lentera Jiwa</label>
         </div>
 
         <div class="btn-row" style="margin-top:.5rem">
@@ -729,8 +752,7 @@ select option{background:#082218;color:#fff}
           <div class="suc-ic">✓</div>
           <div class="suc-t">Berhasil! 🎉</div>
           <p class="suc-m" id="sucM"></p>
-          <button class="btn btn-p" onclick="window.location.href='index.html'" style="max-width:240px;margin:0 auto">Masuk Sekarang →</button>
-          <p style="font-size:.72rem;color:var(--text-w3);margin-top:.9rem">Periksa email untuk tautan aktivasi akun</p>
+          <button type="button" class="btn btn-p" id="sucBtn" onclick="window.location.href='index.html'" style="max-width:260px;margin:0 auto">Mulai Jelajahi →</button>
         </div>
       </div>
 
@@ -803,12 +825,21 @@ function go(id, dir) {
     nextEl.style.width = '';
     nextEl.classList.add(inClass);
 
+    // Di HP: kalau judul layar baru ada di atas layar, gulir ke sana
+    const top = document.getElementById('mainCard').getBoundingClientRect().top;
+    if (top < 0) window.scrollTo({ top: window.scrollY + top - 12, behavior: 'auto' });
+    // Di laptop: fokus langsung ke isian pertama (di HP tidak, agar keyboard tidak tiba-tiba muncul)
+    if (window.matchMedia('(pointer:fine)').matches) {
+      const first = nextEl.querySelector('input:not([type=hidden]):not([readonly]):not([type=checkbox]):not([type=file])');
+      if (first && first.offsetParent) first.focus({ preventScroll: true });
+    }
+
     setTimeout(() => {
       nextEl.classList.remove(inClass);
       isAnimating = false;
-    }, 430);
+    }, 230);
 
-  }, 420);
+  }, 200);
 
   cur = id;
 }
@@ -818,6 +849,8 @@ function pickRole(r) {
   wRole = r;
   document.getElementById('rcG').classList.toggle('on', r === 'guest');
   document.getElementById('rcM').classList.toggle('on', r === 'mhs');
+  document.getElementById('rcG').setAttribute('aria-pressed', String(r === 'guest'));
+  document.getElementById('rcM').setAttribute('aria-pressed', String(r === 'mhs'));
   const pill = document.getElementById('wPill');
   pill.style.display = '';
   pill.innerHTML = r === 'guest'
@@ -852,6 +885,7 @@ function tPw(id, ic) {
   const el = document.getElementById(id);
   el.type = el.type === 'password' ? 'text' : 'password';
   ic.textContent = el.type === 'text' ? '🙈' : '👁';
+  ic.setAttribute('aria-label', el.type === 'text' ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
 }
 
 // ===== TOMBOL SIBUK =====
@@ -898,6 +932,8 @@ async function doForgot() {
       if (!r.ok) { sN(nf, 'err', /tidak dikenal/i.test(r.msg || '') ? 'Fitur pemulihan belum aktif di server. Hubungi admin Lentera Jiwa.' : (r.msg || 'Gagal mengirim kode.')); return; }
       forgotStep = 2;
       document.getElementById('fStep2').style.display = '';
+      document.getElementById('fStep2Links').style.display = 'flex';
+      cooldown(document.getElementById('fResend'), 'Kirim ulang kode');
       document.getElementById('fE').readOnly = true;
       document.getElementById('fSub').textContent = 'Cek emailmu (juga folder Spam), lalu masukkan kode dan kata sandi baru.';
       btn.textContent = 'Simpan Kata Sandi Baru';
@@ -916,6 +952,7 @@ async function doForgot() {
     forgotStep = 1;
     ['fO', 'fP', 'fPC'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('fStep2').style.display = 'none';
+    document.getElementById('fStep2Links').style.display = 'none';
     document.getElementById('fE').readOnly = false;
     btn.textContent = 'Kirim Kode Pemulihan';
     document.getElementById('lU').value = em;
@@ -925,11 +962,48 @@ async function doForgot() {
   }
 }
 
-// Tekan Enter di kolom login = klik Masuk
-['lU', 'lP'].forEach(id => {
+// Enter di kolom login ditangani oleh <form id="loginForm"> (bisa disimpan pengelola sandi)
+// Enter di langkah daftar = Lanjutkan
+[['rU','rN','rA'], ['rP','rPC','rE','rPh']].forEach((ids, k) => ids.forEach(id => {
   const el = document.getElementById(id);
-  if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
-});
+  if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); k ? v2() : v1(); } });
+}));
+// Kartu & pilihan bisa dipakai dengan keyboard (Enter / Spasi)
+function onKeyAct(el, fn) {
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+}
+onKeyAct(document.getElementById('rcG'), () => pickRole('guest'));
+onKeyAct(document.getElementById('rcM'), () => pickRole('mhs'));
+document.querySelectorAll('.gsex').forEach(o => onKeyAct(o, () => o.click()));
+
+// Lupa sandi: kembali ke layar asal (welcome atau login)
+let forgotFrom = 'scW';
+function openForgot() { forgotFrom = cur === 'scL' ? 'scL' : 'scW'; go('scForgot', 'r'); }
+function closeForgot() { go(forgotFrom, 'l'); }
+function forgotReset() {
+  forgotStep = 1;
+  ['fO', 'fP', 'fPC'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fStep2').style.display = 'none';
+  document.getElementById('fStep2Links').style.display = 'none';
+  const fE = document.getElementById('fE'); fE.readOnly = false; fE.focus();
+  document.getElementById('fBtn').textContent = 'Kirim Kode Pemulihan';
+  document.getElementById('fSub').textContent = 'Kami kirimkan kode pemulihan 6 digit ke email akunmu';
+  sN(document.getElementById('fNf'), '', '');
+}
+async function forgotResend() {
+  const b = document.getElementById('fResend');
+  if (b.disabled) return;
+  const r = await LJ_AUTH.sendResetOTP(g('fE').trim().toLowerCase());
+  sN(document.getElementById('fNf'), r.ok ? 'ok' : 'err', r.ok ? 'Kode baru sudah dikirim. Cek juga folder Spam.' : (r.msg || 'Gagal mengirim kode.'));
+  if (r.ok) cooldown(b, 'Kirim ulang kode');
+}
+// Hitung mundur 60 detik (server menolak permintaan kode baru < 1 menit)
+function cooldown(btn, label, sec) {
+  sec = sec || 60;
+  clearInterval(btn._cd); btn.disabled = true;
+  const tick = () => { btn.textContent = label + ' (' + sec + ' dtk)'; if (sec-- <= 0) { clearInterval(btn._cd); btn.disabled = false; btn.textContent = label; } };
+  tick(); btn._cd = setInterval(tick, 1000);
+}
 
 // ===== STEP BARS — 3 langkah (R1, R2, R3) =====
 const sNames = ['Info Pribadi', 'Keamanan', 'Verifikasi'];
@@ -998,8 +1072,9 @@ async function v2() {
   goR(3);
   const nf3 = document.getElementById('r3Nf');
   sN(nf3, 'ok', '📩 Mengirim kode ke ' + em + '… cek email-mu sebentar lagi.');
+  document.getElementById('otpInfo').textContent = 'Kode 6 digit dikirim ke ' + em;
   const otpRes = await LJ_AUTH.sendOTP(em);
-  if (otpRes.ok) sN(nf3, 'ok', '✅ Kode terkirim ke ' + em + '. Cek juga folder Spam.');
+  if (otpRes.ok) { sN(nf3, 'ok', '✅ Kode terkirim ke ' + em + '. Cek juga folder Spam.'); cooldown(document.getElementById('otpResend'), 'Kirim ulang'); }
   else sN(nf3, 'err', 'Kode belum terkirim: ' + (otpRes.msg || 'coba lagi') + (/terdaftar/.test(otpRes.msg || '') ? '' : ' Ketuk "Kirim ulang" di bawah.'));
 }
 
@@ -1080,9 +1155,11 @@ async function selesaiDaftar(res, regData, mhs) {
   const bold = t => { const b = document.createElement('strong'); b.textContent = t; return b; };
   sucM.append('Akun ', bold(mhs ? 'Mahasiswa' : 'Umum'), ' atas nama ', bold((res.user && res.user.nama) || regData.nama), ' berhasil dibuat!');
   sucM.append(document.createElement('br'));
-  sucM.append(loginRes && loginRes.ok
-    ? 'Kamu sudah masuk secara otomatis.'
-    : 'Silakan masuk dengan username dan kata sandimu.');
+  const masuk = loginRes && loginRes.ok;
+  sucM.append(masuk ? 'Kamu sudah masuk secara otomatis.' : 'Silakan masuk dengan username dan kata sandimu.');
+  const sb = document.getElementById('sucBtn');
+  if (masuk) { sb.textContent = 'Mulai Jelajahi →'; sb.onclick = () => { window.location.href = 'index.html'; }; }
+  else { sb.textContent = 'Masuk Sekarang →'; sb.onclick = () => { document.getElementById('lU').value = regData.username; go('scL', 'l'); }; }
   go('scSuc', 'r');
   confetti();
 }
@@ -1153,8 +1230,8 @@ function vPh(inp) {
 
 // ===== GENDER =====
 function pickG(el, val) {
-  document.querySelectorAll('.gsex').forEach(g => g.classList.remove('on'));
-  el.classList.add('on'); gen = val;
+  document.querySelectorAll('.gsex').forEach(g => { g.classList.remove('on'); g.setAttribute('aria-checked', 'false'); });
+  el.classList.add('on'); el.setAttribute('aria-checked', 'true'); gen = val;
 }
 
 // Jenis akun: umum (18+, HP opsional, tanpa KTM) atau mahasiswa
@@ -1205,18 +1282,41 @@ document.addEventListener('click', e => {
 
 // ===== OTP =====
 function oN(inp, i) {
-  inp.value = inp.value.replace(/\D/g, '');
   const all = document.querySelectorAll('#scR3 .oti');
-  if (inp.value && i < all.length - 1) all[i + 1].focus();
+  const d = inp.value.replace(/\D/g, '');
+  if (d.length > 1) return fillOtp(d, i);   // isi otomatis dari email/SMS di HP
+  inp.value = d;
+  if (d && i < all.length - 1) all[i + 1].focus();
 }
+function fillOtp(digits, from) {
+  const all = document.querySelectorAll('#scR3 .oti');
+  digits = digits.replace(/\D/g, '').slice(0, all.length - from);
+  [...digits].forEach((c, k) => { all[from + k].value = c; });
+  all[Math.min(from + digits.length, all.length - 1)].focus();
+}
+document.querySelectorAll('#scR3 .oti').forEach((inp, i, all) => {
+  inp.addEventListener('paste', e => {
+    const t = (e.clipboardData || window.clipboardData).getData('text');
+    if (/\d/.test(t)) { e.preventDefault(); fillOtp(t, t.replace(/\D/g, "").length >= all.length ? 0 : i); }
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Backspace' && !inp.value && i > 0) { e.preventDefault(); all[i - 1].value = ''; all[i - 1].focus(); }
+    else if (e.key === 'ArrowLeft' && i > 0) all[i - 1].focus();
+    else if (e.key === 'ArrowRight' && i < all.length - 1) all[i + 1].focus();
+    else if (e.key === 'Enter') { e.preventDefault(); subReg(); }
+  });
+  inp.addEventListener('focus', () => inp.select());
+});
 async function resOtp() {
   const nf = document.getElementById('r3Nf');
+  if (document.getElementById('otpResend').disabled) return;
   document.querySelectorAll('#scR3 .oti').forEach(i => i.value = '');
   document.querySelectorAll('#scR3 .oti')[0].focus();
   regTicket = null; ktmUploaded = false;
   sN(nf, 'ok', '📩 Mengirim kode baru...');
   const r = await LJ_AUTH.sendOTP(g('rE').trim().toLowerCase());
   sN(nf, r.ok ? 'ok' : 'err', r.ok ? '✅ Kode OTP baru terkirim ke email kamu.' : (r.msg || 'Gagal mengirim kode.'));
+  if (r.ok) cooldown(document.getElementById('otpResend'), 'Kirim ulang');
 }
 
 // ===== FILE UPLOAD =====
@@ -1259,7 +1359,7 @@ function g(id) { return (document.getElementById(id) || {}).value || ''; }
 function sN(el, type, msg) {
   if (!type || !msg) { el.className = 'nf'; el.textContent = ''; return; }
   el.className = 'nf ' + type + ' show'; el.textContent = msg;
-  setTimeout(() => el.classList.remove('show'), 5500);
+  // Pesan tetap terlihat sampai ada aksi berikutnya (dulu hilang sendiri setelah 5,5 detik)
 }
 function resetAll() {
   wRole = null;
@@ -1304,7 +1404,9 @@ document.addEventListener('click', e => {
 });
 
 // ===== PARTICLE SYSTEM =====
+const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 (() => {
+  if (REDUCE_MOTION) return;
   const cv = document.getElementById('cvs'); const cx = cv.getContext('2d');
   let W, H, pts = [];
   const resize = () => { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; };
@@ -1334,6 +1436,7 @@ document.addEventListener('click', e => {
 
 // ===== FLOATING LEAVES =====
 (() => {
+  if (REDUCE_MOTION) return;
   const em = ['🍃','🌿','✨','🌱','💫'];
   const c = document.getElementById('leaves');
   const spawn = () => {
@@ -1353,6 +1456,23 @@ document.addEventListener('click', e => {
 // ===== INIT =====
 gMath();
 sBars(0);
+(function sudahMasuk() {
+  const ss = typeof LJ_AUTH !== 'undefined' && LJ_AUTH.getSession();
+  if (!ss || !ss.token) return;
+  const box = document.getElementById('signedBox');
+  box.textContent = '';
+  const p = document.createElement('div');
+  p.append('Kamu sedang masuk sebagai ');
+  const b = document.createElement('strong'); b.textContent = ss.nama || ss.username || 'pengguna'; p.append(b, '.');
+  const row = document.createElement('div'); row.className = 'row';
+  const go1 = document.createElement('button'); go1.type = 'button'; go1.className = 'btn btn-p';
+  const staff = ss.role === 'psikolog' || ss.role === 'admin';
+  go1.textContent = staff ? 'Buka Portal →' : 'Lanjut ke Beranda →';
+  go1.onclick = () => { window.location.href = staff ? 'portal.html' : 'index.html'; };
+  const out = document.createElement('button'); out.type = 'button'; out.className = 'btn btn-g'; out.textContent = 'Keluar';
+  out.onclick = async () => { out.disabled = true; out.textContent = 'Keluar…'; await LJ_AUTH.logout(); box.style.display = 'none'; };
+  row.append(go1, out); box.append(p, row); box.style.display = '';
+})();
 </script>
 </body>
 </html>
