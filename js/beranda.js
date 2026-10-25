@@ -17,10 +17,18 @@
     if (text != null) n.textContent = text;
     return n;
   }
-  function info(box, cls, text) {
+  // Pesan kosong/gagal. Bila ada `retry`, tampil tombol "Coba lagi".
+  function info(box, cls, text, retry) {
     box.textContent = '';
-    const n = el('div', cls, text);
-    n.style.cssText = 'min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--text-secondary);cursor:default;padding:20px;grid-column:1/-1;';
+    const n = el('div', cls);
+    n.style.cssText = 'min-height:120px;width:100%;flex:1 1 100%;max-width:none;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;text-align:center;color:var(--text-secondary);cursor:default;padding:20px;grid-column:1/-1;';
+    n.append(el('div', '', text));
+    if (retry) {
+      const b = el('button', 'btn btn-soft btn-sm', '🔄 Coba lagi');
+      b.type = 'button'; b.style.minHeight = '40px';
+      b.addEventListener('click', () => { b.disabled = true; b.textContent = '⏳ Memuat…'; retry(); });
+      n.append(b);
+    }
     box.append(n);
   }
   function goto(page) {
@@ -42,9 +50,9 @@
 
   /* ── Artikel terbaru (Beranda) ── */
   const homeArt = document.getElementById('home-artikel');
-  if (homeArt) {
+  if (homeArt) (function loadArt() {
     LJ_AUTH.apiGet('getKonten', { tipe: 'artikel' }).then(r => {
-      if (!r.ok) return info(homeArt, 'artikel-card', 'Artikel belum bisa dimuat. Coba lagi nanti.');
+      if (!r.ok) return info(homeArt, 'artikel-card', 'Artikel belum bisa dimuat. Periksa koneksi internetmu.', loadArt);
       const list = (r.konten || []).slice(0, 3);
       if (!list.length) return info(homeArt, 'artikel-card', '📭 Artikel pertama sedang ditulis oleh psikolog kami.');
       homeArt.textContent = '';
@@ -63,13 +71,13 @@
         homeArt.append(c);
       });
     });
-  }
+  })();
 
   /* ── Buku terbaru (Beranda) ── */
   const homeBuku = document.getElementById('home-buku');
-  if (homeBuku) {
+  if (homeBuku) (function loadBuku() {
     LJ_AUTH.apiGet('getKonten', { tipe: 'buku' }).then(r => {
-      if (!r.ok) return info(homeBuku, 'buku-card', 'Koleksi belum bisa dimuat.');
+      if (!r.ok) return info(homeBuku, '', 'Koleksi belum bisa dimuat. Periksa koneksi internetmu.', loadBuku);
       const list = (r.konten || []).slice(0, 8);
       if (!list.length) return info(homeBuku, 'buku-card', '📭 Koleksi sedang disiapkan.');
       homeBuku.textContent = '';
@@ -87,13 +95,13 @@
         homeBuku.append(c);
       });
     });
-  }
+  })();
 
   /* ── Tim psikolog (Tentang) ── */
   const team = document.getElementById('team-grid');
-  if (team) {
+  if (team) (function loadTim() {
     LJ_AUTH.apiGet('getPsikolog').then(r => {
-      if (!r.ok) return info(team, 'team-card', 'Profil psikolog belum bisa dimuat. Coba lagi nanti.');
+      if (!r.ok) return info(team, 'team-card', 'Profil psikolog belum bisa dimuat. Periksa koneksi internetmu.', loadTim);
       const list = r.psikolog || [];
       team.textContent = '';
       list.forEach((p, i) => {
@@ -129,5 +137,5 @@
       join.querySelector('p').style.cssText = 'font-size:13px;color:var(--text-secondary);line-height:1.65;max-width:240px;';
       team.append(join);
     });
-  }
+  })();
 })();

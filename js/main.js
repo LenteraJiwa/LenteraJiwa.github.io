@@ -487,9 +487,11 @@ const App = {
 
     this.navOpen = false;
     if (burger)  { burger.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); }
-    if (drawer)  { drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); }
+    if (drawer)  { drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); drawer.inert = true; }
     if (overlay) overlay.classList.remove('is-visible');
     document.body.style.overflow = '';
+    // Kembalikan fokus ke tombol ☰ (pengguna keyboard tidak "tersesat")
+    if (burger && drawer && drawer.contains(document.activeElement)) burger.focus({ preventScroll: true });
   },
 
   initBurger() {
@@ -501,8 +503,10 @@ const App = {
     if (!burger || !drawer) return;
 
     drawer.style.willChange = 'transform';
+    drawer.inert = true;   // saat tertutup, isinya tidak bisa dijangkau Tab
 
     const open = () => {
+      drawer.inert = false;
       this.navOpen = true;
       burger.classList.add('is-open');
       burger.setAttribute('aria-expanded', 'true');
@@ -510,6 +514,7 @@ const App = {
       drawer.setAttribute('aria-hidden', 'false');
       if (overlay) overlay.classList.add('is-visible');
       document.body.style.overflow = 'hidden';
+      setTimeout(() => { if (close) close.focus({ preventScroll: true }); }, 60);
     };
 
     const closeFn = () => this._closeDrawer();
@@ -519,6 +524,14 @@ const App = {
     if (close)   close.addEventListener('click', closeFn);
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && this.navOpen) closeFn();
+      // Tab berputar di dalam menu selama menu terbuka
+      if (e.key === 'Tab' && this.navOpen) {
+        const items = [...drawer.querySelectorAll('a[href],button,[tabindex="0"]')].filter(el => el.offsetParent !== null);
+        if (!items.length) return;
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
 
     document.querySelectorAll('.nav-drawer-age[data-age-val]').forEach(card => {

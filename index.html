@@ -68,7 +68,7 @@
     - CSS ter-cache di <head> setelah pertama kali dimuat
     - Tidak ada FOUC karena CSS dimuat sebelum HTML diinjeksikan
   -->
-<script src="https://js.puter.com/v2/"></script>
+<!-- js.puter.com dihapus: dimuat & menahan tampilan di setiap halaman, padahal tidak dipakai kode mana pun -->
 </head>
 <body>
 
@@ -184,20 +184,15 @@
       🔐 Masuk / Daftar
     </a>
 
-    <!-- User Profile -->
-    <div id="drawer-user-section" style="display:none;margin-top:16px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">
-      <div id="drawer-logout-popup" style="display:none;background:rgba(255,255,255,0.08);border-radius:10px;padding:8px;margin-bottom:8px;">
-        <button onclick="LJ_AUTH.logout()" style="width:100%;background:#e74c3c;color:white;border:none;border-radius:8px;padding:10px;font-size:14px;cursor:pointer;font-weight:600;">
-          🚪 Keluar
-        </button>
-      </div>
-      <div id="drawer-username-btn" onclick="toggleLogout()" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:10px;background:rgba(255,255,255,0.06);width:100%;box-sizing:border-box;">
-        <div id="drawer-avatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00c896,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:14px;">U</div>
-        <div>
-          <div id="drawer-username" style="font-weight:600;font-size:14px;color:#1a1a2e;">Username</div>
-          <div style="font-size:11px;color:#666;">Mahasiswa</div>
+    <!-- Akun (tampil bila sudah login) -->
+    <div id="drawer-user-section" style="display:none;margin-top:14px;">
+      <div class="drawer-user">
+        <div id="drawer-avatar" class="drawer-user-avatar" aria-hidden="true">U</div>
+        <div style="min-width:0">
+          <div id="drawer-username" class="drawer-user-name">Pengguna</div>
+          <div id="drawer-role" class="drawer-user-role">Akun</div>
         </div>
-        <span id="drawer-arrow" style="margin-left:auto;color:rgba(255,255,255,0.4);font-size:12px;">▲</span>
+        <button type="button" class="drawer-logout" onclick="LJ_AUTH.logout()">🚪 Keluar</button>
       </div>
     </div>
   </div>
@@ -224,21 +219,15 @@
         <p class="footer-brand-desc">
           Ruang hangat untuk setiap jiwa yang sedang mencari cahaya dalam perjalanannya.
         </p>
-        <div class="footer-social" aria-label="Media sosial Lentera Jiwa">
-          <button class="footer-social-btn" aria-label="Instagram Lentera Jiwa">📸</button>
-          <button class="footer-social-btn" aria-label="Twitter / X Lentera Jiwa">🐦</button>
-          <button class="footer-social-btn" aria-label="YouTube Lentera Jiwa">▶️</button>
-          <button class="footer-social-btn" aria-label="TikTok Lentera Jiwa">🎵</button>
-        </div>
       </div>
 
       <nav aria-label="Tautan Layanan">
         <span class="footer-col-title">Layanan</span>
         <ul role="list">
-          <li><a href="layanan.html" class="footer-link-item">Konsultasi Individual</a></li>
-          <li><a href="layanan.html" class="footer-link-item">Terapi Keluarga</a></li>
-          <li><a href="layanan.html" class="footer-link-item">Workshop Kelompok</a></li>
-          <li><a href="layanan.html" class="footer-link-item">Jadwal Temu</a></li>
+          <li><a href="layanan.html#harga" class="footer-link-item">Konsultasi Individual</a></li>
+          <li><a href="layanan.html#harga" class="footer-link-item">Terapi Keluarga</a></li>
+          <li><a href="layanan.html#harga" class="footer-link-item">Workshop Kelompok</a></li>
+          <li><a href="layanan.html#booking" class="footer-link-item">Jadwal Temu</a></li>
         </ul>
       </nav>
 
@@ -255,21 +244,21 @@
       <nav aria-label="Tautan Tentang">
         <span class="footer-col-title">Tentang</span>
         <ul role="list">
-          <li><a href="tentang.html" class="footer-link-item">Tim Kami</a></li>
-          <li><a href="tentang.html" class="footer-link-item">Misi &amp; Visi</a></li>
-          <li><a href="tentang.html" class="footer-link-item">Kontak</a></li>
-          <li><a href="tentang.html" class="footer-link-item">Kebijakan Privasi</a></li>
+          <li><a href="tentang.html#tim" class="footer-link-item">Tim Kami</a></li>
+          <li><a href="tentang.html#misi" class="footer-link-item">Misi &amp; Visi</a></li>
+          <li><a href="layanan.html#booking" class="footer-link-item">Hubungi Kami</a></li>
+          <li><a href="tentang.html#privasi" class="footer-link-item">Kebijakan Privasi</a></li>
         </ul>
       </nav>
 
     </div>
 
     <div class="footer-bottom">
-      <span>© 2025 Lentera Jiwa. Dibuat dengan 💜 di Indonesia.</span>
-      <div class="footer-bottom-badge">
+      <span>© <span id="footer-year">2026</span> Lentera Jiwa. Dibuat dengan 💜 di Indonesia.</span>
+      <a href="tentang.html#privasi" class="footer-bottom-badge">
         <span aria-hidden="true">🔒</span>
-        <span>Data Anda Aman &amp; Rahasia</span>
-      </div>
+        <span>Bagaimana datamu disimpan</span>
+      </a>
       <span>Krisis? SEJIWA: <strong style="color:rgba(255,255,255,0.65);">119 ext 8</strong> · Darurat: <strong style="color:rgba(255,255,255,0.65);">112</strong></span>
     </div>
 
@@ -299,23 +288,14 @@ function initDrawerUser() {
   if (!section) return;
   if (session) {
     section.style.display = 'block';
-    const nama = session.nama || session.user?.nama || session.username || session.user?.username || 'User';
+    const nama = session.nama || session.user?.nama || session.username || session.user?.username || 'Pengguna';
+    const role = session.role || session.user?.role || '';
+    const ROLE = { umum: 'Akun Umum', mahasiswa: 'Mahasiswa', psikolog: 'Psikolog', admin: 'Admin' };
     document.getElementById('drawer-username').textContent = nama;
     document.getElementById('drawer-avatar').textContent = nama.charAt(0).toUpperCase();
+    document.getElementById('drawer-role').textContent = ROLE[role] || 'Akun';
   } else {
     section.style.display = 'none';
-  }
-}
-
-function toggleLogout() {
-  const popup = document.getElementById('drawer-logout-popup');
-  const arrow = document.getElementById('drawer-arrow');
-  if (popup.style.display === 'none') {
-    popup.style.display = 'block';
-    arrow.textContent = '▼';
-  } else {
-    popup.style.display = 'none';
-    arrow.textContent = '▲';
   }
 }
 
@@ -325,10 +305,10 @@ function updateAccountUI() {
   const prof = document.getElementById('drawer-profile-link');
   // LJ_AUTH dideklarasikan dengan const, jadi tidak ada di window.LJ_AUTH
   const session = (typeof LJ_AUTH !== 'undefined' && LJ_AUTH.getSession()) || null;
-  if (prof) {
-    prof.setAttribute('href', session ? 'profil.html' : 'login.html');
-    prof.firstElementChild.textContent = session ? '👤 Profil Saya' : '🔐 Masuk / Daftar';
-  }
+  // Tamu: tautan "Profil Saya" disembunyikan; cukup satu tombol "Masuk / Daftar"
+  if (prof) prof.style.display = session ? '' : 'none';
+  const yr = document.getElementById('footer-year');
+  if (yr) yr.textContent = new Date().getFullYear();
   const dl = document.getElementById('drawer-login-btn');
   if (dl) dl.style.display = session ? 'none' : '';
   if (!el) return;

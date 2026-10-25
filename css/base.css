@@ -1750,3 +1750,84 @@ body {
   .nav-account-name { display: none; }
   .nav-account { padding: 7px 10px; }
 }
+
+/* ============================================================
+   24. PERBAIKAN TAMPILAN BERANDA & MENU (26 Okt 2026)
+   Hasil uji di 360/412/768/1024/1366/1920 px.
+   ============================================================ */
+/* Menu samping harus DI ATAS bilah navigasi (dulu tertutup bilah atas
+   dan tombol ✕ terpotong). */
+:root { --z-drawer: 120; }
+
+/* Bilah atas HP: logo, tombol akun, dan ☰ tidak bertabrakan / terpotong */
+.nav-burger { flex-shrink: 0; }
+.nav-logo   { min-height: 44px; }
+@media (max-width: 480px) {
+  .nav-inner { padding: 6px 6px 6px 14px; }
+  .nav-right { gap: 6px !important; }
+  /* Pilihan usia tetap ada di menu ☰ dan di kartu usia Beranda */
+  #nav-age-label { display: none !important; }
+  .nav-account { min-height: 40px; }
+}
+@media (max-width: 340px) {
+  .nav-logo { font-size: 16px; gap: 8px; }
+  .nav-logo-icon { width: 30px; height: 30px; }
+}
+
+/* Teks kecil (10–11 px) → mudah dibaca */
+.nav-drawer-age .age-text    { font-size: 12px; }
+.nav-drawer-age-label        { font-size: 12px; }
+.nav-drawer-age              { min-height: 56px; }
+.age-card-range              { font-size: 12px; }
+.stat-pill-text span         { font-size: 12.5px; }
+.trust-badge                 { font-size: 12.5px; white-space: normal; text-align: left; line-height: 1.4; }
+.footer-col-title            { font-size: 12px; }
+
+/* Statistik di HP: kotak 2×2 yang rapi, bukan 4 kapsul beda lebar */
+@media (max-width: 600px) {
+  .hero-stats.stats-strip {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    width: 100%; max-width: 420px; margin-inline: auto;
+  }
+  .hero-stats .stat-pill { padding: 12px 12px; gap: 10px; min-width: 0; }
+  .hero-stats .stat-pill-text { min-width: 0; }
+  .hero-stats .stat-pill-text span { display: block; line-height: 1.3; }
+  .trust-strip { gap: 8px; }
+  .trust-badge { padding: 9px 14px; }
+}
+
+/* Tautan footer: area sentuh ≥ 40 px */
+.footer-link-item { padding: 9px 0; margin-bottom: 0; min-height: 40px; }
+.footer-bottom-badge { text-decoration: none; color: inherit; min-height: 40px; }
+a.footer-bottom-badge:hover { border-color: rgba(196,190,255,.45); }
+
+/* Akun di menu samping */
+.drawer-user {
+  display: flex; align-items: center; gap: 10px; padding: 10px;
+  border-radius: 12px; background: var(--lav-50, #F3F1FF);
+}
+.drawer-user-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: var(--age-gradient); color: #fff; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.drawer-user-name { font-weight: 700; font-size: 14px; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drawer-user-role { font-size: 12.5px; color: var(--text-muted); }
+.drawer-logout {
+  margin-left: auto; flex-shrink: 0; min-height: 40px; padding: 0 14px;
+  border-radius: 10px; border: 1.5px solid rgba(231,76,60,.35); background: #fff;
+  color: #c0392b; font-weight: 700; font-size: 13px; cursor: pointer;
+}
+.drawer-logout:hover { background: #fdecea; }
+
+/* Hormati pengaturan "kurangi animasi" */
+@media (prefers-reduced-motion: reduce) {
+  .stat-pill, .bg-blob { animation: none !important; }
+}
+/* Footer: logo & deskripsi selalu selebar penuh di tablet/HP (dulu "Lentera / Jiwa" terlipat) */
+@media (max-width: 1000px) {
+  .footer-top > div:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+}
