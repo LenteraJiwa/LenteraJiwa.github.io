@@ -160,6 +160,7 @@
     <a href="tes.html"          class="nav-drawer-link"><span>🧪 Tes Psikologi</span>   <span class="arrow">→</span></a>
     <a href="tentang.html"      class="nav-drawer-link"><span>💜 Tentang Kami</span>    <span class="arrow">→</span></a>
     <a href="profil.html"       class="nav-drawer-link" id="drawer-profile-link"><span>👤 Profil Saya</span>     <span class="arrow">→</span></a>
+    <a href="portal.html"       class="nav-drawer-link" id="drawer-portal-link" style="display:none;"><span>🛡️ Portal</span>     <span class="arrow">→</span></a>
   </nav>
 
   <div class="nav-drawer-footer">
@@ -307,6 +308,10 @@ function updateAccountUI() {
   const session = (typeof LJ_AUTH !== 'undefined' && LJ_AUTH.getSession()) || null;
   // Tamu: tautan "Profil Saya" disembunyikan; cukup satu tombol "Masuk / Daftar"
   if (prof) prof.style.display = session ? '' : 'none';
+  // Admin & psikolog: jalan pintas ke Portal di menu ☰
+  const ptl = document.getElementById('drawer-portal-link');
+  const staff = session && (session.role === 'admin' || session.role === 'psikolog');
+  if (ptl) { ptl.style.display = staff ? '' : 'none'; ptl.firstElementChild.textContent = session && session.role === 'admin' ? '🛡️ Portal Admin' : '🧑‍⚕️ Portal Psikolog'; }
   const yr = document.getElementById('footer-year');
   if (yr) yr.textContent = new Date().getFullYear();
   const dl = document.getElementById('drawer-login-btn');

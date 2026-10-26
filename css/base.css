@@ -1909,3 +1909,5 @@ a.footer-bottom-badge:hover { border-color: rgba(196,190,255,.45); }
   display: inline-flex; align-items: center; min-height: 40px; margin-top: 10px; padding: 0 16px;
   border-radius: 999px; background: #C0392B; color: #fff; font-weight: 800; font-size: 14px; text-decoration: none;
 }
+/* Tautan ke-8 di menu (🛡️ Portal untuk admin/psikolog) ikut muncul */
+.nav-drawer.is-open .nav-drawer-link:nth-child(8) { transition-delay: 0.42s; opacity: 1; transform: translate3d(0,0,0); }
