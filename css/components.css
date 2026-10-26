@@ -349,6 +349,7 @@
 }
 
 .filter-btn {
+  min-height: 40px; display: inline-flex; align-items: center; gap: 6px;
   padding: 9px 20px;
   border-radius: var(--radius-full);
   border: 1.5px solid var(--border-mid);
