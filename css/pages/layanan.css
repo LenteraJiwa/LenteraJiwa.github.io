@@ -240,3 +240,8 @@
 @media (max-width: 480px) {
   .layanan-hero { padding-top: 16px !important; padding-bottom: 32px !important; gap: 24px; }
 }
+
+/* Pesan salah di bawah kolom formulir */
+.field-error { color: #C0392B; font-size: 13px; font-weight: 600; margin-top: 6px; line-height: 1.4; }
+.field-error:empty { display: none; }
+.form-input[aria-invalid="true"] { border-color: #E88B6A !important; box-shadow: 0 0 0 3px rgba(232,139,106,.18); }

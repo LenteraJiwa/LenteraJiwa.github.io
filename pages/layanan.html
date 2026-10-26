@@ -87,16 +87,16 @@
     <div class="reveal" id="lj-embedded-chat" style="background:rgba(255,255,255,0.85);backdrop-filter:blur(24px);border:1.5px solid rgba(123,111,212,0.18);border-radius:28px;box-shadow:0 16px 48px rgba(45,37,80,0.12);overflow:hidden;display:flex;flex-direction:column;">
       <div style="background:linear-gradient(135deg,#7B6FD4,#9B8FE4);padding:16px 20px 0;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <span style="font-family:Fraunces,serif;font-size:17px;font-weight:400;color:#fff;">🪔 Konsultasi Lentera</span>
+          <span style="font-family:Fraunces,serif;font-size:17px;font-weight:400;color:#fff;">🪔 Ruang Obrolan Lentera</span>
           <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);">
             <div style="width:7px;height:7px;border-radius:50%;background:#4cd9a8;box-shadow:0 0 6px #4cd9a8;animation:ljBlink 1.6s infinite;"></div>
             Ruang Live
           </div>
         </div>
         <div style="display:flex;gap:6px;padding-bottom:14px;">
-          <button class="emb-tab active" data-tab="live" onclick="embTab(this)" style="flex:1;padding:7px 4px;border-radius:999px;border:none;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#7B6FD4;transition:all .2s;position:relative;">🌐 Live<span id="emb-badge-live" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:999px;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #7B6FD4;"></span></button>
-          <button class="emb-tab" data-tab="ai" onclick="embTab(this)" style="flex:1;padding:7px 4px;border-radius:999px;border:none;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.18);color:rgba(255,255,255,0.8);transition:all .2s;position:relative;">🤖 AI<span id="emb-badge-ai" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:999px;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #7B6FD4;"></span></button>
-          <button class="emb-tab" data-tab="pakar" onclick="embTab(this)" style="flex:1;padding:7px 4px;border-radius:999px;border:none;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.18);color:rgba(255,255,255,0.8);transition:all .2s;position:relative;">👨‍⚕️ Pakar<span id="emb-badge-pakar" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:999px;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #7B6FD4;"></span></button>
+          <button class="emb-tab active" data-tab="live" onclick="embTab(this)" style="flex:1;min-height:40px;padding:9px 4px;border-radius:999px;border:none;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#7B6FD4;transition:all .2s;position:relative;">🌐 Live<span id="emb-badge-live" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:999px;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #7B6FD4;"></span></button>
+          <button class="emb-tab" data-tab="ai" onclick="embTab(this)" style="flex:1;min-height:40px;padding:9px 4px;border-radius:999px;border:none;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.18);color:rgba(255,255,255,0.8);transition:all .2s;position:relative;">🤖 AI<span id="emb-badge-ai" style="display:none;position:absolute;top:-4px;right:-4px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:999px;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #7B6FD4;"></span></button>
+          <!-- Tab "Pakar" disembunyikan: belum ada psikolog yang menjawab (tampilkan lagi bila sudah ada) -->
         </div>
       </div>
       <div id="emb-body" role="log" aria-live="polite" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:320px;max-height:420px;scroll-behavior:smooth;"></div>
@@ -225,10 +225,12 @@
     </div>
     <div class="booking-wrapper reveal">
       <form id="booking-form" novalidate aria-label="Form daftar minat konsultasi">
+        <div id="booking-crisis" data-crisis style="display:none;margin-bottom:18px;"></div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="nama">Nama <span style="color:var(--peach-600);">*</span></label>
             <input class="form-input" type="text" id="nama" name="nama" placeholder="Contoh: Rania" autocomplete="given-name" aria-required="true">
+            <div class="field-error" id="err-nama" role="alert"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="usia">Kelompok Usia <span style="color:var(--peach-600);">*</span></label>
@@ -239,16 +241,19 @@
               <option value="dewasa" selected>☀️ Dewasa (18–59 tahun)</option>
               <option value="lansia">🌸 Lansia (60+ tahun)</option>
             </select>
+            <div class="field-error" id="err-usia" role="alert"></div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="email">Email <span style="color:var(--peach-600);">*</span></label>
             <input class="form-input" type="email" id="email" name="email" placeholder="nama@email.com" autocomplete="email" aria-required="true">
+            <div class="field-error" id="err-email" role="alert"></div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="telp">Nomor HP <span style="color:var(--peach-600);">*</span></label>
+            <label class="form-label" for="telp">Nomor HP <span style="color:var(--peach-600);">*</span> <span style="color:var(--text-muted);font-weight:400;">(hanya untuk menghubungimu)</span></label>
             <input class="form-input" type="tel" id="telp" name="telp" placeholder="08xx-xxxx-xxxx" autocomplete="tel" aria-required="true">
+            <div class="field-error" id="err-telp" role="alert"></div>
           </div>
         </div>
         <div class="form-group">
@@ -261,20 +266,20 @@
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Waktu yang Nyaman (nanti)</label>
-          <div class="schedule-grid" role="group">
-            <button type="button" class="schedule-chip" data-time="pagi">☀️ Pagi<br><span style="font-size:10px;opacity:.7;">07.00–12.00</span></button>
-            <button type="button" class="schedule-chip is-selected" data-time="siang">🌤️ Siang<br><span style="font-size:10px;opacity:.7;">12.00–17.00</span></button>
-            <button type="button" class="schedule-chip" data-time="malam">🌙 Malam<br><span style="font-size:10px;opacity:.7;">17.00–21.00</span></button>
-            <button type="button" class="schedule-chip" data-time="weekday">📅 Weekday</button>
-            <button type="button" class="schedule-chip" data-time="weekend">🎉 Weekend</button>
-            <button type="button" class="schedule-chip" data-time="fleksibel">🔄 Fleksibel</button>
+          <label class="form-label" id="lbl-waktu">Waktu yang Nyaman (nanti)</label>
+          <div class="schedule-grid" role="group" aria-labelledby="lbl-waktu">
+            <button type="button" class="schedule-chip" data-time="pagi" aria-pressed="false">☀️ Pagi<br><span style="font-size:12px;opacity:.75;">07.00–12.00</span></button>
+            <button type="button" class="schedule-chip is-selected" data-time="siang" aria-pressed="true">🌤️ Siang<br><span style="font-size:12px;opacity:.75;">12.00–17.00</span></button>
+            <button type="button" class="schedule-chip" data-time="malam" aria-pressed="false">🌙 Malam<br><span style="font-size:12px;opacity:.75;">17.00–21.00</span></button>
+            <button type="button" class="schedule-chip" data-time="weekday" aria-pressed="false">📅 Weekday</button>
+            <button type="button" class="schedule-chip" data-time="weekend" aria-pressed="false">🎉 Weekend</button>
+            <button type="button" class="schedule-chip" data-time="fleksibel" aria-pressed="false">🔄 Fleksibel</button>
           </div>
           <input type="hidden" id="waktu-val" name="waktu" value="siang">
         </div>
         <div class="form-group">
-          <label class="form-label">Mode Sesi yang Diinginkan</label>
-          <div class="modality-toggle" role="group">
+          <label class="form-label" id="lbl-mode">Mode Sesi yang Diinginkan</label>
+          <div class="modality-toggle" role="group" aria-labelledby="lbl-mode">
             <button type="button" class="modality-btn is-active" data-mode="online" aria-pressed="true">💻 Online</button>
             <button type="button" class="modality-btn" data-mode="tatap-muka" aria-pressed="false">🏢 Tatap Muka</button>
             <button type="button" class="modality-btn" data-mode="fleksibel" aria-pressed="false">🔄 Fleksibel</button>
@@ -284,7 +289,7 @@
         <div class="form-group">
           <label class="form-label" for="cerita">Apa yang ingin kamu bicarakan? <span style="color:var(--text-muted);font-weight:400;">(opsional)</span></label>
           <textarea class="form-input form-textarea" id="cerita" name="cerita" placeholder="Tulis apapun yang terlintas di pikiranmu. Tidak perlu sempurna." rows="4"></textarea>
-          <span style="font-size:12.5px;color:var(--text-muted);margin-top:4px;display:block;">Membantu kami menyiapkan psikolog yang sesuai. Jika kamu butuh bantuan sekarang, lihat <a href="#bantuan" style="color:var(--age-primary);font-weight:700;">pilihan bantuan</a>.</span>
+          <p style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">Membantu kami menyiapkan psikolog yang sesuai. Jika kamu butuh bantuan sekarang, lihat <a href="#bantuan" style="color:var(--age-primary);font-weight:700;">pilihan bantuan</a>.</p>
         </div>
         <p role="note" style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:20px;">
           🔒 Datamu disimpan di Google Sheets milik pengelola Lentera Jiwa, hanya dipakai untuk menghubungimu soal layanan ini, dan tidak dibagikan ke pihak lain. <a href="tentang.html#privasi" style="color:var(--age-primary);font-weight:700;">Selengkapnya</a>

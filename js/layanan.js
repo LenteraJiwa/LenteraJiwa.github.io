@@ -75,8 +75,8 @@
 
     scheduleChips.forEach(function(chip) {
       chip.addEventListener('click', function() {
-        scheduleChips.forEach(function(c) { c.classList.remove('is-selected'); });
-        chip.classList.add('is-selected');
+        scheduleChips.forEach(function(c) { c.classList.remove('is-selected'); c.setAttribute('aria-pressed', 'false'); });
+        chip.classList.add('is-selected'); chip.setAttribute('aria-pressed', 'true');
         var waktuVal = document.getElementById('waktu-val');
         if (waktuVal) waktuVal.value = chip.dataset.time;
       });
@@ -118,34 +118,43 @@
         var nama   = document.getElementById('nama');
         var email  = document.getElementById('email');
         var telp   = document.getElementById('telp');
-
-        if (!nama || !nama.value.trim()) {
-          if (nama) nama.focus();
-          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Nama perlu diisi.', 'error');
-          return;
-        }
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) {
-          if (email) email.focus();
-          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Format email belum tepat.', 'error');
-          return;
-        }
-        if (!telp || !/^(\+62|62|0)[0-9]{8,13}$/.test(telp.value.replace(/[\s-]/g, ''))) {
-          if (telp) telp.focus();
-          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Nomor HP kurang valid. Contoh: 081234567890', 'error');
-          return;
-        }
         var usiaSel = document.getElementById('usia');
-        if (usiaSel && !usiaSel.value) {
-          usiaSel.focus();
-          if (window.LJ && window.LJ.ToastManager) window.LJ.ToastManager.show('Pilih kelompok usia dulu.', 'error');
+
+        // Pesan salah tampil di bawah kolomnya (dulu hanya toast yang cepat hilang)
+        var bad = [];
+        function fieldErr(el, id, msg) {
+          var box = document.getElementById('err-' + id);
+          if (box) box.textContent = msg || '';
+          if (el) { if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); }
+          if (msg) bad.push(el);
+        }
+        fieldErr(nama, 'nama', nama && nama.value.trim() ? '' : 'Nama perlu diisi.');
+        fieldErr(usiaSel, 'usia', usiaSel && usiaSel.value ? '' : 'Pilih kelompok usia.');
+        fieldErr(email, 'email', email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()) ? '' : 'Format email belum tepat. Contoh: nama@email.com');
+        fieldErr(telp, 'telp', telp && /^(\+62|62|0)[0-9]{8,13}$/.test(telp.value.replace(/[\s-]/g, '')) ? '' : 'Nomor HP kurang valid. Contoh: 081234567890');
+        if (bad.length) {
+          // Gulir dengan jarak agar kolom tidak tertutup bilah menu yang menempel di atas
+          bad[0].focus({ preventScroll: true });
+          var y = bad[0].getBoundingClientRect().top + window.scrollY - 140;
+          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
           return;
+        }
+
+        // Cerita berisi tanda krisis → bantuan langsung ditampilkan (pendaftaran tetap dikirim)
+        var crisisBox = document.getElementById('booking-crisis');
+        var cerita = document.getElementById('cerita');
+        if (crisisBox) {
+          var krisis = cerita && isCrisis(cerita.value);
+          crisisBox.innerHTML = krisis ? CRISIS_CARD.replace(/Pesan ini tidak dikirim ke AI\.[^<]*/, 'Pendaftaran minatmu tetap kami catat, tapi layanan konsultasi belum dibuka. Jangan menunggu kami bila kamu dalam bahaya.') : '';
+          crisisBox.style.display = krisis ? '' : 'none';
+          if (krisis) window.scrollTo({ top: Math.max(0, crisisBox.getBoundingClientRect().top + window.scrollY - 140), behavior: 'smooth' });
         }
 
         var errBox = document.getElementById('booking-error');
         if (errBox) errBox.style.display = 'none';
         var oldLabel = btn ? btn.textContent : '';
         if (btn) {
-          btn.textContent = 'Mengirim permintaanmu... 💜';
+          btn.textContent = 'Mengirim… 💜';
           btn.disabled    = true;
         }
 
@@ -168,8 +177,11 @@
           timeout
         ]).then(function(res) {
           if (!res || res.ok !== true) throw new Error((res && res.msg) || 'Server menolak permintaan.');
-          bookingForm.style.display = 'none';
           var formSuccess = document.getElementById('form-success');
+          // Kartu bantuan krisis tetap terlihat di atas pesan sukses
+          var cb = document.getElementById('booking-crisis');
+          if (cb && cb.innerHTML && formSuccess) formSuccess.insertBefore(cb, formSuccess.firstChild);
+          bookingForm.style.display = 'none';
           if (formSuccess) formSuccess.classList.add('is-visible');
         }).catch(function() {
           if (btn) { btn.textContent = oldLabel; btn.disabled = false; }
@@ -256,10 +268,15 @@
       EMB.tab=el.dataset.tab;
       EMB.replyTarget=null;
       document.getElementById('emb-reply-bar').style.display='none';
-      var ph={live:'Tulis pesan ke semua orang…',ai:'Tanyakan seputar kesehatan jiwa…',pakar:'Tanya Pakar belum tersedia'};
-      document.getElementById('emb-input').placeholder=ph[EMB.tab];
+      setPlaceholder();
       embRender();
     };
+
+    function loggedIn(){try{var s=JSON.parse(localStorage.getItem('lj_session'));return !!(s&&s.token);}catch(e){return false;}}
+    function setPlaceholder(){
+      var ph={live:loggedIn()?'Tulis pesan ke semua orang…':'Masuk dulu untuk mengobrol di ruang Live',ai:'Tanyakan seputar kesehatan jiwa…',pakar:'Tanya Pakar belum tersedia'};
+      var i=document.getElementById('emb-input'); if(i) i.placeholder=ph[EMB.tab]||'';
+    }
 
     window.embReply=function(id){
       var msgs=sl(EMB.LIVE,[]),msg=msgs.find(function(m){return m.id===id;});
@@ -337,15 +354,25 @@
       if(typing)typing.style.display='flex';
       scr();
       var reply=null;
+      var seed=Math.floor(Math.random()*99999);
+      var lim=function(p){return Promise.race([p,new Promise(function(_,rj){setTimeout(function(){rj(new Error('timeout'));},45000);})]);};
+      /* Kirim lewat POST: pertanyaan TIDAK lagi tertulis di alamat URL (yang bisa
+         tercatat di log server/riwayat). Beberapa pesan terakhir ikut dikirim agar
+         AI paham konteks. Pesan krisis tidak pernah sampai ke sini. */
+      var hist=EMB.aiMsgs.filter(function(m){return m.role==='user'||m.role==='ai';}).slice(-6)
+        .map(function(m){return {role:m.role==='ai'?'assistant':'user',content:String(m.text).slice(0,1500)};});
       try{
+        var rp=await lim(fetch('https://text.pollinations.ai/',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({messages:[{role:'system',content:SYS}].concat(hist),model:'openai',seed:seed,private:true})}));
+        if(rp.status===429) reply='⏳ Server sedang sibuk, tunggu beberapa detik lalu kirim lagi ya.';
+        else if(rp.ok){var t=(await rp.text()).trim(); if(t&&t.length>2&&t.charAt(0)!=='{') reply=t;}
+      }catch(e){}
+      if(!reply) try{
+        // Cadangan: cara lama (GET) bila POST tidak tersedia
         var prompt=encodeURIComponent(txt);
         var sys=encodeURIComponent(SYS);
-        var seed=Math.floor(Math.random()*99999);
-        var url='https://text.pollinations.ai/'+prompt+'?system='+sys+'&model=openai&seed='+seed;
-        var r=await Promise.race([
-          fetch(url),
-          new Promise(function(_,rj){setTimeout(function(){rj(new Error('timeout'));},45000);})
-        ]);
+        var url='https://text.pollinations.ai/'+prompt+'?system='+sys+'&model=openai&seed='+seed+'&private=true';
+        var r=await lim(fetch(url));
         if(r.status===429){
           reply='⏳ Server sedang sibuk, tunggu beberapa detik lalu kirim lagi ya.';
         } else {
@@ -356,7 +383,7 @@
           }
           if(raw&&raw.length>2) reply=raw;
         }
-      }catch(e){console.error('Pollinations error:',e);}
+      }catch(e){}
       if(!reply) reply='Maaf, koneksi sedang terganggu. Coba kirim pesan lagi ya 🪔';
       if(typing)typing.style.display='none';
       EMB.aiLoading=false;
@@ -365,6 +392,7 @@
     }
 
     embRender();
+    setPlaceholder();
     // (Dulu di sini angka "Online" ACAK 24–63. Dihapus: angka palsu.)
     liveStartPolling();
   }
@@ -428,10 +456,28 @@ function embRenderLive() {
   if (wasAtBottom) b.scrollTop = b.scrollHeight;
 }
 
+/* Hemat kuota Apps Script: dulu SETIAP pengunjung meminta pesan tiap 4 detik
+   (±900 permintaan/jam per orang), bahkan saat tab tersembunyi. Sekarang tiap
+   8 detik, dan hanya bila tab browser terlihat, tab Live aktif, dan kotak
+   obrolan ada di layar. */
+function liveShouldPoll() {
+  if (document.hidden) return false;
+  var t = document.querySelector('.emb-tab.active');
+  if (t && t.dataset.tab !== 'live') return false;
+  var box = document.getElementById('lj-embedded-chat');
+  if (!box) return false;
+  var r = box.getBoundingClientRect();
+  return r.bottom > -200 && r.top < window.innerHeight + 200;
+}
+var _liveVisHandler = null;
 function liveStartPolling() {
   liveGetMessages();
   if (_livePolling) clearInterval(_livePolling);
-  _livePolling = setInterval(liveGetMessages, 4000);
+  _livePolling = setInterval(function() { if (!document.getElementById('emb-body')) { liveStopPolling(); return; } if (liveShouldPoll()) liveGetMessages(); }, 8000);
+  if (!_liveVisHandler) {
+    _liveVisHandler = function() { if (!document.hidden && document.getElementById('emb-body') && liveShouldPoll()) liveGetMessages(); };
+    document.addEventListener('visibilitychange', _liveVisHandler);
+  }
   /* Didaftarkan agar dihentikan main.js saat pindah halaman */
   if (window.activeTimers) window.activeTimers.push(_livePolling);
 }
