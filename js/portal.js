@@ -125,6 +125,13 @@
         ringkasan: f.ringkasan.value, topik: f.topik.value, fileLink: f.fileLink.value, linkLuar: f.linkLuar.value,
         usia: $$('input[name="usia"]:checked', f).map(c => c.value)
       };
+      // Link file Word/Office yang dibuka di Google Docs mengandung "rtpof=true".
+      // Situs hanya bisa membaca Google Docs asli → beri tahu sebelum dikirim.
+      if (data.tipe === 'artikel' && /[?&]rtpof=true/.test(data.fileLink)) {
+        status($('#kt-status'), 'err', 'Link ini masih file Word (.docx), belum Google Docs. Buka file itu, pilih File → Simpan sebagai Google Dokumen (di HP: ⋮ → Bagikan & ekspor → Simpan sebagai Google Dokumen), lalu tempel link dari salinan barunya.');
+        f.fileLink.focus();
+        return;
+      }
       status($('#kt-status'), 'info', '⏳ Memeriksa file di Google Drive dan menyimpan…');
       const r = await busy($('#kt-submit'), () => LJ_AUTH.call('simpanKonten', { data }));
       status($('#kt-status'), r.ok ? 'ok' : 'err', r.msg || (r.ok ? 'Tersimpan.' : 'Gagal menyimpan.'));
