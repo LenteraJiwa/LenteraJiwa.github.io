@@ -224,3 +224,31 @@
   #book-filter { padding-left: 16px !important; padding-right: 16px !important; scroll-padding-left: 16px; }
   .book-detail-cover { height: 150px !important; min-height: 0 !important; font-size: 56px !important; margin-bottom: 18px !important; }
 }
+
+/* ── Pembaca buku di dalam situs (tanpa link Drive) ── */
+.book-reader { position: fixed; inset: 0; z-index: 400; display: flex; flex-direction: column;
+  background: var(--bg-page, #F5F3FF); visibility: hidden; opacity: 0; transition: opacity .2s ease, visibility .2s; }
+.book-reader.is-open { visibility: visible; opacity: 1; }
+.book-reader-head { display: flex; align-items: center; gap: 12px; padding: 10px 16px; min-height: 56px;
+  border-bottom: 1px solid var(--lav-100, #ede9fe); background: var(--bg-solid, #fff); }
+.book-reader-btn { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; border: 1px solid var(--lav-200, #ddd6fe);
+  background: transparent; color: inherit; font-size: 20px; cursor: pointer; }
+.book-reader-btn:focus-visible { outline: 2px solid var(--lav-400, #a78bfa); outline-offset: 2px; }
+.book-reader-title { flex: 1; min-width: 0; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-reader-page { flex-shrink: 0; font-size: 13px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.book-reader-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+  padding: 24px 16px 80px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.book-reader-body:focus { outline: none; }
+.book-reader-msg { margin: auto; max-width: 420px; text-align: center; color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
+.book-reader-msg .btn { margin-top: 12px; }
+.book-page { flex-shrink: 0; width: 100%; max-width: 820px; background: #fff; border-radius: 6px; box-shadow: 0 4px 18px rgba(45,37,80,.15); overflow: hidden; }
+.book-page canvas { display: block; user-select: none; -webkit-user-select: none; }
+.book-text { flex-shrink: 0; width: 100%; max-width: 680px; font-size: 17px; line-height: 1.8; color: var(--text-primary); overflow-wrap: anywhere; }
+.book-text h1, .book-text h2, .book-text h3 { line-height: 1.3; margin: 1.6em 0 .6em; }
+.book-text h1 { font-size: 26px; } .book-text h2 { font-size: 22px; } .book-text h3 { font-size: 19px; }
+.book-text p { margin: 0 0 1em; }
+.book-text ul, .book-text ol { padding-left: 1.4em; margin: 0 0 1em; }
+.book-text img { max-width: 100%; height: auto; }
+@media (max-width: 480px) { .book-text { font-size: 16px; } .book-reader-body { padding: 16px 12px 60px; } }
+@media (prefers-reduced-motion: reduce) { .book-reader { transition: none; } }
+.book-text ul { list-style: disc; } .book-text ol { list-style: decimal; } .book-text li { margin-bottom: .3em; }

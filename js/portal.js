@@ -104,7 +104,7 @@
   /* ── Konten ── */
   function setTipeUI(tipe) {
     const f = $('#kt-form');
-    $('#kt-file-label').textContent = tipe === 'artikel' ? 'Link Google Docs artikel *' : 'Link file di Google Drive (PDF/Docs, opsional jika ada link luar)';
+    $('#kt-file-label').textContent = tipe === 'artikel' ? 'Link Google Docs artikel *' : 'Link file PDF / Google Docs di Drive (tetap privat; opsional jika ada link luar)';
     f.fileLink.placeholder = tipe === 'artikel' ? 'https://docs.google.com/document/d/…' : 'https://drive.google.com/file/d/…';
     $('#kt-luar-wrap').hidden = tipe !== 'buku';
   }
