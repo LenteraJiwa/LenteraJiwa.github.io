@@ -181,6 +181,13 @@
           body.append(box); pages.push(box);
         }
         pageEl.textContent = '1 / ' + pdf.numPages;
+        // Layar lebar (PC/tablet mendatar): satu halaman utuh muat di layar. HP: halaman selebar layar.
+        const ratio = vp1.width / vp1.height;
+        const fit = () => {
+          const mw = window.innerWidth > 600 ? Math.max(320, Math.min(820, (body.clientHeight - 48) * ratio)) : 820;
+          pages.forEach(p => { p.style.maxWidth = Math.floor(mw) + 'px'; });
+        };
+        fit(); window.__ljReaderFit = fit;
         const draw = async box => {
           if (box.dataset.done) return; box.dataset.done = '1';
           const page = await pdf.getPage(+box.dataset.page);
@@ -223,13 +230,14 @@
       opened = false; token++;
       if (observer) { observer.disconnect(); observer = null; }
       root.classList.remove('is-open'); root.setAttribute('aria-hidden', 'true');
-      body.textContent = ''; pageEl.textContent = ''; body.onscroll = null;
+      body.textContent = ''; pageEl.textContent = ''; body.onscroll = null; window.__ljReaderFit = null;
       // Detail buku masih terbuka di belakang: kunci gulir tetap
       if (prevFocus && document.contains(prevFocus)) prevFocus.focus();
     }
     return { open, close, isOpen: () => opened };
   })();
 
+  if (!window.__ljReaderResize) { window.__ljReaderResize = true; window.addEventListener('resize', () => { if (window.__ljReaderFit) window.__ljReaderFit(); }, { passive: true }); }
   document.getElementById('book-close').addEventListener('click', closeDetail);
   document.getElementById('book-overlay').addEventListener('click', closeDetail);
   if (window.__ljBookEsc) document.removeEventListener('keydown', window.__ljBookEsc);
