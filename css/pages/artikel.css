@@ -357,3 +357,45 @@ ol.article-ul li::before { content: none; display: none; }
 .article-table th, .article-table td { border: 1px solid var(--border-mid, rgba(123,111,212,.2)); padding: 8px 10px; text-align: left; vertical-align: top; }
 .article-table th { background: var(--lav-100); font-weight: 800; }
 #article-content a { color: var(--lav-800, #3F3592); text-decoration: underline; font-weight: 700; }
+
+/* ============================================================
+   PERBAIKAN 26 Okt 2026
+   ============================================================ */
+/* Ruang kosong di bawah menu: dulu 120 px + 88 px ruang menu (dihitung dua kali) */
+.artikel-page-header { padding-top: 40px !important; padding-bottom: 32px; }
+@media (max-width: 480px) {
+  .artikel-page-header { padding-top: 16px !important; padding-bottom: 24px; }
+}
+
+/* Tombol filter: area sentuh ≥ 40 px, jumlah artikel di dalam tombol */
+.filter-btn { min-height: 40px; display: inline-flex; align-items: center; gap: 6px; }
+.filter-btn .filter-count { font-weight: 600; opacity: .7; font-size: 12.5px; }
+
+/* Isi artikel dari Google Docs (tag polos dari server): beri jarak & gaya baca */
+#article-content .article-text { font-size: 17px; line-height: 1.8; color: var(--text-primary); }
+#article-content .article-text p { margin: 0 0 1.1em; }
+#article-content .article-text h2 { font-family: 'Fraunces', serif; font-size: clamp(22px, 3vw, 28px); font-weight: 400; line-height: 1.25; margin: 1.8em 0 .6em; }
+#article-content .article-text h3 { font-size: 18px; font-weight: 800; margin: 1.5em 0 .5em; }
+#article-content .article-text ul, #article-content .article-text ol { margin: 0 0 1.1em 1.3em; padding: 0; }
+#article-content .article-text li { margin-bottom: .45em; }
+#article-content .article-text a { color: var(--lav-700, #5A4FC4); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+#article-content .article-text table { width: 100%; border-collapse: collapse; margin: 0 0 1.2em; font-size: 15px; display: block; overflow-x: auto; }
+#article-content .article-text td, #article-content .article-text th { border: 1px solid var(--border-mid); padding: 8px 10px; vertical-align: top; }
+#article-content .article-text > :first-child { margin-top: 0; }
+#article-content .article-h1 { margin-bottom: 14px; }
+#article-content .article-author { margin-bottom: 26px; }
+#article-content .article-disclaimer { margin-top: 32px; }
+.article-retry { margin-top: 14px; }
+@media (max-width: 480px) {
+  #article-content .article-text { font-size: 16.5px; }
+}
+/* HP: filter satu baris yang bisa digeser (dulu terlipat 3 baris) */
+@media (max-width: 600px) {
+  .filter-bar { flex-wrap: nowrap !important; overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+    margin-inline: -16px; padding: 4px 16px 8px; scrollbar-width: none; justify-content: flex-start !important; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-bar .filter-btn { flex-shrink: 0; scroll-snap-align: start; }
+}
+/* Keterangan kartu: tiap bagian tidak terpecah di tengah */
+.artikel-card .artikel-meta { flex-wrap: wrap; gap: 6px 14px; }
+.artikel-card .artikel-meta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }

@@ -19,15 +19,32 @@
     if (text != null) n.textContent = text;
     return n;
   }
-  function message(text, sub) {
+  function message(text, sub, retry) {
     grid.textContent = '';
     const box = el('div', 'artikel-card');
     box.style.cssText = 'grid-column:1/-1;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;cursor:default;';
     box.append(el('div', '', '📭'), el('p', '', text));
-    if (sub) { const s = el('p', '', sub); s.style.cssText = 'font-size:13px;color:var(--text-secondary);max-width:420px;'; box.append(s); }
+    if (sub) { const s = el('p', '', sub); s.style.cssText = 'font-size:13.5px;color:var(--text-secondary);max-width:420px;'; box.append(s); }
+    if (retry) {
+      const b = el('button', 'btn btn-soft btn-sm article-retry', '🔄 Coba lagi');
+      b.type = 'button'; b.style.minHeight = '40px';
+      b.addEventListener('click', () => { b.disabled = true; b.textContent = '⏳ Memuat…'; retry(); });
+      box.append(b);
+    }
     grid.append(box);
     grid.setAttribute('aria-busy', 'false');
   }
+  // Jumlah artikel di setiap tombol filter usia, mis. "🌙 Remaja (2)"
+  function updateCounts() {
+    document.querySelectorAll('#artikel-filter .filter-btn').forEach(b => {
+      const f = b.dataset.filter;
+      const n = LIST.filter(a => f === 'semua' || (a.usia || []).indexOf(f) >= 0).length;
+      let c = b.querySelector('.filter-count');
+      if (!c) { c = el('span', 'filter-count'); b.append(c); }
+      c.textContent = LIST.length ? '(' + n + ')' : '';
+    });
+  }
+  const safeId = id => /^[\w-]{1,80}$/.test(String(id || '')) ? String(id) : '';
 
   function card(a) {
     const c = el('article', 'artikel-card card-hover');
@@ -70,6 +87,7 @@
       c.textContent = '';
       document.getElementById('article-drawer-tag').textContent = (a.usia || []).map(u => USIA[u] || u).join(' · ');
       document.getElementById('article-drawer-time').textContent = '📖 ' + (a.menitBaca || 1) + ' menit baca';
+      // Urutan baca: judul → penulis → isi → catatan (dulu penulis & catatan di atas judul)
       const h1 = el('h1', 'article-h1', a.judul);
       h1.id = 'article-drawer-title'; h1.tabIndex = -1;
       const author = el('div', 'article-author');
@@ -80,8 +98,11 @@
       author.append(av, who);
       const note = el('div', 'article-disclaimer', '📋 Konten ini bersifat edukatif dan tidak menggantikan diagnosis atau konsultasi profesional. Dalam keadaan darurat hubungi Layanan SEJIWA 119 ext 8 atau 112.');
       note.setAttribute('role', 'note');
-      const body = el('div', '', 'Memuat isi artikel…');
-      c.append(author, note, h1, body);
+      const body = el('div', 'article-text', 'Memuat isi artikel…');
+      c.append(h1, author, body, note);
+      // Alamat yang bisa dibagikan: artikel.html#baca-ID
+      const id = safeId(a.id);
+      if (id) try { history.replaceState(history.state, '', location.pathname + location.search + '#baca-' + id); } catch (e) {}
 
       this.overlay.classList.add('is-open'); this.overlay.setAttribute('aria-hidden', 'false');
       this.drawer.classList.add('is-open'); this.drawer.setAttribute('aria-hidden', 'false');
@@ -91,10 +112,17 @@
       if (this.progress) this.progress.style.transform = 'scaleX(0)';
       setTimeout(() => h1.focus(), 300);
 
-      const r = await LJ_AUTH.apiGet('getArtikel', { id: a.id });
-      if (!this.isOpen) return;
-      if (r.ok && r.artikel) body.innerHTML = r.artikel.html; // HTML dibuat & di-escape oleh server
-      else body.textContent = r.msg || 'Isi artikel belum bisa dimuat. Coba lagi nanti.';
+      const loadBody = async () => {
+        body.textContent = 'Memuat isi artikel…';
+        const r = await LJ_AUTH.apiGet('getArtikel', { id: a.id });
+        if (!this.isOpen) return;
+        if (r.ok && r.artikel) { body.innerHTML = r.artikel.html; return; } // HTML dibuat & di-escape oleh server
+        body.textContent = r.msg || 'Isi artikel belum bisa dimuat.';
+        const b = el('button', 'btn btn-soft btn-sm article-retry', '🔄 Coba lagi');
+        b.type = 'button'; b.style.minHeight = '40px'; b.addEventListener('click', loadBody);
+        body.append(document.createElement('br'), b);
+      };
+      await loadBody();
     },
     close() {
       if (!this.isOpen) return;
@@ -102,6 +130,7 @@
       this.drawer.classList.remove('is-open'); this.drawer.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
       this.isOpen = false;
+      if (/^#baca-/.test(location.hash)) try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
       if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
     },
     update() {
@@ -114,7 +143,18 @@
   Reader.drawer.addEventListener('scroll', () => Reader.update(), { passive: true });
   // Satu listener Escape saja walau halaman dibuka berkali-kali
   if (window.__ljArtikelEsc) document.removeEventListener('keydown', window.__ljArtikelEsc);
-  window.__ljArtikelEsc = e => { if (e.key === 'Escape') Reader.close(); };
+  window.__ljArtikelEsc = e => {
+    if (e.key === 'Escape') Reader.close();
+    // Tab berputar di dalam pembaca selama terbuka
+    if (e.key === 'Tab' && Reader.isOpen && document.contains(Reader.drawer)) {
+      const items = [...Reader.drawer.querySelectorAll('a[href],button,[tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+      if (!Reader.drawer.contains(document.activeElement)) { e.preventDefault(); (items[0] || Reader.drawer).focus(); return; }
+      if (!items.length) { e.preventDefault(); return; }
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
   document.addEventListener('keydown', window.__ljArtikelEsc);
 
   /* ── Filter ── */
@@ -126,12 +166,15 @@
   /* ── Muat data ── */
   (async function load() {
     const r = await LJ_AUTH.apiGet('getKonten', { tipe: 'artikel' });
-    if (!r.ok) return message('Artikel belum bisa dimuat.', r.offline ? 'Periksa koneksi internetmu lalu muat ulang halaman.' : 'Server sedang disiapkan. Coba lagi nanti.');
+    if (!r.ok) return message('Artikel belum bisa dimuat.', r.offline ? 'Periksa koneksi internetmu.' : 'Server sedang disiapkan. Coba lagi nanti.', load);
     LIST = r.konten || [];
+    updateCounts();
     render('semua');
-    // Dibuka dari kartu di Beranda
+    // Dibuka dari kartu di Beranda, atau dari tautan berbagi artikel.html#baca-ID
     let want = '';
     try { want = sessionStorage.getItem('lj_open_artikel') || ''; sessionStorage.removeItem('lj_open_artikel'); } catch (e) {}
+    const m = location.hash.match(/^#baca-([\w-]{1,80})$/);
+    if (!want && m) want = m[1];
     const a = want && LIST.filter(x => x.id === want)[0];
     if (a) Reader.open(a);
   })();
