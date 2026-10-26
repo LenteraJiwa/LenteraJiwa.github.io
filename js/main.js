@@ -270,6 +270,14 @@ const App = {
 
       const href = link.getAttribute('href');
 
+      // Tautan "#bagian" di halaman yang sama: dulu ditangani browser apa adanya
+      // (tanpa memperhitungkan bilah menu) → posisi meleset.
+      if (href && href.length > 1 && href.startsWith('#') && !e.ctrlKey && !e.metaKey) {
+        const id = href.slice(1);
+        if (document.getElementById(id)) { e.preventDefault(); this._closeDrawer(); scrollToHash(id, 0); }
+        return;
+      }
+
       if (!href ||
           href.startsWith('#') ||
           href.startsWith('http') ||
@@ -295,14 +303,9 @@ const App = {
         this._closeDrawer();
 
         if (normalizedTarget === normalizedCurrent) {
-          if (hashPart) {
-            setTimeout(() => {
-              const target = document.getElementById(hashPart);
-              if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }, 100);
-          }
+          // Tautan ke bagian di halaman yang sama: pakai cara gulir yang sama
+          // dengan pindah halaman (memperhitungkan bilah menu yang menempel)
+          if (hashPart) scrollToHash(hashPart, 0);
           return;
         }
 
@@ -460,7 +463,10 @@ const App = {
         const scrollY = window.scrollY;
         navInner.classList.toggle('nav-scrolled', scrollY > 40);
 
-        if (nav) {
+        if (nav && Date.now() < (window.__ljNavHoldUntil || 0)) {
+          // Sedang melompat ke suatu bagian: menu tetap terlihat agar posisi akhir konsisten
+          nav.style.transform = 'translateX(-50%) translate3d(0, 0, 0)';
+        } else if (nav) {
           if (scrollY > lastScrollY + 80 && scrollY > 200) {
             nav.style.transform = 'translateX(-50%) translate3d(0, -120%, 0)';
           } else if (scrollY < lastScrollY - 20 || scrollY < 80) {
@@ -723,25 +729,41 @@ const ToastManager = {
 /* Gulir ke bagian tujuan (#id), memperhitungkan menu atas yang menempel.
    Diulang setelah konten di atasnya (statistik, gambar) selesai dimuat,
    karena konten itu bisa mendorong posisi tujuan. */
-function scrollToHash(hash) {
-  const go = (smooth) => {
-    let t = null;
-    try { t = document.getElementById(decodeURIComponent(hash)); } catch (e) { return; }
-    if (!t) return null;
-    const nav = document.querySelector('.navbar, #navbar, header');
-    const fixed = nav && /fixed|sticky/.test(getComputedStyle(nav).position);
-    const off = (fixed ? nav.offsetHeight : 0) + 16;
-    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - off, behavior: smooth ? 'smooth' : 'auto' });
-    return off;
+function scrollToHash(hash, delay) {
+  /* Posisi akhir: AWAL ISI bagian (label/judul) tepat di bawah bilah menu.
+     - Bilah menu = #main-nav (fixed). Dulu yang diukur <header> (tidak fixed),
+       sehingga judul tertutup menu.
+     - Ruang kosong (padding) di atas isi bagian dilewati, bukan ikut ditampilkan.
+     - Diulang setelah konten di atasnya selesai dimuat agar tidak meleset. */
+  const target = () => { try { return document.getElementById(decodeURIComponent(hash)); } catch (e) { return null; } };
+  const navSpace = () => {
+    const nav = document.getElementById('main-nav');
+    if (!nav) return 16;
+    const r = nav.getBoundingClientRect();
+    return Math.max(0, parseFloat(getComputedStyle(nav).top) || 0) + r.height + 14;
   };
-  setTimeout(() => go(true), 150);
-  [800, 1600, 2600].forEach(ms => setTimeout(() => {
-    const t = document.getElementById(hash);
-    if (!t) return;
-    const nav = document.querySelector('.navbar, #navbar, header');
-    const want = (nav && /fixed|sticky/.test(getComputedStyle(nav).position) ? nav.offsetHeight : 0) + 16;
-    if (Math.abs(t.getBoundingClientRect().top - want) > 40) go(false);
-  }, ms));
+  const contentTop = (t) => {
+    const pad = parseFloat(getComputedStyle(t).paddingTop) || 0;
+    return t.getBoundingClientRect().top + window.scrollY + Math.min(pad, 120);
+  };
+  const go = (smooth) => {
+    const t = target(); if (!t) return;
+    window.scrollTo({ top: Math.max(0, contentTop(t) - navSpace()), behavior: smooth ? 'smooth' : 'auto' });
+  };
+  // Bila pengguna menggulir sendiri, koreksi otomatis dibatalkan (layar tidak "ditarik balik")
+  let userMoved = false;
+  const stop = () => { userMoved = true; window.__ljNavHoldUntil = 0; };
+  window.__ljNavHoldUntil = Date.now() + 3200 + (delay || 0);
+  const navEl = document.getElementById('main-nav');
+  if (navEl) navEl.style.transform = 'translateX(-50%) translate3d(0, 0, 0)';
+  setTimeout(() => ['wheel', 'touchstart', 'keydown'].forEach(ev => window.addEventListener(ev, stop, { once: true, passive: true })), (delay || 0) + 50);
+  setTimeout(() => go(true), delay == null ? 150 : delay);
+  [900, 1800, 2800].forEach(ms => setTimeout(() => {
+    if (userMoved) return;
+    const t = target(); if (!t) return;
+    const off = contentTop(t) - window.scrollY - navSpace();
+    if (Math.abs(off) > 24) go(false);
+  }, ms + (delay || 0)));
 }
 
 function initialLoad() {
