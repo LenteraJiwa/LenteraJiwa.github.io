@@ -252,3 +252,20 @@
 @media (max-width: 480px) { .book-text { font-size: 16px; } .book-reader-body { padding: 16px 12px 60px; } }
 @media (prefers-reduced-motion: reduce) { .book-reader { transition: none; } }
 .book-text ul { list-style: disc; } .book-text ol { list-style: decimal; } .book-text li { margin-bottom: .3em; }
+
+/* ── Jenis koleksi (Buku / Jurnal), sampul gambar, sumber ── */
+.jenis-toggle { display: inline-flex; gap: 4px; padding: 4px; margin: 0 0 14px; border-radius: 999px;
+  background: var(--bg-solid, #fff); border: 1px solid var(--lav-100, #E8E4FF); max-width: 100%; }
+.jenis-btn { min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 600; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.jenis-btn.is-active { background: var(--lav-100, #E8E4FF); color: var(--lav-800, #3B2F8F); }
+.jenis-btn:focus-visible { outline: 2px solid var(--lav-400, #8B7FE8); outline-offset: 2px; }
+.jenis-btn .filter-count { font-size: 12.5px; }
+.jenis-badge { position: absolute; top: 10px; left: 10px; z-index: 2; padding: 3px 9px; border-radius: 999px;
+  background: rgba(255,255,255,.92); color: var(--lav-800, #3B2F8F); font-size: 12px; font-weight: 700; }
+.book-cover.has-img, .book-detail-cover.has-img { font-size: 0 !important; }
+.book-cover.has-img img, .book-detail-cover.has-img img { position: relative; z-index: 1; height: 86%; width: auto; max-width: 86%;
+  object-fit: contain; border-radius: 4px; box-shadow: 0 6px 16px rgba(45,37,80,.28); user-select: none; -webkit-user-select: none; }
+.book-detail-source { font-size: 14px; color: var(--text-primary); margin: -2px 0 6px; line-height: 1.5; }
+.book-reader-sub { margin-top: 8px; font-size: 13.5px; }
+@media (max-width: 600px) { .jenis-toggle { display: flex; width: fit-content; } .jenis-btn { padding: 0 13px; } }

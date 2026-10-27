@@ -91,7 +91,7 @@
             <li><strong>Artikel:</strong> tulis di <em>Google Docs</em>. Pakai gaya <em>Judul 1/Judul 2</em> untuk subjudul, daftar berpoin, cetak tebal/miring, dan link — semuanya ikut tampil di situs.</li>
             <li>Dokumen harus bisa dibuka oleh akun Google pemilik situs: simpan di Drive akun itu, atau klik <em>Bagikan</em> → tambahkan email akun itu sebagai <em>Pelihat</em>. <strong>Tidak perlu</strong> dibuat publik.</li>
             <li>Salin link dokumen dan tempel di kolom di bawah.</li>
-            <li><strong>Buku/materi:</strong> pakai <em>PDF</em> (maks. 10 MB) atau <em>Google Docs</em> di Drive akun pemilik situs. File <strong>tetap privat</strong> — pembaca membacanya di dalam situs tanpa link atau akses ke Drive. Hanya untuk materi milikmu sendiri atau yang memang boleh dibagikan. Untuk buku komersial, cukup isi <em>link luar</em> (toko, perpustakaan, iPusnas).</li>
+            <li><strong>Buku/materi &amp; jurnal:</strong> pakai <em>PDF</em> (maks. 10 MB) atau <em>Google Docs</em> di Drive akun pemilik situs. File <strong>tetap privat</strong> — pembaca membacanya di dalam situs tanpa link atau akses ke Drive. Hanya untuk materi milikmu sendiri atau yang memang boleh dibagikan. Untuk buku komersial, cukup isi <em>link luar</em> (toko, perpustakaan, iPusnas).</li>
             <li>Isi di situs ikut berubah saat dokumen diedit (tunggu hingga ±6 jam, atau simpan ulang konten di sini agar langsung diperbarui).</li>
           </ol>
         </details>
@@ -103,6 +103,7 @@
               <select name="tipe">
                 <option value="artikel">📝 Artikel (Google Docs)</option>
                 <option value="buku">📚 Buku / Materi</option>
+                <option value="jurnal">📄 Jurnal</option>
               </select>
             </label>
             <label class="portal-field">Status
@@ -131,9 +132,27 @@
           <label class="portal-field"><span id="kt-file-label">Link Google Docs artikel *</span>
             <input name="fileLink" maxlength="300" placeholder="https://docs.google.com/document/d/…">
           </label>
-          <label class="portal-field" id="kt-luar-wrap" hidden>Link luar (toko/perpustakaan, opsional)
+          <label class="portal-field" id="kt-luar-wrap" hidden><span id="kt-luar-label">Link luar (toko/perpustakaan, opsional)</span>
             <input name="linkLuar" maxlength="300" placeholder="https://…">
           </label>
+          <div id="kt-pustaka-wrap" hidden>
+            <label class="portal-field"><span id="kt-sumber-label">Penulis &amp; penerbit (opsional)</span>
+              <input name="sumber" maxlength="200" placeholder="Contoh: M.N. Hegde &amp; Don Freed · Plural Publishing, 2022">
+            </label>
+            <div class="portal-field">
+              <span>Gambar sampul (opsional)</span>
+              <div class="kt-sampul">
+                <div class="kt-sampul-preview" id="kt-sampul-preview" aria-live="polite"><span>Belum ada sampul</span></div>
+                <div class="kt-sampul-actions">
+                  <label class="portal-btn portal-btn-ghost portal-btn-sm kt-sampul-pick">🖼️ Pilih gambar
+                    <input type="file" id="kt-sampul-file" class="kt-file-input" accept="image/jpeg,image/png,image/webp">
+                  </label>
+                  <button type="button" class="portal-btn portal-btn-ghost portal-btn-sm" id="kt-sampul-hapus" hidden>Hapus sampul</button>
+                  <p class="portal-help">JPG/PNG/WEBP, sebaiknya tegak (mis. 600×900). Gambar otomatis dikecilkan dan disimpan privat; pembaca hanya melihatnya di situs.</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="portal-actions">
             <button type="submit" class="portal-btn" id="kt-submit">Simpan Konten</button>
             <button type="button" class="portal-btn portal-btn-ghost" id="kt-reset">Batal / Baru</button>

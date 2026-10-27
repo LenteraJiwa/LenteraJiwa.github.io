@@ -103,14 +103,59 @@
 
   /* ── Konten ── */
   function setTipeUI(tipe) {
-    const f = $('#kt-form');
+    const f = $('#kt-form'), pustaka = tipe === 'buku' || tipe === 'jurnal';
     $('#kt-file-label').textContent = tipe === 'artikel' ? 'Link Google Docs artikel *' : 'Link file PDF / Google Docs di Drive (tetap privat; opsional jika ada link luar)';
     f.fileLink.placeholder = tipe === 'artikel' ? 'https://docs.google.com/document/d/…' : 'https://drive.google.com/file/d/…';
-    $('#kt-luar-wrap').hidden = tipe !== 'buku';
+    $('#kt-luar-wrap').hidden = !pustaka;
+    $('#kt-pustaka-wrap').hidden = !pustaka;
+    $('#kt-luar-label').textContent = tipe === 'jurnal' ? 'Link jurnal (DOI / situs jurnal, opsional jika ada file)' : 'Link luar (toko/perpustakaan, opsional)';
+    f.linkLuar.placeholder = tipe === 'jurnal' ? 'https://doi.org/…' : 'https://…';
+    $('#kt-sumber-label').textContent = tipe === 'jurnal' ? 'Penulis, nama jurnal & tahun (opsional)' : 'Penulis & penerbit (opsional)';
+    f.sumber.placeholder = tipe === 'jurnal' ? 'Contoh: Sari, D. & Putra, A. · Jurnal Psikologi Indonesia, 2023' : 'Contoh: M.N. Hegde & Don Freed · Plural Publishing, 2022';
+  }
+  /* ── Sampul: dikecilkan di perangkat (maks. 400×600, JPEG) sebelum dikirim ── */
+  const SAMPUL = { data: '', hapus: false, ada: false };
+  function sampulPreview(src, note) {
+    const box = $('#kt-sampul-preview'); box.textContent = '';
+    if (src) { const img = new Image(); img.src = src; img.alt = 'Pratinjau sampul'; box.append(img); }
+    else box.append(el('span', {}, note || 'Belum ada sampul'));
+    $('#kt-sampul-hapus').hidden = !(src || SAMPUL.ada) || SAMPUL.hapus;
+  }
+  function kecilkanGambar(file) {
+    return new Promise((ok, no) => {
+      const url = URL.createObjectURL(file), img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const sc = Math.min(1, 400 / img.width, 600 / img.height);
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.width * sc)); c.height = Math.max(1, Math.round(img.height * sc));
+        const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+        let q = 0.85, d = c.toDataURL('image/jpeg', q);
+        while (d.length > 110000 && q > 0.4) { q -= 0.1; d = c.toDataURL('image/jpeg', q); } // ±80 KB
+        ok(d);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); no(new Error('img')); };
+      img.src = url;
+    });
+  }
+  function resetSampul() { SAMPUL.data = ''; SAMPUL.hapus = false; SAMPUL.ada = false; $('#kt-sampul-file').value = ''; sampulPreview(''); }
+  function initSampul() {
+    $('#kt-sampul-file').addEventListener('change', async e => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) { status($('#kt-status'), 'err', 'Sampul harus berupa gambar JPG, PNG, atau WEBP.'); e.target.value = ''; return; }
+      if (file.size > 15 * 1024 * 1024) { status($('#kt-status'), 'err', 'Gambar sampul terlalu besar (maks. 15 MB sebelum dikecilkan).'); e.target.value = ''; return; }
+      try { SAMPUL.data = await kecilkanGambar(file); SAMPUL.hapus = false; sampulPreview(SAMPUL.data); }
+      catch (err) { status($('#kt-status'), 'err', 'Gambar tidak bisa dibuka. Coba gambar lain.'); }
+    });
+    $('#kt-sampul-hapus').addEventListener('click', () => {
+      SAMPUL.data = ''; $('#kt-sampul-file').value = '';
+      SAMPUL.hapus = SAMPUL.ada; sampulPreview('', SAMPUL.ada ? 'Sampul akan dihapus saat disimpan' : 'Belum ada sampul');
+    });
   }
   function resetKontenForm() {
     const f = $('#kt-form');
-    f.reset(); f.id.value = ''; setTipeUI('artikel');
+    f.reset(); f.id.value = ''; setTipeUI('artikel'); resetSampul();
     $('#kt-title').textContent = 'Tambah Konten';
     status($('#kt-status'), '', '');
   }
@@ -125,6 +170,11 @@
         ringkasan: f.ringkasan.value, topik: f.topik.value, fileLink: f.fileLink.value, linkLuar: f.linkLuar.value,
         usia: $$('input[name="usia"]:checked', f).map(c => c.value)
       };
+      if (data.tipe !== 'artikel') {
+        data.sumber = f.sumber.value;
+        if (SAMPUL.data) data.sampulBase64 = SAMPUL.data;
+        if (SAMPUL.hapus) data.hapusSampul = true;
+      }
       // Link file Word/Office yang dibuka di Google Docs mengandung "rtpof=true".
       // Situs hanya bisa membaca Google Docs asli → beri tahu sebelum dikirim.
       if (data.tipe === 'artikel' && /[?&]rtpof=true/.test(data.fileLink)) {
@@ -137,7 +187,7 @@
       status($('#kt-status'), r.ok ? 'ok' : 'err', r.msg || (r.ok ? 'Tersimpan.' : 'Gagal menyimpan.'));
       if (r.ok) { toast('Konten disimpan'); const keep = r.msg; resetKontenForm(); status($('#kt-status'), 'ok', keep); loadKonten(); }
     });
-    setTipeUI('artikel');
+    setTipeUI('artikel'); initSampul();
     if (ME.role === 'admin') $('#kt-list-title').textContent = 'Semua Konten (admin)';
   }
   async function loadKonten() {
@@ -148,7 +198,8 @@
     if (!r.ok) { box.append(el('p', { class: 'portal-help' }, r.msg || 'Gagal memuat konten.')); return; }
     if (!r.konten.length) { box.append(el('p', { class: 'portal-help' }, 'Belum ada konten. Tambahkan artikel atau buku pertamamu di atas.')); return; }
     r.konten.forEach(k => {
-      const meta = [k.tipe === 'artikel' ? '📝 Artikel' : '📚 Buku', (k.usia || []).map(u => USIA_LABEL[u] || u).join(', ')];
+      const meta = [k.tipe === 'artikel' ? '📝 Artikel' : k.tipe === 'jurnal' ? '📄 Jurnal' : '📚 Buku', (k.usia || []).map(u => USIA_LABEL[u] || u).join(', ')];
+      if (k.adaSampul) meta.push('🖼️ bersampul');
       if (k.menitBaca) meta.push(k.menitBaca + ' menit baca');
       if (ME.role === 'admin') meta.push('oleh ' + k.penulisNama);
       box.append(el('div', { class: 'portal-item' },
@@ -166,8 +217,13 @@
     f.ringkasan.value = k.ringkasan; f.topik.value = (k.topik || []).join(', ');
     f.fileLink.value = k.fileId ? (k.tipe === 'artikel' ? 'https://docs.google.com/document/d/' + k.fileId + '/edit' : 'https://drive.google.com/file/d/' + k.fileId + '/view') : '';
     f.linkLuar.value = k.linkLuar || '';
+    f.sumber.value = k.sumber || '';
     $$('input[name="usia"]', f).forEach(c => { c.checked = (k.usia || []).indexOf(c.value) >= 0; });
     setTipeUI(k.tipe);
+    resetSampul(); SAMPUL.ada = !!k.adaSampul;
+    sampulPreview('', k.adaSampul ? '✅ Sudah ada sampul. Pilih gambar baru untuk mengganti.' : 'Belum ada sampul');
+    // Sampul konten terbit bisa dipratinjau dari situs
+    if (k.adaSampul && k.status === 'terbit' && k.sampul) LJ_AUTH.sampul([k]).then(m => { if (m[k.id] && !SAMPUL.data && !SAMPUL.hapus && f.id.value === k.id) sampulPreview(m[k.id]); });
     $('#kt-title').textContent = 'Edit Konten';
     status($('#kt-status'), 'info', 'Mengedit: ' + k.judul);
     f.scrollIntoView({ behavior: 'smooth', block: 'start' });

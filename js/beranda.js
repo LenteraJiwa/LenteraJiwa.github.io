@@ -86,19 +86,27 @@
       const list = (r.konten || []).slice(0, 8);
       if (!list.length) return info(homeBuku, 'buku-card', '📭 Koleksi sedang disiapkan.');
       homeBuku.textContent = '';
+      const covers = [];
       list.forEach((b, i) => {
         const c = el('div', 'buku-card');
         c.setAttribute('role', 'listitem'); c.tabIndex = 0;
         c.setAttribute('aria-label', b.judul);
-        const cover = el('div', 'buku-cover', '📘');
+        const cover = el('div', 'buku-cover', b.tipe === 'jurnal' ? '📄' : '📘');
         cover.style.background = GRAD[i % GRAD.length];
+        if (b.sampul) covers.push([cover, b]);
         const inf = el('div', 'buku-info');
-        inf.append(el('div', 'buku-title-text', b.judul), el('div', 'buku-author-text', (b.usia || []).map(u => USIA[u] || u).join(' · ')));
+        inf.append(el('div', 'buku-title-text', b.judul), el('div', 'buku-author-text', (b.tipe === 'jurnal' ? 'Jurnal · ' : '') + (b.usia || []).map(u => USIA[u] || u).join(' · ')));
         c.append(cover, inf);
         c.addEventListener('click', () => goto('perpustakaan.html'));
         c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto('perpustakaan.html'); } });
         homeBuku.append(c);
       });
+      // Sampul asli (bila ada) menggantikan ikon
+      if (covers.length && LJ_AUTH.sampul) LJ_AUTH.sampul(covers.map(x => x[1])).then(m => covers.forEach(([box, b]) => {
+        if (!m[b.id]) return;
+        const img = new Image(); img.src = m[b.id]; img.alt = 'Sampul ' + b.judul; img.draggable = false;
+        img.onload = () => { box.textContent = ''; box.classList.add('has-img'); box.append(img); };
+      }));
     });
   })();
 

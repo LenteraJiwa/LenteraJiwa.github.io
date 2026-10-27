@@ -10,7 +10,16 @@
   const USIA = { anak: '🌱 Anak', remaja: '🌙 Remaja', dewasa: '☀️ Dewasa', lansia: '🌸 Lansia' };
   const GRAD = ['linear-gradient(135deg,#E8E4FF,#C4BEFF)', 'linear-gradient(135deg,#D6EEFF,#7EC3F0)', 'linear-gradient(135deg,#DCFFF0,#6FDDB0)', 'linear-gradient(135deg,#FFE8DC,#F0A882)', 'linear-gradient(135deg,#FFF9D6,#F0D070)'];
   const EMO = ['📘', '📗', '📙', '📕', '📒'];
-  let LIST = [], filter = 'semua', lastFocus = null;
+  let LIST = [], filter = 'semua', jenis = 'semua', lastFocus = null;
+  const isJurnal = b => b.tipe === 'jurnal';
+  const JENIS = b => isJurnal(b) ? 'jurnal' : 'buku';
+  const fmtMB = n => n > 0 ? (n / 1048576).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' MB' : '';
+  // Gambar sampul: dari server (data URL); bila tidak ada, sampul warna + ikon seperti biasa
+  function putCover(box, src, judul) {
+    if (!src || !box || box.querySelector('img')) return;
+    const img = new Image(); img.src = src; img.alt = 'Sampul ' + judul; img.decoding = 'async'; img.draggable = false;
+    img.onload = () => { box.classList.add('has-img'); box.prepend(img); };
+  }
   const search = document.getElementById('search-input');
   const count = document.getElementById('search-count');
   const empty = document.getElementById('empty-state');
@@ -32,11 +41,18 @@
     const rb = document.getElementById('empty-retry');
     if (rb) { rb.style.display = retry ? '' : 'none'; rb.disabled = false; rb.textContent = '🔄 Coba lagi'; rb.onclick = retry ? () => { rb.disabled = true; rb.textContent = '⏳ Memuat…'; retry(); } : null; }
   }
-  // Jumlah buku di setiap tombol filter usia, mis. "🌙 Remaja (2)"
+  // Jumlah di setiap tombol, mis. "🌙 Remaja (2)" — mengikuti jenis yang dipilih
   function updateCounts() {
+    const byJenis = LIST.filter(x => jenis === 'semua' || JENIS(x) === jenis);
+    document.querySelectorAll('#jenis-filter .jenis-btn').forEach(btn => {
+      const j = btn.dataset.jenis, n = LIST.filter(x => j === 'semua' || JENIS(x) === j).length;
+      let c = btn.querySelector('.filter-count');
+      if (!c) { c = el('span', 'filter-count'); btn.append(c); }
+      c.textContent = LIST.length ? '(' + n + ')' : '';
+    });
     document.querySelectorAll('#book-filter .filter-btn').forEach(btn => {
       const f = btn.dataset.filter;
-      const n = LIST.filter(x => f === 'semua' || (x.usia || []).indexOf(f) >= 0).length;
+      const n = byJenis.filter(x => f === 'semua' || (x.usia || []).indexOf(f) >= 0).length;
       let c = btn.querySelector('.filter-count');
       if (!c) { c = el('span', 'filter-count'); btn.append(c); }
       c.textContent = LIST.length ? '(' + n + ')' : '';
@@ -46,50 +62,58 @@
 
   function render() {
     const q = (search ? search.value : '').trim().toLowerCase();
-    const shown = LIST.filter(b => (filter === 'semua' || (b.usia || []).indexOf(filter) >= 0) &&
-      (!q || [b.judul, b.ringkasan, b.penulisNama, (b.topik || []).join(' ')].join(' ').toLowerCase().indexOf(q) >= 0));
+    const shown = LIST.filter(b => (jenis === 'semua' || JENIS(b) === jenis) && (filter === 'semua' || (b.usia || []).indexOf(filter) >= 0) &&
+      (!q || [b.judul, b.ringkasan, b.penulisNama, b.sumber, (b.topik || []).join(' ')].join(' ').toLowerCase().indexOf(q) >= 0));
     grid.textContent = '';
     empty.style.display = 'none';
-    if (count) count.textContent = shown.length + ' buku';
-    if (!LIST.length) return showEmpty('Koleksi sedang disiapkan', 'Buku dan materi pertama sedang dipilih. Kembali lagi nanti, ya.', false);
-    if (!shown.length) return showEmpty('Belum ada buku untuk pilihan ini', 'Coba kata kunci lain atau pilih "Semua".', true);
+    const nB = shown.filter(b => !isJurnal(b)).length, nJ = shown.length - nB;
+    if (count) count.textContent = jenis === 'jurnal' ? nJ + ' jurnal' : jenis === 'buku' ? nB + ' buku' : (nJ ? nB + ' buku · ' + nJ + ' jurnal' : nB + ' buku');
+    if (!LIST.length) return showEmpty('Koleksi sedang disiapkan', 'Buku dan jurnal pertama sedang dipilih. Kembali lagi nanti, ya.', false);
+    if (!shown.length) return showEmpty(jenis === 'jurnal' ? 'Belum ada jurnal untuk pilihan ini' : 'Belum ada buku untuk pilihan ini', 'Coba kata kunci lain atau pilih "Semua".', true);
+    const covers = [];
     shown.forEach(b => {
       const card = el('div', 'book-card');
       card.setAttribute('role', 'listitem'); card.tabIndex = 0;
-      card.setAttribute('aria-label', b.judul);
-      const cover = el('div', 'book-cover', pick(EMO, b.id));
+      card.setAttribute('aria-label', (isJurnal(b) ? 'Jurnal: ' : 'Buku: ') + b.judul);
+      const cover = el('div', 'book-cover', isJurnal(b) ? '📄' : pick(EMO, b.id));
       cover.style.background = pick(GRAD, b.id);
       cover.append(el('div', 'book-cover-shine'));
+      if (isJurnal(b)) cover.append(el('span', 'jenis-badge', 'Jurnal'));
+      if (b.sampul) covers.push([cover, b]);
       const info = el('div', 'buku-info');
       const tags = el('div', 'book-tags');
       (b.usia || []).slice(0, 2).forEach(u => { const p = el('span', 'age-pill ' + u, (USIA[u] || u).replace(/^\S+\s/, '')); tags.append(p); });
-      info.append(el('div', 'buku-title-text', b.judul), el('div', 'buku-author-text', b.penulisNama ? 'Dipilih oleh ' + b.penulisNama : ''), tags);
+      info.append(el('div', 'buku-title-text', b.judul), el('div', 'buku-author-text', b.sumber || (b.penulisNama ? 'Dipilih oleh ' + b.penulisNama : '')), tags);
       card.append(cover, info);
       card.addEventListener('click', () => openDetail(b));
       card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(b); } });
       grid.append(card);
     });
+    if (covers.length) LJ_AUTH.sampul(covers.map(x => x[1])).then(m => covers.forEach(([box, b]) => putCover(box, m[b.id], b.judul)));
   }
 
   function openDetail(b) {
     lastFocus = document.activeElement;
     const overlay = document.getElementById('book-overlay'), drawer = document.getElementById('book-drawer');
     const c = document.getElementById('book-detail-content');
-    document.getElementById('book-drawer-tag').textContent = (b.topik || [])[0] || 'Buku & Materi';
+    document.getElementById('book-drawer-tag').textContent = (isJurnal(b) ? '📄 Jurnal' : '📘 Buku') + ((b.topik || [])[0] ? ' · ' + b.topik[0] : '');
     c.textContent = '';
-    const cover = el('div', 'book-detail-cover', pick(EMO, b.id));
+    const cover = el('div', 'book-detail-cover', isJurnal(b) ? '📄' : pick(EMO, b.id));
     cover.style.background = pick(GRAD, b.id);
+    if (b.sampul) LJ_AUTH.sampul([b]).then(m => putCover(cover, m[b.id], b.judul));
     const title = el('div', 'book-detail-title', b.judul); title.tabIndex = -1;
     const meta = el('div', 'book-meta-row');
     (b.usia || []).forEach(u => meta.append(el('span', 'age-pill ' + u, USIA[u] || u)));
     (b.topik || []).forEach(t => meta.append(el('span', 'book-meta-chip', t)));
-    c.append(cover, title, el('div', 'book-detail-author', b.penulisNama ? 'Dipilih oleh ' + b.penulisNama : ''), meta,
-             el('div', 'book-section-title', 'Tentang buku ini'), el('p', 'book-synopsis', b.ringkasan));
+    c.append(cover, title);
+    if (b.sumber) c.append(el('div', 'book-detail-source', '✍️ ' + b.sumber));
+    c.append(el('div', 'book-detail-author', b.penulisNama ? 'Dipilih oleh ' + b.penulisNama : ''), meta,
+             el('div', 'book-section-title', isJurnal(b) ? 'Tentang jurnal ini' : 'Tentang buku ini'), el('p', 'book-synopsis', b.ringkasan));
     const actions = el('div'); actions.style.cssText = 'display:flex;flex-direction:column;gap:10px;margin-top:12px;';
     // Pembaca tidak diberi link Drive: isi buku dibaca di dalam situs lewat server.
     const baca = b.bacaDiSitus === true, luar = safeUrl(b.linkLuar);
-    if (baca) { const a = el('button', 'btn btn-primary btn-md w-full', '📖 Baca di Lentera Jiwa'); a.type = 'button'; a.style.justifyContent = 'center'; a.addEventListener('click', () => BookReader.open(b)); actions.append(a); }
-    if (luar) { const a = el('a', 'btn btn-soft btn-md w-full', '🔗 Lihat di toko / perpustakaan'); a.href = luar; a.target = '_blank'; a.rel = 'noopener'; a.style.justifyContent = 'center'; actions.append(a); }
+    if (baca) { const a = el('button', 'btn btn-primary btn-md w-full', '📖 Baca di Lentera Jiwa' + (b.ukuran ? ' (' + fmtMB(b.ukuran) + ')' : '')); a.type = 'button'; a.style.justifyContent = 'center'; a.addEventListener('click', () => BookReader.open(b)); actions.append(a); }
+    if (luar) { const a = el('a', 'btn btn-soft btn-md w-full', isJurnal(b) ? '🔗 Buka di situs jurnal' : '🔗 Lihat di toko / perpustakaan'); a.href = luar; a.target = '_blank'; a.rel = 'noopener'; a.style.justifyContent = 'center'; actions.append(a); }
     // (Dulu ada tombol "Diskusikan dengan Psikolog" — layanan belum ada, jadi dihapus.)
     if (!baca && !luar) actions.append(el('p', '', 'Tautan untuk membaca buku ini belum tersedia.'));
     c.append(actions);
@@ -152,8 +176,14 @@
     }
     async function load(b) {
       const my = ++token;
-      pageEl.textContent = ''; status('⏳ Memuat isi buku…');
+      pageEl.textContent = '';
+      const what = isJurnal(b) ? 'jurnal' : 'buku';
+      status('⏳ Memuat isi ' + what + (b.ukuran ? ' (' + fmtMB(b.ukuran) + ')' : '') + '…');
+      // File besar butuh waktu lebih lama: beri tahu, jangan biarkan pembaca mengira macet
+      const slow = setTimeout(() => { if (my === token && opened && body.querySelector('.book-reader-msg') && !body.querySelector('button'))
+        body.querySelector('.book-reader-msg').append(el('div', 'book-reader-sub', 'File berukuran besar butuh waktu lebih lama. Tunggu sebentar, ya.')); }, 6000);
       const r = await LJ_AUTH.apiGet('getBuku', { id: b.id });
+      clearTimeout(slow);
       if (my !== token || !opened) return;
       if (!r.ok) return status(r.msg || 'Isi buku belum bisa dibuka.', () => load(b));
       if (r.format === 'html') {
@@ -256,6 +286,10 @@
   };
   document.addEventListener('keydown', window.__ljBookEsc);
 
+  document.querySelectorAll('#jenis-filter .jenis-btn').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('#jenis-filter .jenis-btn').forEach(x => { x.classList.toggle('is-active', x === btn); x.setAttribute('aria-pressed', String(x === btn)); });
+    jenis = btn.dataset.jenis; updateCounts(); render();
+  }));
   document.querySelectorAll('#book-filter .filter-btn').forEach(btn => btn.addEventListener('click', () => {
     document.querySelectorAll('#book-filter .filter-btn').forEach(x => { x.classList.toggle('is-active', x === btn); x.setAttribute('aria-pressed', String(x === btn)); });
     filter = btn.dataset.filter; render();
@@ -263,9 +297,10 @@
   if (search) search.addEventListener('input', render);
   document.getElementById('empty-reset').addEventListener('click', () => {
     if (search) search.value = '';
-    filter = 'semua';
+    filter = 'semua'; jenis = 'semua';
     document.querySelectorAll('#book-filter .filter-btn').forEach(x => { const on = x.dataset.filter === 'semua'; x.classList.toggle('is-active', on); x.setAttribute('aria-pressed', String(on)); });
-    render();
+    document.querySelectorAll('#jenis-filter .jenis-btn').forEach(x => { const on = x.dataset.jenis === 'semua'; x.classList.toggle('is-active', on); x.setAttribute('aria-pressed', String(on)); });
+    updateCounts(); render();
   });
 
   (async function load() {

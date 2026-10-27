@@ -159,9 +159,34 @@ const LJ_AUTH = (function() {
     return api({ action: 'resetPassword', email, otp, password });
   }
 
+  /* Gambar sampul buku/jurnal. Server mengirim data URL (file tetap privat di Drive).
+     Disimpan di memori selama halaman terbuka; diambil per kelompok (maks. 20). */
+  const _sampulMemo = {};
+  async function sampul(items) {
+    const out = {}, need = [];
+    (items || []).forEach(b => {
+      if (!b || !b.sampul) return;
+      const k = b.id + '_' + b.sampul;
+      if (k in _sampulMemo) { if (_sampulMemo[k]) out[b.id] = _sampulMemo[k]; } else need.push(b);
+    });
+    for (let i = 0; i < need.length; i += 20) {
+      const part = need.slice(i, i + 20);
+      const r = await apiGet('getSampul', { ids: part.map(b => b.id).join(',') });
+      if (!r.ok || !r.sampul) continue;
+      part.forEach(b => {
+        const v = r.sampul[b.id];
+        const okV = typeof v === 'string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(v);
+        _sampulMemo[b.id + '_' + b.sampul] = okV ? v : '';   // yang kosong/tak valid juga diingat → tidak diminta ulang
+        if (okV) out[b.id] = v;
+      });
+    }
+    return out;
+  }
+
   return {
     api:           api,
     apiGet:        apiGet,
+    sampul:        sampul,
     call:          call,
     sendResetOTP:  sendResetOTP,
     resetPassword: resetPassword,

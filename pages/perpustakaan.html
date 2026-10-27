@@ -8,7 +8,7 @@
   <div class="container">
     <div class="section-tag reveal" style="justify-content:center;margin:0 auto 18px;">📚 Perpustakaan Digital</div>
     <h1 class="section-title reveal" style="text-align:center;">Buku &amp; Jurnal untuk <em>Setiap Jiwa</em></h1>
-    <p class="section-intro reveal" style="text-align:center;margin:0 auto 32px;">Buku dan materi pilihan tim Lentera Jiwa. Materi milik kami bisa dibaca langsung; untuk buku terbitan lain, kami arahkan ke tempat resmi untuk membeli atau meminjamnya.</p>
+    <p class="section-intro reveal" style="text-align:center;margin:0 auto 32px;">Buku, jurnal, dan materi pilihan tim Lentera Jiwa. Materi milik kami bisa dibaca langsung di sini; untuk buku dan jurnal terbitan lain, kami arahkan ke sumber resminya.</p>
     <div class="search-wrap reveal" style="max-width:480px;margin:0 auto;">
       <span class="search-icon" aria-hidden="true">🔍</span>
       <input type="search" class="search-input" id="search-input" placeholder="Cari judul, penulis, atau topik..." aria-label="Cari buku atau jurnal">
@@ -19,7 +19,12 @@
 
 <!-- ══ FILTER BAR ══ -->
 <div class="container" style="padding-bottom:20px;">
-  <div class="filter-bar reveal" role="toolbar" aria-label="Filter koleksi" id="book-filter" style="display:flex;gap:10px;flex-wrap:wrap;">
+  <div class="jenis-toggle reveal" role="toolbar" aria-label="Jenis koleksi" id="jenis-filter">
+    <button type="button" class="jenis-btn is-active" data-jenis="semua" aria-pressed="true">Semua</button>
+    <button type="button" class="jenis-btn" data-jenis="buku" aria-pressed="false">📘 Buku</button>
+    <button type="button" class="jenis-btn" data-jenis="jurnal" aria-pressed="false">📄 Jurnal</button>
+  </div>
+  <div class="filter-bar reveal" role="toolbar" aria-label="Filter usia" id="book-filter" style="display:flex;gap:10px;flex-wrap:wrap;">
     <button class="filter-btn is-active" data-filter="semua"  aria-pressed="true">Semua</button>
     <button class="filter-btn" data-filter="anak"   aria-pressed="false">🌱 Anak</button>
     <button class="filter-btn" data-filter="remaja" aria-pressed="false">🌙 Remaja</button>

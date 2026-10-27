@@ -768,4 +768,6 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-}
+}/* Sampul asli buku di Beranda (dari server) */
+.buku-cover.has-img img { height: 86%; width: auto; max-width: 86%; object-fit: contain; border-radius: 4px;
+  box-shadow: 0 6px 16px rgba(45,37,80,.28); position: relative; z-index: 1; user-select: none; }
